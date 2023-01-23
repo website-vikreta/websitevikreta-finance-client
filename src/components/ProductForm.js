@@ -11,6 +11,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
 import { useNavigate } from 'react-router-dom';
 import { Table } from '@mui/material';
+
 import './ProductForm.css';
 const Date = styled(DatePicker)`
     width: 250px
@@ -27,8 +28,8 @@ const ProductForm = () => {
     let navigate = useNavigate();
 
     const addProductDetails = async () => {
-        console.log('productdata',productData);
         await createProduct(productData);
+       
         navigate('/all');
     }
 
@@ -127,6 +128,7 @@ const ProductForm = () => {
 
             </table>
         </StyledTable>
+        
     </Container >
 
        

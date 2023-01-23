@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const url = 'http://localhost:5000/root';
+const url = process.env.REACT_APP_BASE_URL;
 
 export const getProducts = async (id) =>{
     id = id || '';
