@@ -50,7 +50,7 @@ const EditProduct = (props) => {
 
     const editProductDetails = async () => {
         console.log(product.dateOfinvoice);
-        const response = await updateProduct(id, product);
+        await updateProduct(id, product);
         toast.success("Product updated Successfully!!", {
             position: "top-center",
             autoClose: 2000,
