@@ -27,8 +27,6 @@ const Index = () => {
         <div className="App">
         <header className="App-header">
         
-       
-
         
         <StyleButton variant="contained" onClick={() => navigate('/all')} sx={{mr:2,
          color: '#7700FF', backgroundColor: '#ddccff', borderColor: '#7700FF', ':hover': {

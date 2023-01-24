@@ -21,7 +21,7 @@ export default function Popup(props){
                 </div>
             </DialogTitle>
             <DialogContent dividers sx= {{paddingY:5}}>
-              {formType === 'Add'? <ProductForm/> : <EditProduct cproduct = {currProduct} showModal = {showModal} setModal = {setShowModal}/>}
+              {formType === 'Add'? <ProductForm showModal= {showModal} setShowModal = {setShowModal} /> : <EditProduct cProduct = {currProduct} showModal = {showModal} setShowModal = {setShowModal}/>}
             </DialogContent>
         </Dialog>
     );

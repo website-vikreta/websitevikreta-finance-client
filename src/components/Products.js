@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { getProducts, deleteProduct } from '../api/index';
-import { Table, TableHead, TableCell, TableRow, TableBody, styled, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -11,30 +11,11 @@ import React from 'react'
 import DeletePopup from './DeletePopup';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import DataTable from 'react-data-table-component';
+import { tableCustomStyles } from './TableStyle.js';
+   
+;
 
-const StyledTable = styled(Table)`
-    width: 95%;
-    margin: 50px;
-`;
-
-const THead = styled(TableRow)`
-    & > th {
-        font-size: 20px;
-        background: #6600cc;
-        color: #FFFFFF;
-        text-align: center;
-    }
-`;
-
-const TRow = styled(TableRow)`
-    & > td{
-        font-size: 18px;
-        text-align: center;
-    }
-    &:nth-of-type(even){
-        background-color: #f5e6ff;
-      }
-`;
 
 const Product = (props) => {
 
@@ -47,7 +28,7 @@ const Product = (props) => {
 
     useEffect(() => {
         getAllProducts();
-    }, []);
+    }, [products]);
 
 
     const getAllProducts = async () => {
@@ -58,6 +39,7 @@ const Product = (props) => {
     const deleteProductData = (id) => {
         setDelModal({ openDelDialog: true, deleteId: id });
     }
+
     function confirm() {
         deleteConfrim(delModal.deleteId);
         setDelModal({ openDelDialog: false, deleteId: null });
@@ -159,46 +141,65 @@ const Product = (props) => {
     const filteredElements = products.filter((e) => check(e, type)).filter((e) => checkDuration(e, dateFilter));
 
 
+
+const columns = [
+    {
+        name: 'Title',
+        selector: row => row.title,
+        sortable: true,
+    },
+    {
+        name: 'Category',
+        selector: row => row.category,
+       
+    },
+    {
+        name: 'Payment Type',
+        selector: row => row.paymentType,
+    },
+    {
+        name: 'Date of Invoice',
+        selector: row => formatedate(new Date(row.dateOfInvoice)),
+        sortable: true,
+    },
+    {
+        name: 'Date of Payment',
+        selector: row => formatedate(new Date(row.dateOfPayment)),
+        sortable: true,
+    },
+    {
+        name: 'Description',
+        selector: row => row.description,
+    },
+    {
+        name: 'Action ',
+        cell: row => <> <IconButton sx={{ color: '#0052cc' }} variant="contained" style={{ marginRight: 10 }} onClick={() => setShowModal({ openDialog: true, currProduct: row })}><EditIcon /></IconButton> 
+        <IconButton sx={{ color: 'red' }} variant="contained" onClick={() => deleteProductData(row._id)}><DeleteIcon /></IconButton> </>
+                                
+    },
+];
+
+
     return (
         <Grid container alignContent={'center'}>
-            <Grid item xs={12}>
-                <StyledTable>
-                    <TableHead>
-                        <THead>
-
-                            <TableCell >Title</TableCell>
-                            <TableCell >Amount</TableCell>
-                            <TableCell >Category</TableCell>
-                            <TableCell >Payment Type</TableCell>
-                            <TableCell >Date of Invoice</TableCell>
-                            <TableCell >Date of Payment</TableCell>
-                            <TableCell >Description</TableCell>
-                            <TableCell >Action</TableCell>
-                        </THead>
-                    </TableHead>
-                    <TableBody>
-                        {filteredElements.map((product) => (
-                            <TRow key={product._id}>
-
-                                <TableCell>{product.title}</TableCell>
-                                <TableCell>{product.amount}</TableCell>
-                                <TableCell>{product.category}</TableCell>
-                                <TableCell>{product.paymentType}</TableCell>
-                                <TableCell>{formatedate(new Date(product.dateOfInvoice))}</TableCell>
-                                <TableCell>{formatedate(new Date(product.dateOfPayment))}</TableCell>
-                                <TableCell>{product.description}</TableCell>
-                                <TableCell>
-                                    <IconButton sx={{ color: '#0052cc' }} variant="contained" style={{ marginRight: 10 }} onClick={() => setShowModal({ openDialog: true, currProduct: product })}><EditIcon /></IconButton> {/* change it to user.id to use JSON Server component={Link} to={`/edit/${product._id}`*/}
-                                    <IconButton sx={{ color: 'red' }} variant="contained" onClick={() => deleteProductData(product._id)}><DeleteIcon /></IconButton> {/* change it to user.id to use JSON Server */}
-                                </TableCell>
-                            </TRow>
-                        ))}
-                    </TableBody>
-                </StyledTable>
-            </Grid>
+            
             <Popup showModal={showModal} setShowModal={setShowModal} formType='Edit' ></Popup>
             <DeletePopup delModal={delModal} setDelModal={setDelModal} confirm={confirm}></DeletePopup>
             <ToastContainer/>
+            <div style={{ width: '95%', margin: '50px'}}>
+            <DataTable
+            columns={columns}
+            data={filteredElements}
+            customStyles = {tableCustomStyles}
+            fixedHeader
+            pagination
+            pointerOnHover
+            highlightOnHover
+            dense
+            
+            />
+            </div>
+            
         </Grid>
     );
 

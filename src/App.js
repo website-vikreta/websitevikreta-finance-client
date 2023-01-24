@@ -1,4 +1,4 @@
-import AddProduct from './components/AddProduct'
+
 import EditProduct from './components/EditProduct';
 import Index from './components/Index'
 import AllProducts from './components/AllProducts';
@@ -14,7 +14,6 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="all" element={<AllProducts />} />
-        <Route path="add" element={<AddProduct />} />
         <Route path="/edit/:id" element={<EditProduct />} />
 
       </Routes>

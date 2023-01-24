@@ -11,7 +11,6 @@ import FormLabel from '@mui/material/FormLabel';
 
 import { TextField,  Container, Button, styled } from '@mui/material';
 import { updateProduct, getProducts } from '../api/index';
-import { useNavigate} from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './ProductForm.css';
@@ -31,10 +30,9 @@ const EditProduct = (props) => {
     const { title, amount, category, paymentType, dateOfinvoice, dateOfPayment, description } = product;
     // const { id } = useParams();
 
-    const cProduct = props;
-    const temp = Object.values(cProduct);
-    const id = temp[0]['_id'];
-    let navigate = useNavigate();
+    const {cProduct, showModal, setShowModal} = props;
+    
+    const id = cProduct._id;
 
     useEffect(() => {
         const loadProductDetails = async () => {
@@ -51,6 +49,7 @@ const EditProduct = (props) => {
     const editProductDetails = async () => {
         console.log(product.dateOfinvoice);
         await updateProduct(id, product);
+        setShowModal({...showModal, openDialog: false});
         toast.success("Product updated Successfully!!", {
             position: "top-center",
             autoClose: 2000,
@@ -58,7 +57,6 @@ const EditProduct = (props) => {
             closeOnClick: true,
             theme: "light",
             });
-        navigate('/all');
     }
 
     const onValueChange = (e) => {

@@ -9,8 +9,10 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
-import { useNavigate } from 'react-router-dom';
 import { Table } from '@mui/material';
+
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import './ProductForm.css';
 const Date = styled(DatePicker)`
@@ -21,16 +23,21 @@ const StyledTable = styled(Table)`
    
 `;
 
-const ProductForm = () => {
+const ProductForm = (props) => {
     const [productData, setProductData] = useState({ title: '', amount: '', category: '', paymentType: '', dateOfinvoice: '', dateOfPayment: '', description: '' });
     const { title, amount, category, paymentType, dateOfinvoice, dateOfPayment, description } = productData;
-
-    let navigate = useNavigate();
-
+    const {showModal, setShowModal} = props;
+    
     const addProductDetails = async () => {
         await createProduct(productData);
-       
-        navigate('/all');
+        setShowModal({...showModal, openDialog: false});
+        toast.success("Product Added Successfully!!", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            theme: "light",
+        });
     }
 
     const clear = () => {
