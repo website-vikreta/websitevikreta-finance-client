@@ -13,8 +13,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import DataTable from 'react-data-table-component';
 import { tableCustomStyles } from './TableStyle.js';
-   
-;
 
 
 const Product = (props) => {
@@ -149,10 +147,16 @@ const columns = [
         sortable: true,
     },
     {
+        name: 'Amount',
+        selector: row => row.amount,
+       
+    },
+    {
         name: 'Category',
         selector: row => row.category,
        
     },
+    
     {
         name: 'Payment Type',
         selector: row => row.paymentType,
