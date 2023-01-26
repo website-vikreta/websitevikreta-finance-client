@@ -14,8 +14,8 @@ import Product from './Products';
 export default function AllProducts() {
   const [val, setVal] = React.useState('');
   const [open, setOpen] = React.useState(false);
-  const [filtr, setFilter] = React.useState('_id');
-
+  const [filtr, setFilter] = React.useState({filter:'_id', allActive: false, incomeActive: false, expenseActive: false, });
+  const {filter, allActive, incomeActive, expenseActive} = filtr;
   const handleClose = () => {
     setOpen(false);
   };
@@ -30,25 +30,28 @@ export default function AllProducts() {
     <Box sx={{ flexGrow: 1, m: 3 }}>
       <AppBar position="static" sx={{ backgroundColor: '#FFFFFF', boxShadow: 'none' }}>
         <Toolbar>
-          <Button sx={{ p: 2, color: 'black', backgroundColor: 'white', borderColor: 'black', border: 1, ':hover': {
+          <div  className="d-inline-flex p-2">
+          <Button sx={{ p: 2, color: allActive ? 'white': 'black', backgroundColor: allActive ? "#7700FF" : "white", borderColor: 'black', border: 1, ':hover': {
               bgcolor: '#7700FF',
               color: 'white',
             
             }
-          }} onClick= {(() => setFilter('_id'))}
+            
+          }} onClick= {(() => setFilter({filter: '_id', allActive: true}))}
           >All</Button>
-          <Button sx={{ p: 2, color: 'black', backgroundColor: 'white', borderColor: 'black', border: 1, ':hover': {
+          <Button sx={{ p: 2,  color: incomeActive ? 'white': 'black', backgroundColor: incomeActive ? "#7700FF" : "white", borderColor: 'black', border: 1, ':hover': {
               bgcolor: '#7700FF', 
               color: 'white',
             }
-          }}onClick= {(() => setFilter('Income'))}>
+          }}onClick= {(() => setFilter({filter: 'Income', incomeActive: true}))}>
             Income</Button>
-          <Button sx={{ p: 2, color: 'black', backgroundColor: 'white', borderColor: 'black', border: 1, ':hover': {
+          <Button sx={{ p: 2, color: expenseActive ? 'white': 'black', backgroundColor: expenseActive ? "#7700FF" : "white", borderColor: 'black', border: 1, ':hover': {
               bgcolor: '#7700FF', 
               color: 'white',
             }
-          }} onClick= {(() => setFilter('Expense'))}
+          }} onClick= {(() => setFilter({filter: 'Expense', expenseActive: true}))}
           >Expense</Button>
+          </div>
           <FormControl sx={{ m: 2, width: '250px' }}>
 
             <InputLabel id="demo-simple-select-label">Filter Records</InputLabel>
@@ -73,7 +76,7 @@ export default function AllProducts() {
           </FormControl>
         </Toolbar>
       </AppBar>
-      <Product type={filtr} dateFilter= {val}/>
+      <Product type={filter} dateFilter= {val}/>
     </Box>
   );
 }

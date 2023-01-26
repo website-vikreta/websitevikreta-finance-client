@@ -17,44 +17,22 @@ import { tableCustomStyles } from './TableStyle.js';
 
 const Product = (props) => {
 
-    // const products = useSelector((state) => state.products);
     const [products, setProducts] = useState([]);
     const { type, dateFilter } = props;
+
+    const [search, setSearch] = useState('');
+    const [filteredElements, setFilteredElements] = useState('');
     const [showModal, setShowModal] = useState({ openDialog: false, currProduct: '' });
     const [delModal, setDelModal] = useState({ openDelDialog: false, deleteId: null });
 
 
+   
     useEffect(() => {
         getAllProducts();
+        
     }, [products]);
 
-
-    const getAllProducts = async () => {
-        let response = await getProducts();
-        setProducts(response.data);
-    }
-
-    const deleteProductData = (id) => {
-        setDelModal({ openDelDialog: true, deleteId: id });
-    }
-
-    function confirm() {
-        deleteConfrim(delModal.deleteId);
-        setDelModal({ openDelDialog: false, deleteId: null });
-    }
-
-    const deleteConfrim = async (id) => {
-        await deleteProduct(id);
-        toast(" Successfully Deleted", {
-            position: "top-center",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            theme: "light",
-            });
-        getAllProducts();
-    }
-
+    useEffect(() => {
 
     function check(products, type) {
         if (type === '_id' || type === undefined) return products;
@@ -132,12 +110,46 @@ const Product = (props) => {
         }
         return product;
     }
+    const result = products.filter((e) => checkDuration(e, dateFilter)).filter((e) => check(e, type)).filter((product) =>{
+        return product.title.match(search);
+    });
+    
+    setFilteredElements(result);
+    }, [search,dateFilter, products, type]);
+
+    const getAllProducts = async () => {
+        let response = await getProducts();
+        setProducts(response.data);
+    }
+
+    const deleteProductData = (id) => {
+        setDelModal({ openDelDialog: true, deleteId: id });
+    }
+
+    function confirm() {
+        deleteConfrim(delModal.deleteId);
+        setDelModal({ openDelDialog: false, deleteId: null });
+    }
+
+    const deleteConfrim = async (id) => {
+        await deleteProduct(id);
+        toast(" Successfully Deleted", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            theme: "light",
+            });
+        getAllProducts();
+    }
+
+
 
     const formatedate = (d) => {
         return d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear()
     };
-    const filteredElements = products.filter((e) => check(e, type)).filter((e) => checkDuration(e, dateFilter));
-
+    
+   
 
 
 const columns = [
@@ -183,7 +195,6 @@ const columns = [
     },
 ];
 
-
     return (
         <Grid container alignContent={'center'}>
             
@@ -194,13 +205,23 @@ const columns = [
             <DataTable
             columns={columns}
             data={filteredElements}
+           
             customStyles = {tableCustomStyles}
             fixedHeader
             pagination
             pointerOnHover
             highlightOnHover
             dense
-            
+            subHeader
+            subHeaderComponent = {
+                <input 
+                    type='text'
+                    placeholder='Search Here'
+                    className='w-25 form-control'
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}    
+                />
+            }
             />
             </div>
             
