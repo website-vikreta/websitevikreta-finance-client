@@ -2,7 +2,10 @@
     width: 100%;
 }
 
-td{
-    padding: 20px;
+.tr-row{
+    padding: 10px 5px;
+}
+#demo-controlled-radio-buttons-group{
     
+    font-weight:bolder;
 }

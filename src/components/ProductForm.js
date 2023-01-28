@@ -19,18 +19,37 @@ const Date = styled(DatePicker)`
     width: 250px
 `;
 const StyledTable = styled(Table)`
-    width: 100%;
+    width: 200px;
    
 `;
 
 const ProductForm = (props) => {
-    const [productData, setProductData] = useState({ title: '', amount: '', category: '', paymentType: '', dateOfinvoice: '', dateOfPayment: '', description: '' });
-    const { title, amount, category, paymentType, dateOfinvoice, dateOfPayment, description } = productData;
-    const {showModal, setShowModal} = props;
-    
+    const [productData, setProductData] = useState({ title: '', amount: '', category: '', paymentType: '', dateOfInvoice: '', dateOfPayment: '', description: '' });
+    const { title, amount, category, paymentType, dateOfInvoice, dateOfPayment, description } = productData;
+    const { showModal, setShowModal } = props;
+
+    const validateProductDetails = () => {
+        if (!title.match(/^[a-z]+$/)) {
+            alert('Enter product title properly');
+        } else if (!amount.match(/^\d+$/)) {
+            alert('Enter amount properly');
+        } else if (!category.match(/^[a-z]+$/)) {
+            alert('Enter product category properly');
+        } else if (paymentType === '') {
+            alert('Please select payment type');
+        } else if (dateOfInvoice === '') {
+            alert('Selete date of invoice');
+        } else if (dateOfPayment === '') {
+            alert('Select date of payment');
+        } else if (description === '') {
+            alert('Enter product description');
+        } else {
+            addProductDetails();
+        }
+    }
     const addProductDetails = async () => {
         await createProduct(productData);
-        setShowModal({...showModal, openDialog: false});
+        setShowModal({ ...showModal, openDialog: false });
         toast.success("Product Added Successfully!!", {
             position: "top-center",
             autoClose: 2000,
@@ -41,7 +60,7 @@ const ProductForm = (props) => {
     }
 
     const clear = () => {
-        setProductData({ title: '', amount: '', category: '', paymentType: '', dateOfinvoice: null, dateOfPayment: null, description: '' });
+        setProductData({ title: '', amount: '', category: '', paymentType: '', dateOfInvoice: null, dateOfPayment: null, description: '' });
     }
     const onValueChange = (e) => {
         setProductData({ ...productData, [e.target.name]: e.target.value })
@@ -50,95 +69,134 @@ const ProductForm = (props) => {
 
         <Container >
 
-        <StyledTable>
+            <StyledTable>
 
-            <table>
-                <tr>
-                    <td >
-                    <TextField label="Product Title" type={'text'} onChange={(e) => onValueChange(e)} name='title' value={title}></TextField>
-          
-                    </td>
-                    <td>
-                    <TextField label="Amount" type={'text'} onChange={(e) => onValueChange(e)} name='amount' value={amount}></TextField>
-            
-                    </td>
-                </tr>
+                <table>
+                    <thead></thead>
+                    <tbody>
+                        <tr>
+                            <td colSpan='2'>
+                                <FormLabel id="demo-controlled-radio-buttons-group">Product Title</FormLabel>
 
-                <tr>
-                    <td style={{ paddingBottom: '0px'}}>
-                    <TextField fullWidth sx={{paddingBottom: '20px'}} label="Category" type={'text'} onChange={(e) => onValueChange(e)} name='category' value={category}></TextField>
-                
-                    <FormLabel  id="demo-controlled-radio-buttons-group">Payment Type</FormLabel>
-                   
-                    <RadioGroup 
-                        aria-labelledby="demo-controlled-radio-buttons-group"
-                        name="paymentType"
-                        value={paymentType}
-                        onChange={(e) => onValueChange(e)}>
-                        <FormControlLabel value="Income" control={<Radio />} label="Income" />
-                        <FormControlLabel value="Expense" control={<Radio />} label="Expense" />
-                    </RadioGroup>
-                    </td>
-                    <td style={{verticalAlign: 'top'}}>
-                    <TextField multiline rows={5} fullWidth label="Description" type={'text'} onChange={(e) => onValueChange(e)} name='description' value={description}></TextField>
+                                <TextField variant='outlined' fullWidth
+                                    type={'text'} onChange={(e) => onValueChange(e)}
+                                    error={title !== '' && !title.match(/^[a-z]+$/)}
+                                    helperText={!title.match(/^[a-z]+$/) && title !== '' ? 'Product title should contain only characters. Special chracters, whitespaces, digits are not allowed' : ' '}
+                                    name='title' value={title}></TextField>
 
-                    </td>
-                </tr>
-                <tr>
-                    <td style={{paddingTop: '0px',verticalAlign: 'top'}}>
-                    
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <Date label='Date Of Invoice'
-                            name='dateOfinvoice'
-                            renderInput={(params) => <TextField {...params} />}
-                            value={dateOfinvoice}
-                            onChange={((date) => setProductData({ ...productData, dateOfinvoice: date })
-                            )}
-                        />
-                    </LocalizationProvider>
-                    </td>
-                    <td>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <Date width='100%' label='Date Of Payment'
-                            name='dateOfPayment'
-                            renderInput={(params) => <TextField {...params} />}
-                            value={dateOfPayment}
-                            onChange={((date) => setProductData({ ...productData, dateOfPayment: date }))}
-                        />
-                    </LocalizationProvider>
-                    
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                    <Button variant="contained" color="primary" onClick={() => clear()} sx={{
-                    color: 'red', backgroundColor: '#ffe6e6', borderColor: 'red', ':hover': {
-                        bgcolor: '#ffe6e6',
-                        color: 'red',
-                    }
-                }}>Reset</Button>
-                    </td>
-                    <td align='right'>
-                    <Button variant="contained" color="primary" onClick={() => addProductDetails()} sx={{
-                        color: 'white', backgroundColor: '#7700FF', borderColor: 'white', ':hover': {
-                            bgcolor: '#7700FF',
-                            color: 'black',
-                        }
-                    }}>Add Product</Button>
-                    </td>
-                </tr>
+                            </td>
+
+                        </tr>
+                        <tr >
+                            <td colSpan='2'>
+                                <FormLabel id="demo-controlled-radio-buttons-group">Amount</FormLabel>
+
+                                <TextField type={'text'} onChange={(e) => onValueChange(e)}
+                                    name='amount'
+                                    error={amount !== '' && !amount.match(/^\d+$/)}
+                                    helperText={!amount.match(/^\d+$/) && amount !== '' ? 'Only digits are allowed' : ' '}
+                                    value={amount}></TextField>
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colSpan='2' >
+                                <FormLabel id="demo-controlled-radio-buttons-group">Category</FormLabel>
+
+                                <TextField fullWidth
+                                    type={'text'} onChange={(e) => onValueChange(e)}
+                                    name='category'
+                                    error={category !== '' && !category.match(/^[a-z]+$/)}
+                                    helperText={!category.match(/^[a-z]+$/) && category !== '' ? 'Category should contain only characters. Special chracters, whitespaces, digits are not allowed' : ' '}
+
+                                    value={category}></TextField>
+
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td className='tr-row'>
+                                <FormLabel id="demo-controlled-radio-buttons-group">Payment Type</FormLabel>
+
+                                <RadioGroup row
+                                    aria-labelledby="demo-controlled-radio-buttons-group"
+                                    name="paymentType"
+                                    value={paymentType}
+                                    onChange={(e) => onValueChange(e)}>
+                                    <FormControlLabel value="Income" control={<Radio />} label="Income" />
+                                    <FormControlLabel value="Expense" control={<Radio />} label="Expense" />
+                                </RadioGroup>
+                            </td>
+                        </tr>
+                        <tr >
+                            <td className='tr-row'>
+                                <FormLabel id="demo-controlled-radio-buttons-group">Date of Invoice</FormLabel>
+
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <Date
+                                        name='dateOfInvoice'
+                                        renderInput={(params) => <TextField {...params} />}
+                                        value={dateOfInvoice}
+                                        onChange={((date) => setProductData({ ...productData, dateOfInvoice: date }))}
+
+                                    />
+                                </LocalizationProvider>
+                            </td>
+                            <td>
+                                <FormLabel id="demo-controlled-radio-buttons-group">Date of Payment</FormLabel>
+
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <Date
+                                        name='dateOfPayment'
+                                        renderInput={(params) => <TextField {...params} />}
+                                        value={dateOfPayment}
+                                        onChange={((date) => setProductData({ ...productData, dateOfPayment: date }))}
+                                    />
+                                </LocalizationProvider>
+
+                            </td>
+                        </tr>
+                        <tr >
+                            <td colSpan='2' className='tr-row'>
+                                <FormLabel id="demo-controlled-radio-buttons-group">Description</FormLabel>
+
+                                <TextField
+                                    multiline rows={5}
+                                    fullWidth
+                                    type={'text'} onChange={(e) => onValueChange(e)}
+                                    name='description'
+                                    value={description} required></TextField>
+
+                            </td>
+                        </tr>
+                        <tr className='tr-row'>
+                            <td>
+                                <Button variant="contained" color="primary" onClick={() => clear()} sx={{
+                                    color: 'red', backgroundColor: '#ffe6e6', borderColor: 'red', ':hover': {
+                                        bgcolor: '#ffe6e6',
+                                        color: 'red',
+                                    }
+                                }}>Reset</Button>
+                            </td>
+                            <td align='right'>
+                                <Button variant="contained" color="primary" onClick={() => validateProductDetails()} sx={{
+                                    color: 'white', backgroundColor: '#7700FF', borderColor: 'white', ':hover': {
+                                        bgcolor: '#7700FF',
+                                        color: 'black',
+                                    }
+                                }}>Add Product</Button>
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+            </StyledTable>
+
+        </Container >
 
 
-            </table>
-        </StyledTable>
-        
-    </Container >
-
-       
     );
 }
 
