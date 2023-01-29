@@ -19,8 +19,8 @@ import { tableCustomStyles } from './TableStyle.js';
 const Product = (props) => {
 
     const [products, setProducts] = useState([]);
-    const { type, dateFilter, dateRange } = props;
-    const { startDate, endDate } = dateRange;
+    const { type, dateFilter, startDate, endDate } = props;
+    
 
     const [search, setSearch] = useState('');
     const [filteredElements, setFilteredElements] = useState('');
@@ -81,7 +81,7 @@ const Product = (props) => {
             const d = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate());
             const month = (d.getMonth() + 1);
             if (dateFilter === 1) {
-                console.log(d, s, d === s);
+               
                 return (d.getFullYear() === s.getFullYear() && d.getMonth() === s.getMonth() && d.getDate() === s.getDate()) ? product : null;
 
             } else if (dateFilter === 2) {

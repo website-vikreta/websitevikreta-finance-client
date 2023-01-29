@@ -23,8 +23,9 @@ const StyledTable = styled(Table)`
    
 `;
 
+
 const ProductForm = (props) => {
-    const [productData, setProductData] = useState({ title: '', amount: '', category: '', paymentType: '', dateOfInvoice: '', dateOfPayment: '', description: '' });
+    const [productData, setProductData] = useState({ title: '', amount: '', category: '', paymentType: '', dateOfInvoice: null, dateOfPayment: null, description: '' });
     const { title, amount, category, paymentType, dateOfInvoice, dateOfPayment, description } = productData;
     const { showModal, setShowModal } = props;
 
@@ -65,6 +66,18 @@ const ProductForm = (props) => {
     const onValueChange = (e) => {
         setProductData({ ...productData, [e.target.name]: e.target.value })
     }
+
+    // const handleFileUpload = (e) => {
+    //     let files=e.target.files;
+
+    //     let reader = new FileReader();
+    //     reader.readAsDataURL(files[0]);
+
+    //     reader.onload = (e) =>{
+    //         console.log('img data', e.target.result);
+    //     }
+
+    // }
     return (
 
         <Container >
@@ -170,6 +183,7 @@ const ProductForm = (props) => {
 
                             </td>
                         </tr>
+                      
                         <tr className='tr-row'>
                             <td>
                                 <Button variant="contained" color="primary" onClick={() => clear()} sx={{

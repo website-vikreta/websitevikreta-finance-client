@@ -112,7 +112,7 @@ export default function AllProducts() {
                 <span style={{ padding: '0px 5px' }}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <Date
-                      toolbarTitle='End Dtae'
+                      toolbarTitle='End Date'
                       label='End Date'
                       name='endDate'
                       renderInput={(params) => <TextField {...params} />}
@@ -127,7 +127,7 @@ export default function AllProducts() {
           }
         </Toolbar>
       </AppBar>
-      <Product type={filter} dateFilter={val} dateRange={dateRange} />
+      <Product type={filter} dateFilter={val} startDate={startDate} endDate={endDate}/>
     </Box>
   );
 }
