@@ -11,3 +11,5 @@ export const createProduct = async (newProduct) => await axios.post(`${url}/add`
 
 export const updateProduct = async (id, updatedProduct) => await axios.put(`${url}/${id}`, updatedProduct);
 export const deleteProduct = async (id) => await axios.delete(`${url}/${id}`);
+
+export const loginUser = async (user) => await axios.post(`${url}/login`, user);

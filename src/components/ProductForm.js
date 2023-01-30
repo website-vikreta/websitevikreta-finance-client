@@ -10,7 +10,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
 import { Table } from '@mui/material';
-
+import FileBase64 from 'react-file-base64';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -23,10 +23,9 @@ const StyledTable = styled(Table)`
    
 `;
 
-
 const ProductForm = (props) => {
-    const [productData, setProductData] = useState({ title: '', amount: '', category: '', paymentType: '', dateOfInvoice: null, dateOfPayment: null, description: '' });
-    const { title, amount, category, paymentType, dateOfInvoice, dateOfPayment, description } = productData;
+    const [productData, setProductData] = useState({ title: '', amount: '', category: '', paymentType: '', dateOfInvoice: null, dateOfPayment: null, description: '', paymentProof: '' });
+    const { title, amount, category, paymentType, dateOfInvoice, dateOfPayment, description, paymentProof } = productData;
     const { showModal, setShowModal } = props;
 
     const validateProductDetails = () => {
@@ -47,6 +46,8 @@ const ProductForm = (props) => {
         } else {
             addProductDetails();
         }
+        addProductDetails();
+        console.log('afteradding: ', productData);
     }
     const addProductDetails = async () => {
         await createProduct(productData);
@@ -61,23 +62,30 @@ const ProductForm = (props) => {
     }
 
     const clear = () => {
-        setProductData({ title: '', amount: '', category: '', paymentType: '', dateOfInvoice: null, dateOfPayment: null, description: '' });
+        setProductData({ title: '', amount: '', category: '', paymentType: '', dateOfInvoice: null, dateOfPayment: null, description: '', paymentProof: '' });
     }
     const onValueChange = (e) => {
         setProductData({ ...productData, [e.target.name]: e.target.value })
     }
 
-    // const handleFileUpload = (e) => {
-    //     let files=e.target.files;
+    const handleImageData = (img) => {
+        console.log('befor', productData);
+        setProductData({ ...productData, paymentProof: img });
+        const validExtensions = ['png', 'jpeg', 'jpg', 'pdf'];
+        const fileExtension = img.split(';')[0].split('/')[1]
+        if (!validExtensions.includes(fileExtension)) {
+            alert('File must be in img and pdf format');
+        }
+        const newRes = (img.length * (3 / 4)) - 2;
+        const size = (newRes / (1024 * 1024)); //1048576;2,560,181
 
-    //     let reader = new FileReader();
-    //     reader.readAsDataURL(files[0]);
+        if (size > 1.5) {
+            alert('File limit exceed');
+        }
+        console.log(paymentProof);
 
-    //     reader.onload = (e) =>{
-    //         console.log('img data', e.target.result);
-    //     }
-
-    // }
+    }
+  
     return (
 
         <Container >
@@ -183,7 +191,23 @@ const ProductForm = (props) => {
 
                             </td>
                         </tr>
-                      
+
+                        <tr>
+                            <td colSpan='2' className='tr-row'>
+                                <FormLabel id="demo-controlled-radio-buttons-group">Payment Proof</FormLabel>
+                               
+                                    <span className="input-file" >
+                                        <FileBase64
+                                            type="file"
+                                            sx={{ display: 'none' }}
+                                            multiple={false}
+                                            onDone={({ base64 }) => { handleImageData(base64) }}
+                                        />
+                                    </span>
+                                  
+                            </td>
+                        </tr>
+
                         <tr className='tr-row'>
                             <td>
                                 <Button variant="contained" color="primary" onClick={() => clear()} sx={{

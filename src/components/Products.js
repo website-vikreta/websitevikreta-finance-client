@@ -13,7 +13,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import DataTable from 'react-data-table-component';
 import { tableCustomStyles } from './TableStyle.js';
-
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import PopupImage from './PopupImage';
 
 
 const Product = (props) => {
@@ -25,6 +26,7 @@ const Product = (props) => {
     const [search, setSearch] = useState('');
     const [filteredElements, setFilteredElements] = useState('');
     const [showModal, setShowModal] = useState({ openDialog: false, currProduct: '' });
+    const [showImgModal, setShowImgModal] = useState({ openImgDialog: false, image: '' });
     const [delModal, setDelModal] = useState({ openDelDialog: false, deleteId: null });
 
 
@@ -82,7 +84,7 @@ const Product = (props) => {
             const month = (d.getMonth() + 1);
             if (dateFilter === 1) {
                
-                return (d.getFullYear() === s.getFullYear() && d.getMonth() === s.getMonth() && d.getDate() === s.getDate()) ? product : null;
+                return (d.getFullYear() === s.getFullYear() && d.getMonth() === s.getMonth() && d.getDate() === s.getDate()) ?  product : null;
 
             } else if (dateFilter === 2) {
 
@@ -126,11 +128,14 @@ const Product = (props) => {
                 return product;
             }
         }
-        var result = products.filter((e) => checkDuration(e, dateFilter)).filter((e) => check(e, type)).filter((product) => { return String(Object.values(product)).toLowerCase().includes(search.toLowerCase()); });
+        var result = products.filter((e) => checkDuration(e, dateFilter))
+        .filter((e) => check(e, type))
+        .filter((product) => { return String(Object.values(product)).toLowerCase().includes(search.toLowerCase()); });
 
         setFilteredElements(result);
     }, [search, dateFilter, products, type, startDate, endDate]);
 
+   
     const getAllProducts = async () => {
         let response = await getProducts();
         setProducts(response.data);
@@ -163,7 +168,11 @@ const Product = (props) => {
         return d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear()
     };
 
-
+    function showProof(img){
+       // console.log(img );
+        setShowImgModal({ openImgDialog: true, image: img })
+      //  console.log(showImgModal.image, 'productssssdhh', img);
+    }
 
 
     const columns = [
@@ -208,6 +217,12 @@ const Product = (props) => {
             selector: row => row.description,
         },
         {
+            name: 'Payment Proof',
+             cell: row => <> <IconButton sx={{ color: '#0052cc' }} variant="contained" style={{ marginRight: 10 }}  
+             onClick={() => showProof( row.paymentProof)}><VisibilityIcon /></IconButton> </>
+        },
+
+        {
             name: 'Action ',
             cell: row => <> <IconButton sx={{ color: '#0052cc' }} variant="contained" style={{ marginRight: 10 }} onClick={() => setShowModal({ openDialog: true, currProduct: row })}><EditIcon /></IconButton>
                 <IconButton sx={{ color: 'red' }} variant="contained" onClick={() => deleteProductData(row._id)}><DeleteIcon /></IconButton> </>
@@ -251,6 +266,7 @@ const Product = (props) => {
 
             <Popup showModal={showModal} setShowModal={setShowModal} formType='Edit' ></Popup>
             <DeletePopup delModal={delModal} setDelModal={setDelModal} confirm={confirm}></DeletePopup>
+            <PopupImage showImgModal={showImgModal} setShowImgModal={setShowImgModal}></PopupImage>
             <ToastContainer />
             <div style={{ width: '95%', margin: '50px' }}>
                 <DataTable
