@@ -2,14 +2,19 @@ import axios from 'axios';
 
 const url = process.env.REACT_APP_BASE_URL;
 
-export const getProducts = async (id) =>{
+export const getItems = async (id) =>{
     id = id || '';
     return await axios.get(`${url}/${id}`);
 }
 
-export const createProduct = async (newProduct) => await axios.post(`${url}/add`, newProduct);
+export const createItem = async (newItem) => await axios.post(`${url}/add`, newItem);
 
-export const updateProduct = async (id, updatedProduct) => await axios.put(`${url}/${id}`, updatedProduct);
-export const deleteProduct = async (id) => await axios.delete(`${url}/${id}`);
+export const updateItem = async (id, updatedItem) => await axios.put(`${url}/${id}`, updatedItem);
+export const deleteItem = async (id) => await axios.delete(`${url}/${id}`);
 
 export const loginUser = async (user) => await axios.post(`${url}/login`, user);
+
+export const getMedia = async (id) => {
+    id = id || '';
+    return await axios.get(`${url}/media${id}`);
+};

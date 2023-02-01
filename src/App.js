@@ -1,7 +1,7 @@
 
-import EditProduct from './components/EditProduct';
+import EditItem from './components/EditItem';
 import Index from './components/Index'
-import AllProducts from './components/AllProducts';
+import AllItems from './components/AllItems';
 import './index.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './components/Login';
@@ -19,11 +19,11 @@ const App = () => {
     <BrowserRouter>
 
       <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="all" element={<AllProducts />} />
-        <Route path="/edit/:id" element={<EditProduct />} />
-        <Route path="/login" element={<Login />} />
-
+        <Route path="/" element={<Login />} />
+        <Route path="/home" element={<Index />} />
+        <Route path="all" element={<AllItems />} />
+        <Route path="/edit/:id" element={<EditItem />} />
+       
       </Routes>
     </BrowserRouter>
   );

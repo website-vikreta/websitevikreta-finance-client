@@ -1,58 +1,119 @@
+import { useState, useEffect } from 'react';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import styled from "@emotion/styled";
-import { useState } from "react";
-import { TextField, Button, Container } from '@mui/material';
-import { createProduct } from '../api/index';
+
+import {  Table } from '@mui/material';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
-import { Table } from '@mui/material';
-import FileBase64 from 'react-file-base64';
+
+import { TextField, Container, Button, styled ,FormHelperText } from '@mui/material';
+import { updateItem, getItems } from '../api/index';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-import './ProductForm.css';
+import './ItemForm.css';
+import FileBase64 from 'react-file-base64';
 const Date = styled(DatePicker)`
-    width: 250px
+    width: 300px
 `;
+
 const StyledTable = styled(Table)`
     width: 200px;
    
 `;
 
-const ProductForm = (props) => {
-    const [productData, setProductData] = useState({ title: '', amount: '', category: '', paymentType: '', dateOfInvoice: null, dateOfPayment: null, description: '', paymentProof: '' });
-    const { title, amount, category, paymentType, dateOfInvoice, dateOfPayment, description, paymentProof } = productData;
-    const { showModal, setShowModal } = props;
 
-    const validateProductDetails = () => {
-        if (!title.match(/^[a-z]+$/)) {
-            alert('Enter product title properly');
-        } else if (!amount.match(/^\d+$/)) {
-            alert('Enter amount properly');
-        } else if (!category.match(/^[a-z]+$/)) {
-            alert('Enter product category properly');
-        } else if (paymentType === '') {
-            alert('Please select payment type');
-        } else if (dateOfInvoice === '') {
-            alert('Selete date of invoice');
-        } else if (dateOfPayment === '') {
-            alert('Select date of payment');
-        } else if (description === '') {
-            alert('Enter product description');
-        } else {
-            addProductDetails();
+const EditItem = (props) => {
+    const [item, setItem] = useState({ title: '', amount: '', category: '', paymentType: '', dateOfInvoice: '', dateOfPayment: '', description: '', paymentProof: '' });
+    const { title, amount, category, paymentType, dateOfInvoice, dateOfPayment, description, paymentProof } = item;
+   
+    const { cItem, showModal, setShowModal } = props;
+    const id = cItem._id;
+
+    useEffect(() => {
+        const loadItemDetails = async () => {
+            const response = await getItems(id);
+            setItem(response.data);
+            console.log(response.data, 'payayaa');
         }
-        addProductDetails();
-        console.log('afteradding: ', productData);
+        loadItemDetails();
+    }, [id]);
+
+    const [errors, setErrors] = useState({
+        title: {
+            value: cItem.title,
+            error: false,
+            errorMessage: ''
+        },
+        amount: {
+            value: cItem.amount,
+            error: false,
+            errorMessage: ''
+        },
+        category: {
+            value: cItem.category,
+            error: false,
+            errorMessage: ''
+        },
+        paymentType: {
+            value: cItem.paymentType,
+            error: false,
+            errorMessage: ''
+        },
+        dateOfInvoice: {
+            value: cItem.dateOfInvoice,
+            error: false,
+            errorMessage: ''
+        },
+        dateOfPayment: {
+            value: cItem.dateOfPayment,
+            error: false,
+            errorMessage: ''
+        },
+        description: {
+            value: cItem.description,
+            error: false,
+            errorMessage: ''
+        }
+    })
+
+    const clear = () => {
+        setItem({ title: '', amount: '', category: '', paymentType: '', dateOfInvoice: null, dateOfPayment: null, description: '', paymentProof: '' });
     }
-    const addProductDetails = async () => {
-        await createProduct(productData);
+
+    const validateItemDetails = () => {
+        const errorFields = Object.keys(errors);
+        let newErrorValues = { ...errors }
+        let cnt = 0;
+        for (let index = 0; index < errorFields.length; index++) {
+            const currentField = errorFields[index];
+            const currentValue = errors[currentField].value;
+
+            if (currentValue === '') {
+                cnt= cnt+1;
+                newErrorValues = {
+                    ...newErrorValues,
+                    [currentField]: {
+                        ...newErrorValues[currentField],
+                        error: true,
+                        errorMessage: 'This field is required'
+                    }
+                }
+            }
+
+        }
+
+        setErrors(newErrorValues);
+        console.log(errors, '.............................');
+        if(cnt === 0)  editItemDetails();
+    }
+    const editItemDetails = async () => {
+        console.log(item.dateOfInvoice);
+        await updateItem(id, item);
         setShowModal({ ...showModal, openDialog: false });
-        toast.success("Product Added Successfully!!", {
+        toast.success("Item updated Successfully!!", {
             position: "top-center",
             autoClose: 2000,
             hideProgressBar: false,
@@ -61,31 +122,22 @@ const ProductForm = (props) => {
         });
     }
 
-    const clear = () => {
-        setProductData({ title: '', amount: '', category: '', paymentType: '', dateOfInvoice: null, dateOfPayment: null, description: '', paymentProof: '' });
-    }
     const onValueChange = (e) => {
-        setProductData({ ...productData, [e.target.name]: e.target.value })
+        setErrors({
+            ...errors,
+            [e.target.name]: {
+                value: e.target.value,
+                error: false,
+                errorMessage: ''
+            }
+        })
+        setItem({ ...item, [e.target.name]: e.target.value })
     }
 
     const handleImageData = (img) => {
-        console.log('befor', productData);
-        setProductData({ ...productData, paymentProof: img });
-        const validExtensions = ['png', 'jpeg', 'jpg', 'pdf'];
-        const fileExtension = img.split(';')[0].split('/')[1]
-        if (!validExtensions.includes(fileExtension)) {
-            alert('File must be in img and pdf format');
-        }
-        const newRes = (img.length * (3 / 4)) - 2;
-        const size = (newRes / (1024 * 1024)); //1048576;2,560,181
-
-        if (size > 1.5) {
-            alert('File limit exceed');
-        }
-        console.log(paymentProof);
-
+        setItem({ ...item, paymentProof: img });
+        console.log(paymentProof, 'dgsgsgsggq1111');
     }
-  
     return (
 
         <Container >
@@ -97,12 +149,13 @@ const ProductForm = (props) => {
                     <tbody>
                         <tr>
                             <td colSpan='2'>
-                                <FormLabel id="demo-controlled-radio-buttons-group">Product Title</FormLabel>
+                                <FormLabel id="demo-controlled-radio-buttons-group">Item Title</FormLabel>
 
                                 <TextField variant='outlined' fullWidth
                                     type={'text'} onChange={(e) => onValueChange(e)}
-                                    error={title !== '' && !title.match(/^[a-z]+$/)}
-                                    helperText={!title.match(/^[a-z]+$/) && title !== '' ? 'Product title should contain only characters. Special chracters, whitespaces, digits are not allowed' : ' '}
+                                    error={(errors.title.error) || (!title.match(/^[a-z]+$/) && title !== '')}
+                                    helperText={(errors.title.error && errors.title.errorMessage) || (!title.match(/^[a-z]+$/) && title !== '' ? 'Item title should contain only characters. Special chracters, whitespaces, digits are not allowed' : ' ')}
+
                                     name='title' value={title}></TextField>
 
                             </td>
@@ -114,8 +167,10 @@ const ProductForm = (props) => {
 
                                 <TextField type={'text'} onChange={(e) => onValueChange(e)}
                                     name='amount'
-                                    error={amount !== '' && !amount.match(/^\d+$/)}
-                                    helperText={!amount.match(/^\d+$/) && amount !== '' ? 'Only digits are allowed' : ' '}
+                                    fullWidth
+                                    error={(errors.amount.error) || (amount !== '' && !String(amount).match(/^\d+$/))}
+                                    helperText={(errors.amount.error && errors.amount.errorMessage) || (!String(amount).match(/^\d+$/) && amount !== '' ? 'Only digits are allowed' : ' ')}
+                                   
                                     value={amount}></TextField>
 
                             </td>
@@ -128,8 +183,9 @@ const ProductForm = (props) => {
                                 <TextField fullWidth
                                     type={'text'} onChange={(e) => onValueChange(e)}
                                     name='category'
-                                    error={category !== '' && !category.match(/^[a-z]+$/)}
-                                    helperText={!category.match(/^[a-z]+$/) && category !== '' ? 'Category should contain only characters. Special chracters, whitespaces, digits are not allowed' : ' '}
+                                    error={(errors.category.error) || (category !== '' && !category.match(/^[a-z]+$/))}
+                                    helperText={(errors.category.error && errors.category.errorMessage) || (!category.match(/^[a-z]+$/) && category !== '' ?
+                                        'Category should contain only characters. Special chracters, whitespaces, digits are not allowed' : ' ')}
 
                                     value={category}></TextField>
 
@@ -148,6 +204,8 @@ const ProductForm = (props) => {
                                     <FormControlLabel value="Income" control={<Radio />} label="Income" />
                                     <FormControlLabel value="Expense" control={<Radio />} label="Expense" />
                                 </RadioGroup>
+                                <FormHelperText error>{errors.paymentType.errorMessage}</FormHelperText>
+
                             </td>
                         </tr>
                         <tr >
@@ -159,7 +217,7 @@ const ProductForm = (props) => {
                                         name='dateOfInvoice'
                                         renderInput={(params) => <TextField {...params} />}
                                         value={dateOfInvoice}
-                                        onChange={((date) => setProductData({ ...productData, dateOfInvoice: date }))}
+                                        onChange={((date) => setItem({ ...item, dateOfInvoice: date }))}
 
                                     />
                                 </LocalizationProvider>
@@ -172,7 +230,7 @@ const ProductForm = (props) => {
                                         name='dateOfPayment'
                                         renderInput={(params) => <TextField {...params} />}
                                         value={dateOfPayment}
-                                        onChange={((date) => setProductData({ ...productData, dateOfPayment: date }))}
+                                        onChange={((date) => setItem({ ...item, dateOfPayment: date }))}
                                     />
                                 </LocalizationProvider>
 
@@ -187,27 +245,26 @@ const ProductForm = (props) => {
                                     fullWidth
                                     type={'text'} onChange={(e) => onValueChange(e)}
                                     name='description'
-                                    value={description} required></TextField>
+                                    value={description} 
+                                    error={(errors.description.error)}
+                                    helperText={(errors.description.error && errors.description.errorMessage) }
+                                    ></TextField>
 
                             </td>
                         </tr>
-
                         <tr>
-                            <td colSpan='2' className='tr-row'>
-                                <FormLabel id="demo-controlled-radio-buttons-group">Payment Proof</FormLabel>
+                        <td colSpan='2' className='tr-row' >
                                
                                     <span className="input-file" >
-                                        <FileBase64
-                                            type="file"
-                                            sx={{ display: 'none' }}
-                                            multiple={false}
-                                            onDone={({ base64 }) => { handleImageData(base64) }}
-                                        />
-                                    </span>
-                                  
+                            <FileBase64
+                                type="file"
+                                multiple={false}
+                                onDone={({ base64 }) => { handleImageData(base64) }}
+                            />
+                            </span>
+                            
                             </td>
                         </tr>
-
                         <tr className='tr-row'>
                             <td>
                                 <Button variant="contained" color="primary" onClick={() => clear()} sx={{
@@ -218,12 +275,12 @@ const ProductForm = (props) => {
                                 }}>Reset</Button>
                             </td>
                             <td align='right'>
-                                <Button variant="contained" color="primary" onClick={() => validateProductDetails()} sx={{
+                                <Button variant="contained" color="primary" onClick={() => validateItemDetails()} sx={{
                                     color: 'white', backgroundColor: '#7700FF', borderColor: 'white', ':hover': {
                                         bgcolor: '#7700FF',
                                         color: 'black',
                                     }
-                                }}>Add Product</Button>
+                                }}>Edit Item</Button>
                             </td>
                         </tr>
 
@@ -234,8 +291,7 @@ const ProductForm = (props) => {
 
         </Container >
 
-
-    );
+    )
 }
 
-export default ProductForm;
+export default EditItem;

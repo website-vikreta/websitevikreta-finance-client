@@ -8,7 +8,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import Product from './Products';
+import Item from './Items';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -18,7 +18,7 @@ import { useState } from 'react';
 const Date = styled(DatePicker)`
     width: 250px
 `;
-export default function AllProducts() {
+export default function AllItems() {
   const [val, setVal] = useState('');
   const [dateRange, setDateRange] = useState({ startDate: null, endDate: null });
   const { startDate, endDate } = dateRange;
@@ -127,7 +127,7 @@ export default function AllProducts() {
           }
         </Toolbar>
       </AppBar>
-      <Product type={filter} dateFilter={val} startDate={startDate} endDate={endDate}/>
+      <Item type={filter} dateFilter={val} startDate={startDate} endDate={endDate}/>
     </Box>
   );
 }

@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { getProducts, deleteProduct } from '../api/index';
+import { getItems, getMedia, deleteItem } from '../api/index';
 import { Grid } from '@mui/material';
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -17,31 +17,35 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import PopupImage from './PopupImage';
 
 
-const Product = (props) => {
+const Item = (props) => {
 
-    const [products, setProducts] = useState([]);
+    const [items, setItems] = useState([]);
     const { type, dateFilter, startDate, endDate } = props;
     
 
     const [search, setSearch] = useState('');
     const [filteredElements, setFilteredElements] = useState('');
-    const [showModal, setShowModal] = useState({ openDialog: false, currProduct: '' });
+    const [showModal, setShowModal] = useState({ openDialog: false, currItem: '' });
     const [showImgModal, setShowImgModal] = useState({ openImgDialog: false, image: '' });
     const [delModal, setDelModal] = useState({ openDelDialog: false, deleteId: null });
 
 
+    const getAllItems = async () => {
+        let response = await getItems();
+        setItems(response.data);
+    }
 
     useEffect(() => {
-        getAllProducts();
+        getAllItems();
 
-    }, [products]);
+    }, [items]);
 
     useEffect(() => {
 
-        function check(products, type) {
-            if (type === '_id' || type === undefined) return products;
+        function check(items, type) {
+            if (type === '_id' || type === undefined) return items;
 
-            return products.paymentType === type ? products : null;
+            return items.paymentType === type ? items : null;
         }
         function getQuarter(month) {
             if (month >= 3 && month <= 5) return 1;
@@ -50,98 +54,95 @@ const Product = (props) => {
             else return 4;
         }
 
-        function thisQuarter(d, now, month, quartr, product) {
+        function thisQuarter(d, now, month, quartr, item) {
             if (getQuarter(quartr === 4)) {
                 if (d.getFullYear() === now.getFullYear() && month <= 2) {
-                    return product;
+                    return item;
                 } else
                     if (d.getFullYear() === (now.getFullYear() - 1) && month >= 12) {
-                        return product
+                        return item
                     } else {
                         return null;
                     }
             } else if (d.getFullYear() === now.getFullYear()) {
 
                 if (quartr === 1)
-                    return d.getFullYear() === now.getFullYear() && month >= 3 && month <= 5 ? product : null;
+                    return d.getFullYear() === now.getFullYear() && month >= 3 && month <= 5 ? item : null;
                 if (quartr === 2)
-                    return d.getFullYear() === now.getFullYear() && month >= 6 && month <= 8 ? product : null;
+                    return d.getFullYear() === now.getFullYear() && month >= 6 && month <= 8 ? item : null;
                 if (quartr === 3)
-                    return d.getFullYear() === now.getFullYear() && month >= 9 && month <= 11 ? product : null;
+                    return d.getFullYear() === now.getFullYear() && month >= 9 && month <= 11 ? item : null;
             } else return null;
         }
 
 
-        function lastQuarter(d, now, month, product) {
-            return d.getFullYear() === (now.getFullYear() - 1) && month >= 9 && month <= 11 ? product : null;
+        function lastQuarter(d, now, month, item) {
+            return d.getFullYear() === (now.getFullYear() - 1) && month >= 9 && month <= 11 ? item : null;
         }
 
-        function checkDuration(product, dateFilter) {
+        function checkDuration(item, dateFilter) {
             const now = new Date();
             const s = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            const currDate = new Date(product.dateOfInvoice);
+            const currDate = new Date(item.dateOfInvoice);
             const d = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate());
             const month = (d.getMonth() + 1);
             if (dateFilter === 1) {
                
-                return (d.getFullYear() === s.getFullYear() && d.getMonth() === s.getMonth() && d.getDate() === s.getDate()) ?  product : null;
+                return (d.getFullYear() === s.getFullYear() && d.getMonth() === s.getMonth() && d.getDate() === s.getDate()) ?  item : null;
 
             } else if (dateFilter === 2) {
 
                 const e = new Date(now.getFullYear(), now.getMonth(), (now.getDate() - 7));
-                return d <= s && d >= e ? product : null;
+                return d <= s && d >= e ? item : null;
 
             } else if (dateFilter === 3) {
 
                 const e = subDays(now, 30);
-                return d <= s && d >= e ? product : null;
+                return d <= s && d >= e ? item : null;
 
             } else if (dateFilter === 4) {
                 const quartr = getQuarter(d.getMonth() + 1);
-                return thisQuarter(d, now, month, quartr, product);
+                return thisQuarter(d, now, month, quartr, item);
 
             } else if (dateFilter === 5) {
 
                 const quartr = getQuarter(d.getMonth() + 1);
-                if (quartr === 1) return thisQuarter(d, now, month, 4, product);
-                if (quartr === 4 || ((d.getFullYear() === now.getFullYear() - 1) && quartr === 3)) return lastQuarter(d, now, month, product);
-                return thisQuarter(d, now, month, quartr - 1, product);
+                if (quartr === 1) return thisQuarter(d, now, month, 4, item);
+                if (quartr === 4 || ((d.getFullYear() === now.getFullYear() - 1) && quartr === 3)) return lastQuarter(d, now, month, item);
+                return thisQuarter(d, now, month, quartr - 1, item);
 
             } else if (dateFilter === 6) {
 
-                return s.getFullYear() === d.getFullYear() ? product : null;
+                return s.getFullYear() === d.getFullYear() ? item : null;
 
             } else if (dateFilter === 7) {
 
-                return (s.getFullYear() - 1) === d.getFullYear() ? product : null;
+                return (s.getFullYear() - 1) === d.getFullYear() ? item : null;
 
             } else if (dateFilter === 8) {
 
-                return d.getFullYear() === 2021 ? product : null;
+                return d.getFullYear() === 2021 ? item : null;
 
             } else if (dateFilter === 9 && startDate && endDate) {
                 const d1 = new Date(startDate);
                 const d2 = new Date(endDate);
-                return (d >= d1) && (d <= d2) ? product : null;
+                return (d >= d1) && (d <= d2) ? item : null;
             }
             else {
-                return product;
+                return item;
             }
         }
-        var result = products.filter((e) => checkDuration(e, dateFilter))
+        var result = items.filter((e) => checkDuration(e, dateFilter))
         .filter((e) => check(e, type))
-        .filter((product) => { return String(Object.values(product)).toLowerCase().includes(search.toLowerCase()); });
+        .filter((item) => { return String(Object.values(item)).toLowerCase().includes(search.toLowerCase()); });
 
         setFilteredElements(result);
-    }, [search, dateFilter, products, type, startDate, endDate]);
+    }, [search, dateFilter, items, type, startDate, endDate]);
 
    
-    const getAllProducts = async () => {
-        let response = await getProducts();
-        setProducts(response.data);
-    }
+   
 
-    const deleteProductData = (id) => {
+    const deleteItemData = (id) => {
         setDelModal({ openDelDialog: true, deleteId: id });
     }
 
@@ -151,7 +152,7 @@ const Product = (props) => {
     }
 
     const deleteConfrim = async (id) => {
-        await deleteProduct(id);
+        await deleteItem(id);
         toast(" Successfully Deleted", {
             position: "top-center",
             autoClose: 2000,
@@ -159,7 +160,7 @@ const Product = (props) => {
             closeOnClick: true,
             theme: "light",
         });
-        getAllProducts();
+        getAllItems();
     }
 
 
@@ -168,10 +169,10 @@ const Product = (props) => {
         return d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear()
     };
 
-    function showProof(img){
-       // console.log(img );
-        setShowImgModal({ openImgDialog: true, image: img })
-      //  console.log(showImgModal.image, 'productssssdhh', img);
+    const getProof = async (id) => {
+        let response = await getMedia(id);
+        console.log(response.data);
+        setShowImgModal({ openImgDialog: true, image: response.data.paymentProof })
     }
 
 
@@ -219,13 +220,13 @@ const Product = (props) => {
         {
             name: 'Payment Proof',
              cell: row => <> <IconButton sx={{ color: '#0052cc' }} variant="contained" style={{ marginRight: 10 }}  
-             onClick={() => showProof( row.paymentProof)}><VisibilityIcon /></IconButton> </>
+             onClick={() => getProof( row._id)}><VisibilityIcon /></IconButton> </>
         },
 
         {
             name: 'Action ',
-            cell: row => <> <IconButton sx={{ color: '#0052cc' }} variant="contained" style={{ marginRight: 10 }} onClick={() => setShowModal({ openDialog: true, currProduct: row })}><EditIcon /></IconButton>
-                <IconButton sx={{ color: 'red' }} variant="contained" onClick={() => deleteProductData(row._id)}><DeleteIcon /></IconButton> </>
+            cell: row => <> <IconButton sx={{ color: '#0052cc' }} variant="contained" style={{ marginRight: 10 }} onClick={() => setShowModal({ openDialog: true, currItem: row })}><EditIcon /></IconButton>
+                <IconButton sx={{ color: 'red' }} variant="contained" onClick={() => deleteItemData(row._id)}><DeleteIcon /></IconButton> </>
 
         },
     ];
@@ -297,4 +298,4 @@ const Product = (props) => {
 
 }
 
-export default Product;
+export default Item;

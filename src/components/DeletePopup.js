@@ -72,7 +72,7 @@ export default function DeletePopup(props) {
 
 
 import { useState, useEffect } from 'react';
-import { getProducts, deleteProduct } from '../api/index';
+import { getItems, deleteItem } from '../api/index';
 import { Table, TableHead, Button, TableCell, TableRow, TableBody, styled, Grid } from '@mui/material';
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -177,25 +177,25 @@ const TRow = styled(TableRow)`
       }
 `;
 
-const Product = (props) => {
+const Item = (props) => {
 
-    // const products = useSelector((state) => state.products);
-    const [products, setProducts] = useState([]);
+    // const items = useSelector((state) => state.items);
+    const [items, setItems] = useState([]);
     const { type, dateFilter } = props;
-    const [showModal,setShowModal] = useState({openDialog: false, currProduct: ''});
+    const [showModal,setShowModal] = useState({openDialog: false, currItem: ''});
     const [delModal,setDelModal] = useState({openDelDialog: false, deleteId: null});
     
 
     useEffect(() => {
-        getAllProducts();
+        getAllItems();
     }, []);
 
-    const getAllProducts = async () => {
-        let response = await getProducts();
-        setProducts(response.data);
+    const getAllItems = async () => {
+        let response = await getItems();
+        setItems(response.data);
     }
 
-    const deleteProductData =  (id) => {
+    const deleteItemData =  (id) => {
        // setDelModal({openDelDialog: true, deleteId: id});
        console.log("delte1");
     }
@@ -206,38 +206,38 @@ const Product = (props) => {
         setDelModal({openDelDialog: false, deleteId: null});
     }
     // const handlDelete = async (id) => {
-    //     if(id === delModal.deleteId) await deleteProduct(id);
+    //     if(id === delModal.deleteId) await deleteItem(id);
     //     setDelModal({openDelDialog: false, deleteId: null});
-    //     getAllProducts();
+    //     getAllItems();
     // }
    
-    function check(products, type) {
-        if (type === '_id' || type === undefined) return products;
+    function check(items, type) {
+        if (type === '_id' || type === undefined) return items;
        
-        return products.paymentType === type ? products : null;
+        return items.paymentType === type ? items : null;
     }
-    function checkDuration(product, dateFilter) {
+    function checkDuration(item, dateFilter) {
         const now = new Date();
         const s = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        const currDate = new Date(product.dateOfPayment);
+        const currDate = new Date(item.dateOfPayment);
         const d = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate());
         if (dateFilter === 1) { 
             const e = new Date(now.getFullYear(), now.getMonth(), (now.getDate() - 7));
-            return d <= s && d >= e ? product : null;
+            return d <= s && d >= e ? item : null;
         }else if(dateFilter === 2){
             const e = new Date(now.getFullYear(), now.getMonth(), (now.getDate() - 30));
-            return d <= s && d >= e ? product : null;
+            return d <= s && d >= e ? item : null;
         }else if(dateFilter === 5){
-            return (s.getFullYear()-1) === d.getFullYear() ? product : null;
+            return (s.getFullYear()-1) === d.getFullYear() ? item : null;
         }else if(dateFilter === 6){
-            return d.getFullYear() === 2021 ? product : null;
+            return d.getFullYear() === 2021 ? item : null;
         }
-        return product;
+        return item;
     }
 
     const formatedate = (d) => {
          return d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear() };
-    const filteredElements = products.filter((e) => check(e, type)).filter((e) => checkDuration(e, dateFilter));
+    const filteredElements = items.filter((e) => check(e, type)).filter((e) => checkDuration(e, dateFilter));
 
 
     return (
@@ -257,19 +257,19 @@ const Product = (props) => {
                         </THead>
                     </TableHead>
                     <TableBody>
-                        {filteredElements.map((product) => (
-                            <TRow key={product._id}>
+                        {filteredElements.map((item) => (
+                            <TRow key={item._id}>
 
-                                <TableCell>{product.title}</TableCell>
-                                <TableCell>{product.amount}</TableCell>
-                                <TableCell>{product.category}</TableCell>
-                                <TableCell>{product.paymentType}</TableCell>
-                                <TableCell>{formatedate(new Date(product.dateOfInvoice))}</TableCell>
-                                <TableCell>{formatedate(new Date(product.dateOfPayment))}</TableCell>
-                                <TableCell>{product.description}</TableCell>
+                                <TableCell>{item.title}</TableCell>
+                                <TableCell>{item.amount}</TableCell>
+                                <TableCell>{item.category}</TableCell>
+                                <TableCell>{item.paymentType}</TableCell>
+                                <TableCell>{formatedate(new Date(item.dateOfInvoice))}</TableCell>
+                                <TableCell>{formatedate(new Date(item.dateOfPayment))}</TableCell>
+                                <TableCell>{item.description}</TableCell>
                                 <TableCell>
-                                    <IconButton sx={{ color: '#0052cc' }} variant="contained" style={{ marginRight: 10 }} onClick={() => setShowModal({openDialog: true, currProduct: product}) }><EditIcon /></IconButton> 
-                                    <IconButton sx={{ color: 'red' }} variant="contained" onClick={() => deleteProductData(product._id)}><DeleteIcon /></IconButton> 
+                                    <IconButton sx={{ color: '#0052cc' }} variant="contained" style={{ marginRight: 10 }} onClick={() => setShowModal({openDialog: true, currItem: item}) }><EditIcon /></IconButton> 
+                                    <IconButton sx={{ color: 'red' }} variant="contained" onClick={() => deleteItemData(item._id)}><DeleteIcon /></IconButton> 
                                 </TableCell>
                             </TRow>
                         ))}
@@ -283,7 +283,7 @@ const Product = (props) => {
 
 }
 
-export default Product;
+export default Item;
 
 
  */

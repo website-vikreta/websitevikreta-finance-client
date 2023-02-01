@@ -4,14 +4,16 @@ import { TextField, Button, Grid, Paper } from '@mui/material';
 import React from 'react';
 import { loginUser } from '../api';
 const Login = () => {
-    const [userDetails, setUserDetails] = React.useState({ email: '', password: '' });
+    const [userDetails, setUserDetails] = React.useState({ email: '', password: ''});
     const {email, password} = userDetails;
 
 
     const handleSubmit = async () => {
         const res = await loginUser(userDetails);
-        alert('login',res.data);
-        console.log(res.data);
+        if(res.data === null){
+            alert('Incorrect email or password');
+        }
+        console.log(res, 'userDetaild');
     }
 
 
