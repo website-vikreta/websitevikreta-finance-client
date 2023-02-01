@@ -26,7 +26,7 @@ const Item = (props) => {
     const [search, setSearch] = useState('');
     const [filteredElements, setFilteredElements] = useState('');
     const [showModal, setShowModal] = useState({ openDialog: false, currItem: '' });
-    const [showImgModal, setShowImgModal] = useState({ openImgDialog: false, image: '' });
+    const [showImgModal, setShowImgModal] = useState({ openImgDialog: false, id: '', paymentType: '', image: '' });
     const [delModal, setDelModal] = useState({ openDelDialog: false, deleteId: null });
 
 
@@ -139,9 +139,6 @@ const Item = (props) => {
         setFilteredElements(result);
     }, [search, dateFilter, items, type, startDate, endDate]);
 
-   
-   
-
     const deleteItemData = (id) => {
         setDelModal({ openDelDialog: true, deleteId: id });
     }
@@ -172,9 +169,8 @@ const Item = (props) => {
     const getProof = async (id) => {
         let response = await getMedia(id);
         console.log(response.data);
-        setShowImgModal({ openImgDialog: true, image: response.data.paymentProof })
+        setShowImgModal({ openImgDialog: true, id: response.data._id, paymentType: response.data.paymentType, image: response.data.paymentProof })
     }
-
 
     const columns = [
         {

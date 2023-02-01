@@ -72,11 +72,11 @@ const ItemForm = (props) => {
     const validateItemDetails = () => {
         const errorFields = Object.keys(errors);
         let newErrorValues = { ...errors }
+        let values = Object.values(itemData)
         let cnt = 0;
         for (let index = 0; index < errorFields.length; index++) {
             const currentField = errorFields[index];
-            const currentValue = errors[currentField].value;
-
+            const currentValue = values[index];
             if (currentValue === '') {
                 cnt= cnt+1;
                 newErrorValues = {
@@ -170,7 +170,7 @@ const ItemForm = (props) => {
                                 <FormLabel id="demo-controlled-radio-buttons-group">Amount</FormLabel>
 
                                 <TextField type={'text'} onChange={(e) => onValueChange(e)}
-                                    name='amount'
+                                    name='amount' fullWidth
                                     error={(errors.amount.error) || (amount !== '' && !amount.match(/^\d+$/))}
                                     helperText={(errors.amount.error && errors.amount.errorMessage) || (!amount.match(/^\d+$/) && amount !== '' ? 'Only digits are allowed' : ' ')}
                                     value={amount}></TextField>

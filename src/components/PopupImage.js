@@ -4,14 +4,14 @@ import CloseIcon from '@mui/icons-material/Close';
 
 export default function PopupImage(props){
     const {showImgModal,setShowImgModal} = props;
-    const {openImgDialog, image} = showImgModal;
+    const {openImgDialog, id, paymentType, image} = showImgModal;
   
     function downloadBase64File( base64Data) {
         //const linkSource = `data:${contentType};base64,${base64Data}`;
         const linkSource = base64Data;
         const downloadLink = document.createElement("a");
         downloadLink.href = linkSource;
-        downloadLink.download = 'PaymentProof';
+        downloadLink.download = 'Payment_'+id+'_'+paymentType;
         downloadLink.click();
    }
     return(

@@ -36,7 +36,7 @@ const EditItem = (props) => {
         const loadItemDetails = async () => {
             const response = await getItems(id);
             setItem(response.data);
-            console.log(response.data, 'payayaa');
+            
         }
         loadItemDetails();
     }, [id]);
@@ -86,11 +86,12 @@ const EditItem = (props) => {
     const validateItemDetails = () => {
         const errorFields = Object.keys(errors);
         let newErrorValues = { ...errors }
+        let values = Object.values(item)
         let cnt = 0;
         for (let index = 0; index < errorFields.length; index++) {
             const currentField = errorFields[index];
-            const currentValue = errors[currentField].value;
-
+            const currentValue = values[index+1];
+            console.log('dsfsd', currentValue, );
             if (currentValue === '') {
                 cnt= cnt+1;
                 newErrorValues = {
@@ -101,6 +102,7 @@ const EditItem = (props) => {
                         errorMessage: 'This field is required'
                     }
                 }
+                console.log(values[index],'fsfsdff', currentValue,'gdgdgs');
             }
 
         }
