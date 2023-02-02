@@ -10,27 +10,24 @@ import { useNavigate } from 'react-router-dom';
 // Image Imports
 import SiteLogo from "../assets/websitevikreta-finance.svg";
 
-
-
 const Index = () => {
 
    const [showModal, setShowModal] = useState({ openDialog: false, itemId: 0 });
    const [items, setItems] = useState([]);
-
+   
+   let navigate = useNavigate();
    const getAllItems = async () => {
       let response = await getItems();
       setItems(response.data);
-
    }
    useEffect(() => {
       getAllItems();
-
-
+      
    }, [items]);
-
-
-
-
+   const handleLogout = () => {
+      localStorage.removeItem('user-info');
+      navigate('/');
+    };
 
    function getIncome(item, type) {
       if (item.paymentType === type) return item.amount;
@@ -65,28 +62,42 @@ const Index = () => {
       } else return null;
    }
 
-
+   function lastQuarter(d, now, month, item) {
+      return d.getFullYear() === (now.getFullYear() - 1) && month >= 9 && month <= 11 ? item : null;
+  }
 
    function getIncomeInDuration(item, currentDate, timeFilter) {
       const itemDate = new Date(item.dateOfInvoice);
+      var currentMonth = currentDate.getMonth();
       if (timeFilter === 0) {
 
          return (itemDate.getFullYear() === currentDate.getFullYear()) ? item : null;
 
-      } if (timeFilter === 1) {
-         var currentMonth = currentDate.getMonth();
-         if (currentMonth === 0) return (itemDate.getFullYear() === (currentDate.getFullYear() - 1) && itemDate.getMonth() === 11) ? item : null;
-         else return (itemDate.getMonth() === currentMonth - 1) ? item : null;
-
-      } else if (timeFilter === 2) {
+      } else if (timeFilter === 1) {
 
          return (itemDate.getFullYear() === currentDate.getFullYear() - 1) ? item : null;
 
-      } else if (timeFilter === 3) {
+      } else if (timeFilter === 2) {
+        
+         return itemDate.getFullYear() === (currentDate.getFullYear()) && (itemDate.getMonth() === currentMonth)  ? item : null;
+
+      }else if (timeFilter === 3) {
+
+         if (currentMonth === 0) return (itemDate.getFullYear() === (currentDate.getFullYear() - 1) && itemDate.getMonth() === 11) ? item : null;
+         else return (itemDate.getMonth() === currentMonth - 1) ? item : null;
+
+      }  else if (timeFilter === 4) {
 
          const quartr = getQuarter(currentDate.getMonth() + 1);
          return thisQuarter(itemDate, currentDate, itemDate.getMonth() + 1, quartr, item);
 
+      }else if (timeFilter === 5) {
+
+         const quartr = getQuarter(currentDate.getMonth() + 1);
+         if (quartr === 1) return thisQuarter(itemDate, currentDate, itemDate.getMonth() + 1, 4, item);
+         if (quartr === 4 || ((itemDate.getFullYear() === currentDate.getFullYear() - 1) && quartr === 3)) return lastQuarter(itemDate, currentDate, itemDate.getMonth() + 1, item);
+         return thisQuarter(itemDate, currentDate, itemDate.getMonth() + 1, quartr - 1, item);
+         
       } else {
          return item;
       }
@@ -119,19 +130,26 @@ const Index = () => {
    const currentYearTotalExpense = getTotalRevenueDetails(items, 'Expense', new Date(), 0);
    const currentYearTotalProfit = currentYearTotalIncome - currentYearTotalExpense;
 
-   const lastMonthTotalIncome = getTotalRevenueDetails(items, 'Income', new Date(), 1);
-   const lastMonthTotalExpense = getTotalRevenueDetails(items, 'Expense', new Date(), 1);
-   const lastMonthTotalProfit = lastMonthTotalIncome - lastMonthTotalExpense;
-
-   const lastYearTotalIncome = getTotalRevenueDetails(items, 'Income', new Date(), 2);
-   const lastYearTotalExpense = getTotalRevenueDetails(items, 'Expense', new Date(), 2);
+   const lastYearTotalIncome = getTotalRevenueDetails(items, 'Income', new Date(), 1);
+   const lastYearTotalExpense = getTotalRevenueDetails(items, 'Expense', new Date(), 1);
    const lastYearTotalProfit = lastYearTotalIncome - lastYearTotalExpense;
 
-   const currQaurtrTotalIncome = getTotalRevenueDetails(items, 'Income', new Date(), 3);
-   const currQaurtrTotalExpense = getTotalRevenueDetails(items, 'Expense', new Date(), 3);
+   const currMonthTotalIncome = getTotalRevenueDetails(items, 'Income', new Date(), 3);
+   const currMonthTotalExpense = getTotalRevenueDetails(items, 'Expense', new Date(), 3);
+   const currMonthTotalProfit = currMonthTotalIncome - currMonthTotalExpense;
+
+   const lastMonthTotalIncome = getTotalRevenueDetails(items, 'Income', new Date(), 3);
+   const lastMonthTotalExpense = getTotalRevenueDetails(items, 'Expense', new Date(), 3);
+   const lastMonthTotalProfit = lastMonthTotalIncome - lastMonthTotalExpense;
+
+   const currQaurtrTotalIncome = getTotalRevenueDetails(items, 'Income', new Date(), 4);
+   const currQaurtrTotalExpense = getTotalRevenueDetails(items, 'Expense', new Date(), 4);
    const currQaurtrTotalProfit = currQaurtrTotalIncome - currQaurtrTotalExpense;
 
-   let navigate = useNavigate();
+   const lastQaurtrTotalIncome = getTotalRevenueDetails(items, 'Income', new Date(), 5);
+   const lastQaurtrTotalExpense = getTotalRevenueDetails(items, 'Expense', new Date(), 5);
+   const lastQaurtrTotalProfit = lastQaurtrTotalIncome - lastQaurtrTotalExpense;
+
 
    return (
 
@@ -148,6 +166,7 @@ const Index = () => {
                <div className='ctaWrapper'>
                   <button className='btn btn-primary' onClick={() => navigate('/all')}>View All Records</button>
                   <button className='btn btn-secondary' onClick={() => setShowModal({ ...showModal, openDialog: true })}>Add New Record</button>
+                  <button className='btn btn-primary' onClick={handleLogout}>Logout</button>
                </div>
             </header>
 
@@ -202,11 +221,11 @@ const Index = () => {
                      <div className="card">
                         <div className="numberWrapper">
                            <div className="item">
-                              <span className='digits'>₹ {currentYearTotalIncome}</span>
+                              <span className='digits'>₹ {currQaurtrTotalProfit}</span>
                               <span>Sales</span>
                            </div>
                            <div className="item">
-                              <span className='digits'>₹ {currQaurtrTotalExpense}</span>
+                              <span className='digits'>₹ {currQaurtrTotalProfit}</span>
                               <span>Expense</span>
                            </div>
                            <div className="item">
@@ -220,15 +239,15 @@ const Index = () => {
                      <div className="card">
                         <div className="numberWrapper">
                            <div className="item">
-                              <span className='digits'>₹ {lastMonthTotalIncome}</span>
+                              <span className='digits'>₹ {lastQaurtrTotalIncome}</span>
                               <span>Sales</span>
                            </div>
                            <div className="item">
-                              <span className='digits'>₹ {lastMonthTotalExpense}</span>
+                              <span className='digits'>₹ {lastQaurtrTotalExpense}</span>
                               <span>Expense</span>
                            </div>
                            <div className="item">
-                              <span className='digits green'>₹ {lastMonthTotalProfit}</span>
+                              <span className='digits green'>₹ {lastQaurtrTotalProfit}</span>
                               <span>Profit</span>
                            </div>
                         </div>
@@ -242,15 +261,15 @@ const Index = () => {
                      <div className="card">
                         <div className="numberWrapper">
                            <div className="item">
-                              <span className='digits'>₹ 0000</span>
+                              <span className='digits'>₹ {currMonthTotalIncome}</span>
                               <span>Sales</span>
                            </div>
                            <div className="item">
-                              <span className='digits'>₹ 0000</span>
+                              <span className='digits'>₹ {currMonthTotalExpense}</span>
                               <span>Expense</span>
                            </div>
                            <div className="item">
-                              <span className='digits green'>₹ 0000</span>
+                              <span className='digits green'>₹ {currMonthTotalProfit}</span>
                               <span>Profit</span>
                            </div>
                         </div>

@@ -15,6 +15,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import styled from "@emotion/styled";
 import { TextField } from '@mui/material';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 const Date = styled(DatePicker)`
     width: 250px
 `;
@@ -27,6 +29,14 @@ export default function AllItems() {
   const { filter, allActive, incomeActive, expenseActive } = filtr;
   const handleClose = () => {
     setOpen(false);
+  };
+
+  
+
+  let navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem('user-info');
+    navigate('/');
   };
 
   const handleOpen = () => {
@@ -46,7 +56,6 @@ export default function AllItems() {
               p: 2, color: allActive ? 'white' : 'black', backgroundColor: allActive ? "#7700FF" : "white", borderColor: 'black', border: 1, ':hover': {
                 bgcolor: '#7700FF',
                 color: 'white',
-
               }
 
             }} onClick={(() => setFilter({ filter: '_id', allActive: true }))}
@@ -126,6 +135,7 @@ export default function AllItems() {
             </Box>
           }
         </Toolbar>
+        <button className='btn btn-primary' onClick={handleLogout}>Logout</button>
       </AppBar>
       <Item type={filter} dateFilter={val} startDate={startDate} endDate={endDate}/>
     </Box>

@@ -157,8 +157,8 @@ const ItemForm = (props) => {
 
                                 <TextField variant='outlined' fullWidth
                                     type={'text'} onChange={(e) => onValueChange(e)}
-                                    error={(errors.title.error) || (!title.match(/^[a-z]+$/) && title !== '')}
-                                    helperText={(errors.title.error && errors.title.errorMessage) || (!title.match(/^[a-z]+$/) && title !== '' ? 'Item title should contain only characters. Special chracters, whitespaces, digits are not allowed' : ' ')}
+                                    error={(errors.title.error) || (!title.match(/^[A-Za-z]+$/) && title !== '')}
+                                    helperText={(errors.title.error && errors.title.errorMessage) || (!title.match(/^[A-Za-z]+$/) && title !== '' ? 'Item title should contain only characters. Special chracters, whitespaces, digits are not allowed' : ' ')}
 
                                     name='title' value={title}></TextField>
 
@@ -185,8 +185,8 @@ const ItemForm = (props) => {
                                 <TextField fullWidth
                                     type={'text'} onChange={(e) => onValueChange(e)}
                                     name='category'
-                                    error={(errors.category.error) || (category !== '' && !category.match(/^[a-z]+$/))}
-                                    helperText={(errors.category.error && errors.category.errorMessage) || (!category.match(/^[a-z]+$/) && category !== '' ?
+                                    error={(errors.category.error) || (category !== '' && !category.match(/^[A-Za-z]+$/))}
+                                    helperText={(errors.category.error && errors.category.errorMessage) || (!category.match(/^[A-Za-z]+$/) && category !== '' ?
                                         'Category should contain only characters. Special chracters, whitespaces, digits are not allowed' : ' ')}
 
                                     value={category}></TextField>

@@ -16,4 +16,5 @@ export const getMedia = async (id) => {
 };
 
 // Authentication APIs
-export const loginUser = async (user) => await axios.post(`${url}/login`, user);
+export const loginUser = async (user) => await axios.post(`${url}`, user);
+

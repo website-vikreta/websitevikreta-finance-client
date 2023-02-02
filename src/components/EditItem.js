@@ -47,6 +47,7 @@ const EditItem = (props) => {
             error: false,
             errorMessage: ''
         },
+
         amount: {
             value: cItem.amount,
             error: false,
@@ -91,7 +92,6 @@ const EditItem = (props) => {
         for (let index = 0; index < errorFields.length; index++) {
             const currentField = errorFields[index];
             const currentValue = values[index+1];
-            console.log('dsfsd', currentValue, );
             if (currentValue === '') {
                 cnt= cnt+1;
                 newErrorValues = {
@@ -102,17 +102,15 @@ const EditItem = (props) => {
                         errorMessage: 'This field is required'
                     }
                 }
-                console.log(values[index],'fsfsdff', currentValue,'gdgdgs');
             }
 
         }
 
         setErrors(newErrorValues);
-        console.log(errors, '.............................');
+        
         if(cnt === 0)  editItemDetails();
     }
     const editItemDetails = async () => {
-        console.log(item.dateOfInvoice);
         await updateItem(id, item);
         setShowModal({ ...showModal, openDialog: false });
         toast.success("Item updated Successfully!!", {
@@ -138,8 +136,14 @@ const EditItem = (props) => {
 
     const handleImageData = (img) => {
         setItem({ ...item, paymentProof: img });
-        console.log(paymentProof, 'dgsgsgsggq1111');
     }
+
+     //To Avoid Warning
+     let payproof = paymentProof;
+     payproof = '';
+     console.log(payproof);
+
+
     return (
 
         <Container >
@@ -155,8 +159,8 @@ const EditItem = (props) => {
 
                                 <TextField variant='outlined' fullWidth
                                     type={'text'} onChange={(e) => onValueChange(e)}
-                                    error={(errors.title.error) || (!title.match(/^[a-z]+$/) && title !== '')}
-                                    helperText={(errors.title.error && errors.title.errorMessage) || (!title.match(/^[a-z]+$/) && title !== '' ? 'Item title should contain only characters. Special chracters, whitespaces, digits are not allowed' : ' ')}
+                                    error={(errors.title.error) || (!title.match(/^[A-Za-z]+$/) && title !== '')}
+                                    helperText={(errors.title.error && errors.title.errorMessage) || (!title.match(/^[A-Za-z]+$/) && title !== '' ? 'Item title should contain only characters. Special chracters, whitespaces, digits are not allowed' : ' ')}
 
                                     name='title' value={title}></TextField>
 
@@ -185,8 +189,8 @@ const EditItem = (props) => {
                                 <TextField fullWidth
                                     type={'text'} onChange={(e) => onValueChange(e)}
                                     name='category'
-                                    error={(errors.category.error) || (category !== '' && !category.match(/^[a-z]+$/))}
-                                    helperText={(errors.category.error && errors.category.errorMessage) || (!category.match(/^[a-z]+$/) && category !== '' ?
+                                    error={(errors.category.error) || (category !== '' && !category.match(/^[A-Za-z]+$/))}
+                                    helperText={(errors.category.error && errors.category.errorMessage) || (!category.match(/^[A-Za-z]+$/) && category !== '' ?
                                         'Category should contain only characters. Special chracters, whitespaces, digits are not allowed' : ' ')}
 
                                     value={category}></TextField>

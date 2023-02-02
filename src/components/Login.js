@@ -1,25 +1,58 @@
 
-import { TextField, Button, Grid, Paper } from '@mui/material';
-
+import { TextField, Button, Grid, Paper, FormHelperText } from '@mui/material';
+import { useState, useEffect } from 'react';
 import React from 'react';
 import { loginUser } from '../api';
+import Index from './Index';
+import { useNavigate } from 'react-router-dom';
 const Login = () => {
-    const [userDetails, setUserDetails] = React.useState({ email: '', password: ''});
-    const {email, password} = userDetails;
 
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [user, setUser] = useState("");
+    const [error, setError] = useState("");
+    var errorMsg = error;
+    let navigate = useNavigate();
+
+
+    useEffect(() => {
+        const loggedInUser = localStorage.getItem("user-info");
+
+        if (loggedInUser) {
+
+            const foundUser = JSON.parse(loggedInUser);
+            setUser(foundUser);
+            navigate('/home');
+        }
+    }, [navigate]);
+
+    if (user) {
+        return <Index />;
+    }
 
     const handleSubmit = async () => {
-        const res = await loginUser(userDetails);
-        if(res.data === null){
-            alert('Incorrect email or password');
+
+        const userDetails = { email, password };
+        try {
+            const res = await loginUser(userDetails);
+            if (res.data) {
+                localStorage.setItem('user-info', JSON.stringify(res.data));
+                setUser(res.data);
+                setError("");
+                navigate('/home');
+            } else {
+                errorMsg = "Invalid Email or Password";
+                setError(errorMsg);
+            }
+        } catch (err) {
+            errorMsg = "Invalid Email or Password";
+                setError(errorMsg);
         }
-        console.log(res, 'userDetaild');
+
+
     }
 
 
-    const onValueChange = (e) => {
-        setUserDetails({ ...userDetails, [e.target.name]: e.target.value })
-    }
     return (
         <div style={{ padding: 30 }}>
             <Paper>
@@ -31,36 +64,25 @@ const Login = () => {
                     alignItems={'center'}>
                     <Grid item xs={12}>
                         <TextField label="Email"
-                            onChange={(e) => onValueChange(e)}
+                            onChange={({ target }) => setEmail(target.value)}
                             name='email'
                             value={email}></TextField>
                     </Grid>
                     <Grid item xs={12}>
                         <TextField label="Password" type={'password'}
-                        onChange={(e) => onValueChange(e)}
-                        name='password'
-                        value={password}
-                        
+                            onChange={({ target }) => setPassword(target.value)}
+                            name='password'
+                            value={password}
                         ></TextField>
                     </Grid>
-                    {/* <Grid item xs={12}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={checked}
-                  onChange={handleChange}
-                  label={'Keep me logged in'}
-                  inputProps={{ 'aria-label': 'primary checkbox' }}
-                />
-              }
-              label="Keep me logged in"
-            />
-          </Grid> */}
                     <Grid item xs={12}>
                         <Button fullWidth onClick={() => handleSubmit()}> Login </Button>
                     </Grid>
+                    <FormHelperText error>{error}</FormHelperText>
+
                 </Grid>
             </Paper>
+
         </div>
     );
 }
