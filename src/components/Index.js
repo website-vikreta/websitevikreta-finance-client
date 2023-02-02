@@ -1,7 +1,7 @@
-import Button from '@mui/material/Button';
+// import Button from '@mui/material/Button';
 import { useState, useEffect } from 'react';
-import Add from '@mui/icons-material/Add';
-import styled from '@emotion/styled';
+// import Add from '@mui/icons-material/Add';
+// import styled from '@emotion/styled';
 import Items from './Items';
 import { getItems } from '../api';
 import Popup from './Popup';
@@ -10,12 +10,6 @@ import { useNavigate } from 'react-router-dom';
 // Image Imports
 import SiteLogo from "../assets/websitevikreta-finance.svg";
 
-
-
-const StyleButton = styled(Button)`
-margin-right: 20px
-
-`;
 
 
 const Index = () => {
@@ -108,18 +102,18 @@ const Index = () => {
    }
 
 
-   function getAllRevenueDetails(items, type, currentDate) {
-      var currItems = items.filter((item) => getIncome(item, type));
-      var currYear = currItems.filter((item) => getIncomeInDuration(item, currentDate, -1)).map(item => item.amount);
-      var total = 0;
-      currYear.forEach(amount => total += amount);
+   // function getAllRevenueDetails(items, type, currentDate) {
+   //    var currItems = items.filter((item) => getIncome(item, type));
+   //    var currYear = currItems.filter((item) => getIncomeInDuration(item, currentDate, -1)).map(item => item.amount);
+   //    var total = 0;
+   //    currYear.forEach(amount => total += amount);
 
-      return total;
-   }
+   //    return total;
+   // }
 
-   const totalIncome = getAllRevenueDetails(items, 'Income', new Date());
-   const totalExpense = getAllRevenueDetails(items, 'Expense', new Date());
-   const totalProfit = totalIncome - totalExpense;
+   // const totalIncome = getAllRevenueDetails(items, 'Income', new Date());
+   // const totalExpense = getAllRevenueDetails(items, 'Expense', new Date());
+   // const totalProfit = totalIncome - totalExpense;
 
    const currentYearTotalIncome = getTotalRevenueDetails(items, 'Income', new Date(), 0);
    const currentYearTotalExpense = getTotalRevenueDetails(items, 'Expense', new Date(), 0);
