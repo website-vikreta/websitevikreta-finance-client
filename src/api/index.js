@@ -2,19 +2,18 @@ import axios from 'axios';
 
 const url = process.env.REACT_APP_BASE_URL;
 
-export const getItems = async (id) =>{
-    id = id || '';
-    return await axios.get(`${url}/${id}`);
+// CRUD APIs
+export const getItems = async (id) => {
+   id = id || '';
+   return await axios.get(`${url}/${id}`);
 }
-
 export const createItem = async (newItem) => await axios.post(`${url}/add`, newItem);
-
 export const updateItem = async (id, updatedItem) => await axios.put(`${url}/${id}`, updatedItem);
 export const deleteItem = async (id) => await axios.delete(`${url}/${id}`);
-
-export const loginUser = async (user) => await axios.post(`${url}/login`, user);
-
 export const getMedia = async (id) => {
-    id = id || '';
-    return await axios.get(`${url}/media${id}`);
+   id = id || '';
+   return await axios.get(`${url}/media${id}`);
 };
+
+// Authentication APIs
+export const loginUser = async (user) => await axios.post(`${url}/login`, user);
