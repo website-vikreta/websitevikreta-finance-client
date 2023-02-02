@@ -1,20 +1,23 @@
 // import Button from '@mui/material/Button';
 import { useState, useEffect } from 'react';
-// import Add from '@mui/icons-material/Add';
 // import styled from '@emotion/styled';
 import Items from './Items';
 import { getItems } from '../api';
 import Popup from './Popup';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 // Image Imports
 import SiteLogo from "../assets/websitevikreta-finance.svg";
+
+// Icon Imports
+import Logout from '@mui/icons-material/Logout';
+import Add from '@mui/icons-material/Add';
 
 const Index = () => {
 
    const [showModal, setShowModal] = useState({ openDialog: false, itemId: 0 });
    const [items, setItems] = useState([]);
-   
+
    let navigate = useNavigate();
    const getAllItems = async () => {
       let response = await getItems();
@@ -22,12 +25,12 @@ const Index = () => {
    }
    useEffect(() => {
       getAllItems();
-      
+
    }, [items]);
    const handleLogout = () => {
       localStorage.removeItem('user-info');
       navigate('/');
-    };
+   };
 
    function getIncome(item, type) {
       if (item.paymentType === type) return item.amount;
@@ -64,7 +67,7 @@ const Index = () => {
 
    function lastQuarter(d, now, month, item) {
       return d.getFullYear() === (now.getFullYear() - 1) && month >= 9 && month <= 11 ? item : null;
-  }
+   }
 
    function getIncomeInDuration(item, currentDate, timeFilter) {
       const itemDate = new Date(item.dateOfInvoice);
@@ -78,26 +81,26 @@ const Index = () => {
          return (itemDate.getFullYear() === currentDate.getFullYear() - 1) ? item : null;
 
       } else if (timeFilter === 2) {
-        
-         return itemDate.getFullYear() === (currentDate.getFullYear()) && (itemDate.getMonth() === currentMonth)  ? item : null;
 
-      }else if (timeFilter === 3) {
+         return itemDate.getFullYear() === (currentDate.getFullYear()) && (itemDate.getMonth() === currentMonth) ? item : null;
+
+      } else if (timeFilter === 3) {
 
          if (currentMonth === 0) return (itemDate.getFullYear() === (currentDate.getFullYear() - 1) && itemDate.getMonth() === 11) ? item : null;
          else return (itemDate.getMonth() === currentMonth - 1) ? item : null;
 
-      }  else if (timeFilter === 4) {
+      } else if (timeFilter === 4) {
 
          const quartr = getQuarter(currentDate.getMonth() + 1);
          return thisQuarter(itemDate, currentDate, itemDate.getMonth() + 1, quartr, item);
 
-      }else if (timeFilter === 5) {
+      } else if (timeFilter === 5) {
 
          const quartr = getQuarter(currentDate.getMonth() + 1);
          if (quartr === 1) return thisQuarter(itemDate, currentDate, itemDate.getMonth() + 1, 4, item);
          if (quartr === 4 || ((itemDate.getFullYear() === currentDate.getFullYear() - 1) && quartr === 3)) return lastQuarter(itemDate, currentDate, itemDate.getMonth() + 1, item);
          return thisQuarter(itemDate, currentDate, itemDate.getMonth() + 1, quartr - 1, item);
-         
+
       } else {
          return item;
       }
@@ -164,9 +167,14 @@ const Index = () => {
                </div>
                {/* CTAs */}
                <div className='ctaWrapper'>
-                  <button className='btn btn-primary' onClick={() => navigate('/all')}>View All Records</button>
-                  <button className='btn btn-secondary' onClick={() => setShowModal({ ...showModal, openDialog: true })}>Add New Record</button>
-                  <button className='btn btn-primary' onClick={handleLogout}>Logout</button>
+                  <div className="navLink">
+                     <Link to="/all">View All Records</Link>
+                  </div>
+                  <div className="navLink">
+                     <button className='linkBtn danger' onClick={handleLogout}>
+                        <span>Logout</span> <Logout fontSize="small" sx={{ color: 'red' }} />
+                     </button>
+                  </div>
                </div>
             </header>
 
@@ -178,103 +186,23 @@ const Index = () => {
 
                   <div className="row">
                      {/* This */}
-                     <div className="card">
-                        <div className="numberWrapper">
-                           <div className="item">
-                              <span className='digits'>₹ {currentYearTotalIncome}</span>
-                              <span>Sales</span>
-                           </div>
-                           <div className="item">
-                              <span className='digits'>₹ {currentYearTotalExpense}</span>
-                              <span>Expense</span>
-                           </div>
-                           <div className="item">
-                              <span className='digits green'>₹ {currentYearTotalProfit}</span>
-                              <span>Profit</span>
-                           </div>
-                        </div>
-                        <hr />
-                        <div>This Year (2023)</div>
-                     </div>
-                     {/* Last */}
-                     <div className="card">
-                        <div className="numberWrapper">
-                           <div className="item">
-                              <span className='digits'>₹ {lastYearTotalIncome}</span>
-                              <span>Sales</span>
-                           </div>
-                           <div className="item">
-                              <span className='digits'>₹ {lastYearTotalExpense}</span>
-                              <span>Expense</span>
-                           </div>
-                           <div className="item">
-                              <span className='digits green'>₹ {lastYearTotalProfit}</span>
-                              <span>Profit</span>
-                           </div>
-                        </div>
-                        <hr />
-                        <div>Last Year (2022)</div>
-                     </div>
-                  </div>
-
-                  <div className="row">
-                     <div className="card">
-                        <div className="numberWrapper">
-                           <div className="item">
-                              <span className='digits'>₹ {currQaurtrTotalProfit}</span>
-                              <span>Sales</span>
-                           </div>
-                           <div className="item">
-                              <span className='digits'>₹ {currQaurtrTotalProfit}</span>
-                              <span>Expense</span>
-                           </div>
-                           <div className="item">
-                              <span className='digits green'>₹ {currQaurtrTotalProfit}</span>
-                              <span>Profit</span>
-                           </div>
-                        </div>
-                        <hr />
-                        <div>This Quarter (JAN23 - MAR23)</div>
-                     </div>
-                     <div className="card">
-                        <div className="numberWrapper">
-                           <div className="item">
-                              <span className='digits'>₹ {lastQaurtrTotalIncome}</span>
-                              <span>Sales</span>
-                           </div>
-                           <div className="item">
-                              <span className='digits'>₹ {lastQaurtrTotalExpense}</span>
-                              <span>Expense</span>
-                           </div>
-                           <div className="item">
-                              <span className='digits green'>₹ {lastQaurtrTotalProfit}</span>
-                              <span>Profit</span>
-                           </div>
-                        </div>
-                        <hr />
-                        <div>Last Quarter (OCT22 - DEC22)</div>
-                     </div>
-                  </div>
-
-                  <div className="row">
-                     {/* This */}
-                     <div className="card">
+                     <div className="card this">
                         <div className="numberWrapper">
                            <div className="item">
                               <span className='digits'>₹ {currMonthTotalIncome}</span>
-                              <span>Sales</span>
+                              <span className='label'>Sales</span>
                            </div>
                            <div className="item">
                               <span className='digits'>₹ {currMonthTotalExpense}</span>
-                              <span>Expense</span>
+                              <span className='label'>Expense</span>
                            </div>
                            <div className="item">
                               <span className='digits green'>₹ {currMonthTotalProfit}</span>
-                              <span>Profit</span>
+                              <span className='label'>Profit</span>
                            </div>
                         </div>
                         <hr />
-                        <div>This Month (Feb 2023)</div>
+                        <div className='cardHeading'>This Month (Feb 2023)</div>
                      </div>
 
                      {/* Last */}
@@ -282,27 +210,136 @@ const Index = () => {
                         <div className="numberWrapper">
                            <div className="item">
                               <span className='digits'>₹ {lastMonthTotalIncome}</span>
-                              <span>Sales</span>
+                              <span className='label'>Sales</span>
                            </div>
                            <div className="item">
                               <span className='digits'>₹ {lastMonthTotalExpense}</span>
-                              <span>Expense</span>
+                              <span className='label'>Expense</span>
                            </div>
                            <div className="item">
                               <span className='digits green'>₹ {lastMonthTotalProfit}</span>
-                              <span>Profit</span>
+                              <span className='label'>Profit</span>
                            </div>
                         </div>
                         <hr />
-                        <div>Last Month (Jan 2023)</div>
+                        <div className='cardHeading'>Last Month (Jan 2023)</div>
                      </div>
                   </div>
+
+                  <div className="row">
+                     <div className="card">
+                        <div className="numberWrapper">
+                           <div className="item">
+                              <span className='digits'>₹ {currQaurtrTotalProfit}</span>
+                              <span className='label'>Sales</span>
+                           </div>
+                           <div className="item">
+                              <span className='digits'>₹ {currQaurtrTotalProfit}</span>
+                              <span className='label'>Expense</span>
+                           </div>
+                           <div className="item">
+                              <span className='digits green'>₹ {currQaurtrTotalProfit}</span>
+                              <span className='label'>Profit</span>
+                           </div>
+                        </div>
+                        <hr />
+                        <div className='cardHeading this'>This Quarter (JAN23 - MAR23)</div>
+                     </div>
+                     <div className="card">
+                        <div className="numberWrapper">
+                           <div className="item">
+                              <span className='digits'>₹ {lastQaurtrTotalIncome}</span>
+                              <span className='label'>Sales</span>
+                           </div>
+                           <div className="item">
+                              <span className='digits'>₹ {lastQaurtrTotalExpense}</span>
+                              <span className='label'>Expense</span>
+                           </div>
+                           <div className="item">
+                              <span className='digits green'>₹ {lastQaurtrTotalProfit}</span>
+                              <span className='label'>Profit</span>
+                           </div>
+                        </div>
+                        <hr />
+                        <div className='cardHeading'>Last Quarter (OCT22 - DEC22)</div>
+                     </div>
+                  </div>
+                  <div className="row">
+                     {/* This */}
+                     <div className="card">
+                        <div className="numberWrapper">
+                           <div className="item">
+                              <span className='digits'>₹ {currentYearTotalIncome}</span>
+                              <span className='label'>Sales</span>
+                           </div>
+                           <div className="item">
+                              <span className='digits'>₹ {currentYearTotalExpense}</span>
+                              <span className='label'>Expense</span>
+                           </div>
+                           <div className="item">
+                              <span className='digits green'>₹ {currentYearTotalProfit}</span>
+                              <span className='label'>Profit</span>
+                           </div>
+                        </div>
+                        <hr />
+                        <div className='cardHeading this'>This Year (2023)</div>
+                     </div>
+                     {/* Last */}
+                     <div className="card">
+                        <div className="numberWrapper">
+                           <div className="item">
+                              <span className='digits'>₹ {lastYearTotalIncome}</span>
+                              <span className='label'>Sales</span>
+                           </div>
+                           <div className="item">
+                              <span className='digits'>₹ {lastYearTotalExpense}</span>
+                              <span className='label'>Expense</span>
+                           </div>
+                           <div className="item">
+                              <span className='digits green'>₹ {lastYearTotalProfit}</span>
+                              <span className='label'>Profit</span>
+                           </div>
+                        </div>
+                        <hr />
+                        <div className='cardHeading'>Last Year (2022)</div>
+                     </div>
+                  </div>
+
                </section>
+
+               {/* Charts */}
+               <section className='chartWrapper'>
+                  <div className="card">Chart 1</div>
+
+                  {/* grid */}
+                  <div className="chartGrid">
+                     <div className="card">Chart 2</div>
+                     <div className="card">Chart 3</div>
+                     <div className="card">Chart 4</div>
+                     <div className="card">Chart 5</div>
+                  </div>
+               </section>
+
+               {/* Table & Glimpse */}
+               <div className="table">
+                  <div className="card">
+                     <Items />
+                  </div>
+               </div>
 
             </main>
 
             {/* Footer */}
             <footer className='footer'></footer>
+
+
+            {/* Add Button Fixed */}
+            <button
+               className='btn btn-primary addItemFloating'
+               onClick={() => setShowModal({ ...showModal, openDialog: true })}
+               title="Add new item">
+               <Add fontSize='medium' />
+            </button>
          </div>
 
          <div className="App">
@@ -311,54 +348,7 @@ const Index = () => {
 
 
             </header>
-            <div>
-
-               {/* <table>
-                  <thead>
-                     <tr>
-                        <th></th>
-                        <th>Total Sales</th>
-                        <th>Total Expense</th>
-                        <th>Total Profits</th>
-                     </tr>
-                  </thead>
-                  <tbody>
-                     <tr>
-                        <th>Current Year</th>
-                        <td>{currentYearTotalIncome}</td>
-                        <td>{currentYearTotalExpense}</td>
-                        <td>{currentYearTotalProfit}</td>
-                     </tr>
-                     <tr>
-                        <th>Last Month</th>
-                        <td>{lastMonthTotalIncome}</td>
-                        <td>{lastMonthTotalExpense}</td>
-                        <td>{lastMonthTotalProfit}</td>
-                     </tr>
-                     <tr>
-                        <th>last Year</th>
-                        <td>{lastYearTotalIncome}</td>
-                        <td>{lastYearTotalExpense}</td>
-                        <td>{lastYearTotalProfit}</td>
-                     </tr>
-                     <tr>
-                        <th>Current quartr</th>
-                        <td>{currQaurtrTotalIncome}</td>
-                        <td>{currQaurtrTotalExpense}</td>
-                        <td>{currQaurtrTotalProfit}</td>
-                     </tr>
-                     <tr>
-                        <th>Total</th>
-                        <td>{totalIncome}</td>
-                        <td>{totalExpense}</td>
-                        <td>{totalProfit}</td>
-                     </tr>
-                  </tbody>
-               </table> */}
-
-            </div>
             <Popup showModal={showModal} setShowModal={setShowModal} formType='Add'></Popup>
-            <Items />
 
 
          </div>

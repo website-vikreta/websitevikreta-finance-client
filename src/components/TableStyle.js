@@ -1,36 +1,34 @@
 const tableCustomStyles = {
-    rows: {
-        style: {
-        
-        minHeight: '70px',
-        fontSize: '20px',
-        padding: '20px 0px',
-        '&:nth-of-type(even)':{backgroundColor: '#f5e6ff'},
-        '&:hover':{backgroundColor: '#000000'}
-        },
-    },
-    headCells: {
+   rows: {
       style: {
-        justifyContent: 'center',
-        minHeight: '65px',
-        fontSize: '20px',
-        backgroundColor: '#6600cc',
-        color: '#FFFFFF',
-        textAlign: 'center',
+         fontSize: '1rem',
+         padding: '10px 0',
+         '&:nth-of-type(even)': { backgroundColor: 'rgba(119, 0, 255, 5%)' },
       },
-    },
-    cells: {
-        style: {
-            justifyContent: 'center',
-            textAlign: 'center',
-        },
-    },
-    pagination:{
-        style: {
-            minHeight: '70px',
-            fontSize: '20px',
-        }
-    }
-    
-  }
-  export { tableCustomStyles };
+   },
+   headCells: {
+      style: {
+         fontSize: '1rem',
+         padding: '10px .9rem',
+         backgroundColor: '#7700ff',
+         color: '#FFFFFF',
+      },
+   },
+   cells: {
+      style: {
+      },
+   },
+   pagination: {
+      style: {
+         fontSize: '0.9rem',
+         padding: '0',
+      }
+   },
+   subHeaderComponent: {
+      style: {
+         padding: '0'
+      }
+   }
+
+}
+export { tableCustomStyles };

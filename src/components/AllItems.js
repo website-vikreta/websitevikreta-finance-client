@@ -21,123 +21,123 @@ const Date = styled(DatePicker)`
     width: 250px
 `;
 export default function AllItems() {
-  const [val, setVal] = useState('');
-  const [dateRange, setDateRange] = useState({ startDate: null, endDate: null });
-  const { startDate, endDate } = dateRange;
-  const [open, setOpen] = useState(false);
-  const [filtr, setFilter] = useState({ filter: '_id', allActive: true, incomeActive: false, expenseActive: false, });
-  const { filter, allActive, incomeActive, expenseActive } = filtr;
-  const handleClose = () => {
-    setOpen(false);
-  };
+   const [val, setVal] = useState('');
+   const [dateRange, setDateRange] = useState({ startDate: null, endDate: null });
+   const { startDate, endDate } = dateRange;
+   const [open, setOpen] = useState(false);
+   const [filtr, setFilter] = useState({ filter: '_id', allActive: true, incomeActive: false, expenseActive: false, });
+   const { filter, allActive, incomeActive, expenseActive } = filtr;
+   const handleClose = () => {
+      setOpen(false);
+   };
 
-  
 
-  let navigate = useNavigate();
-  const handleLogout = () => {
-    localStorage.removeItem('user-info');
-    navigate('/');
-  };
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
-  const handleChange = (event) => {
-    setVal(event.target.value);
-    if (val !== 8) setDateRange({ startDate: null, endDate: null });
-  };
+   let navigate = useNavigate();
+   const handleLogout = () => {
+      localStorage.removeItem('user-info');
+      navigate('/');
+   };
 
-  return (
-    <Box sx={{ flexGrow: 1, m: 3 }}>
-      <AppBar position="static" sx={{ backgroundColor: '#FFFFFF', boxShadow: 'none' }}>
-        <Toolbar>
-          <div className="d-inline-flex p-2">
-            <Button sx={{
-              p: 2, color: allActive ? 'white' : 'black', backgroundColor: allActive ? "#7700FF" : "white", borderColor: 'black', border: 1, ':hover': {
-                bgcolor: '#7700FF',
-                color: 'white',
-              }
+   const handleOpen = () => {
+      setOpen(true);
+   };
+   const handleChange = (event) => {
+      setVal(event.target.value);
+      if (val !== 8) setDateRange({ startDate: null, endDate: null });
+   };
 
-            }} onClick={(() => setFilter({ filter: '_id', allActive: true }))}
-            >All</Button>
-            <Button sx={{
-              p: 2, color: incomeActive ? 'white' : 'black', backgroundColor: incomeActive ? "#7700FF" : "white", borderColor: 'black', border: 1, ':hover': {
-                bgcolor: '#7700FF',
-                color: 'white',
-              }
-            }} onClick={(() => setFilter({ filter: 'Income', incomeActive: true }))}>
-              Income</Button>
-            <Button sx={{
-              p: 2, color: expenseActive ? 'white' : 'black', backgroundColor: expenseActive ? "#7700FF" : "white", borderColor: 'black', border: 1, ':hover': {
-                bgcolor: '#7700FF',
-                color: 'white',
-              }
-            }} onClick={(() => setFilter({ filter: 'Expense', expenseActive: true }))}
-            >Expense</Button>
-          </div>
-          <FormControl sx={{ m: 2, width: '250px' }}>
+   return (
+      <Box sx={{ flexGrow: 1, m: 3 }}>
+         <AppBar position="static" sx={{ backgroundColor: '#FFFFFF', boxShadow: 'none' }}>
+            <Toolbar>
+               <div className="d-inline-flex p-2">
+                  <Button sx={{
+                     p: 2, color: allActive ? 'white' : 'black', backgroundColor: allActive ? "#7700FF" : "white", borderColor: 'black', border: 1, ':hover': {
+                        bgcolor: '#7700FF',
+                        color: 'white',
+                     }
 
-            <InputLabel id="demo-simple-select-label">Filter Records</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              open={open}
-              value={val}
-              onClose={handleClose}
-              onOpen={handleOpen}
-              label="Filter"
-              onChange={handleChange}
-            >
-              <MenuItem value={1}>Today</MenuItem>
-              <MenuItem value={2}>Past 7 Days</MenuItem>
-              <MenuItem value={3}>Past 30 Days</MenuItem>
-              <MenuItem value={4}>This Quarter</MenuItem>
-              <MenuItem value={5}>Last Quarter</MenuItem>
-              <MenuItem value={6}>This Year</MenuItem>
-              <MenuItem value={7}>Last Year</MenuItem>
-              <MenuItem value={8}>2021</MenuItem>
-              <MenuItem value={9}>Custom Range</MenuItem>
+                  }} onClick={(() => setFilter({ filter: '_id', allActive: true }))}
+                  >All</Button>
+                  <Button sx={{
+                     p: 2, color: incomeActive ? 'white' : 'black', backgroundColor: incomeActive ? "#7700FF" : "white", borderColor: 'black', border: 1, ':hover': {
+                        bgcolor: '#7700FF',
+                        color: 'white',
+                     }
+                  }} onClick={(() => setFilter({ filter: 'Income', incomeActive: true }))}>
+                     Income</Button>
+                  <Button sx={{
+                     p: 2, color: expenseActive ? 'white' : 'black', backgroundColor: expenseActive ? "#7700FF" : "white", borderColor: 'black', border: 1, ':hover': {
+                        bgcolor: '#7700FF',
+                        color: 'white',
+                     }
+                  }} onClick={(() => setFilter({ filter: 'Expense', expenseActive: true }))}
+                  >Expense</Button>
+               </div>
+               <FormControl sx={{ m: 2, width: '250px' }}>
 
-            </Select>
-          </FormControl>
+                  <InputLabel id="demo-simple-select-label">Filter Records</InputLabel>
+                  <Select
+                     labelId="demo-simple-select-label"
+                     id="demo-simple-select"
+                     open={open}
+                     value={val}
+                     onClose={handleClose}
+                     onOpen={handleOpen}
+                     label="Filter"
+                     onChange={handleChange}
+                  >
+                     <MenuItem value={1}>Today</MenuItem>
+                     <MenuItem value={2}>Past 7 Days</MenuItem>
+                     <MenuItem value={3}>Past 30 Days</MenuItem>
+                     <MenuItem value={4}>This Quarter</MenuItem>
+                     <MenuItem value={5}>Last Quarter</MenuItem>
+                     <MenuItem value={6}>This Year</MenuItem>
+                     <MenuItem value={7}>Last Year</MenuItem>
+                     <MenuItem value={8}>2021</MenuItem>
+                     <MenuItem value={9}>Custom Range</MenuItem>
 
-          {val === 9 &&
+                  </Select>
+               </FormControl>
 
-            <Box component="div" sx={{ display: 'inline' }}>
+               {val === 9 &&
 
-              <span>
-                <span style={{ padding: '0px 5px' }}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <Date
-                      label='Start Date'
-                      name='startDate'
-                      renderInput={(params) => <TextField {...params} />}
-                      value={startDate}
-                      onChange={((date) => setDateRange({ ...dateRange, startDate: date }))}
+                  <Box component="div" sx={{ display: 'inline' }}>
 
-                    />
-                  </LocalizationProvider>
-                </span>
-                <span style={{ padding: '0px 5px' }}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <Date
-                      toolbarTitle='End Date'
-                      label='End Date'
-                      name='endDate'
-                      renderInput={(params) => <TextField {...params} />}
-                      value={endDate}
-                      onChange={((date) => setDateRange({ ...dateRange, endDate: date }))}
-                    />
+                     <span>
+                        <span style={{ padding: '0px 5px' }}>
+                           <LocalizationProvider dateAdapter={AdapterDayjs}>
+                              <Date
+                                 label='Start Date'
+                                 name='startDate'
+                                 renderInput={(params) => <TextField {...params} />}
+                                 value={startDate}
+                                 onChange={((date) => setDateRange({ ...dateRange, startDate: date }))}
 
-                  </LocalizationProvider>
-                </span>
-              </span>
-            </Box>
-          }
-        </Toolbar>
-        <button className='btn btn-primary' onClick={handleLogout}>Logout</button>
-      </AppBar>
-      <Item type={filter} dateFilter={val} startDate={startDate} endDate={endDate}/>
-    </Box>
-  );
+                              />
+                           </LocalizationProvider>
+                        </span>
+                        <span style={{ padding: '0px 5px' }}>
+                           <LocalizationProvider dateAdapter={AdapterDayjs}>
+                              <Date
+                                 toolbarTitle='End Date'
+                                 label='End Date'
+                                 name='endDate'
+                                 renderInput={(params) => <TextField {...params} />}
+                                 value={endDate}
+                                 onChange={((date) => setDateRange({ ...dateRange, endDate: date }))}
+                              />
+
+                           </LocalizationProvider>
+                        </span>
+                     </span>
+                  </Box>
+               }
+            </Toolbar>
+            <button className='btn btn-primary' onClick={handleLogout}>Logout</button>
+         </AppBar>
+         <Item type={filter} dateFilter={val} startDate={startDate} endDate={endDate} />
+      </Box>
+   );
 }
