@@ -1,6 +1,7 @@
 // import Button from '@mui/material/Button';
 import { useState, useEffect } from 'react';
 // import styled from '@emotion/styled';
+
 import Items from './Items';
 import { getItems } from '../api';
 import Popup from './Popup';
@@ -13,21 +14,27 @@ import SiteLogo from "../assets/websitevikreta-finance.svg";
 import Logout from '@mui/icons-material/Logout';
 import Add from '@mui/icons-material/Add';
 
+//Cookie Import
+import Cookie from 'universal-cookie';
+var cookie = new Cookie();
 const Index = () => {
 
    const [showModal, setShowModal] = useState({ openDialog: false, itemId: 0 });
    const [items, setItems] = useState([]);
 
    let navigate = useNavigate();
-   const getAllItems = async () => {
-      let response = await getItems();
-      setItems(response.data);
-   }
+  
    useEffect(() => {
-      getAllItems();
+      const getAllItems = async () => {
 
+         let response = await getItems(JSON.parse(localStorage.getItem('user-info')).id);
+         setItems(response.data);
+      }
+      getAllItems();
+     
    }, [items]);
    const handleLogout = () => {
+      cookie.remove('user');
       localStorage.removeItem('user-info');
       navigate('/');
    };
@@ -116,19 +123,6 @@ const Index = () => {
    }
 
 
-   // function getAllRevenueDetails(items, type, currentDate) {
-   //    var currItems = items.filter((item) => getIncome(item, type));
-   //    var currYear = currItems.filter((item) => getIncomeInDuration(item, currentDate, -1)).map(item => item.amount);
-   //    var total = 0;
-   //    currYear.forEach(amount => total += amount);
-
-   //    return total;
-   // }
-
-   // const totalIncome = getAllRevenueDetails(items, 'Income', new Date());
-   // const totalExpense = getAllRevenueDetails(items, 'Expense', new Date());
-   // const totalProfit = totalIncome - totalExpense;
-
    const currentYearTotalIncome = getTotalRevenueDetails(items, 'Income', new Date(), 0);
    const currentYearTotalExpense = getTotalRevenueDetails(items, 'Expense', new Date(), 0);
    const currentYearTotalProfit = currentYearTotalIncome - currentYearTotalExpense;
@@ -137,8 +131,8 @@ const Index = () => {
    const lastYearTotalExpense = getTotalRevenueDetails(items, 'Expense', new Date(), 1);
    const lastYearTotalProfit = lastYearTotalIncome - lastYearTotalExpense;
 
-   const currMonthTotalIncome = getTotalRevenueDetails(items, 'Income', new Date(), 3);
-   const currMonthTotalExpense = getTotalRevenueDetails(items, 'Expense', new Date(), 3);
+   const currMonthTotalIncome = getTotalRevenueDetails(items, 'Income', new Date(), 2);
+   const currMonthTotalExpense = getTotalRevenueDetails(items, 'Expense', new Date(), 2);
    const currMonthTotalProfit = currMonthTotalIncome - currMonthTotalExpense;
 
    const lastMonthTotalIncome = getTotalRevenueDetails(items, 'Income', new Date(), 3);
@@ -230,11 +224,11 @@ const Index = () => {
                      <div className="card">
                         <div className="numberWrapper">
                            <div className="item">
-                              <span className='digits'>₹ {currQaurtrTotalProfit}</span>
+                              <span className='digits'>₹ {currQaurtrTotalIncome}</span>
                               <span className='label'>Sales</span>
                            </div>
                            <div className="item">
-                              <span className='digits'>₹ {currQaurtrTotalProfit}</span>
+                              <span className='digits'>₹ {currQaurtrTotalExpense}</span>
                               <span className='label'>Expense</span>
                            </div>
                            <div className="item">
@@ -282,7 +276,7 @@ const Index = () => {
                            </div>
                         </div>
                         <hr />
-                        <div className='cardHeading this'>This Year (2023)</div>
+                        <div className='cardHeading this'>This Year ({new Date().getFullYear()})</div>
                      </div>
                      {/* Last */}
                      <div className="card">
@@ -301,7 +295,7 @@ const Index = () => {
                            </div>
                         </div>
                         <hr />
-                        <div className='cardHeading'>Last Year (2022)</div>
+                        <div className='cardHeading'>Last Year  ({new Date().getFullYear()-1})</div>
                      </div>
                   </div>
 

@@ -10,11 +10,13 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
 
 import { TextField, Container, Button, styled ,FormHelperText } from '@mui/material';
-import { updateItem, getItems } from '../api/index';
+import { updateItem, getItem } from '../api/index';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './ItemForm.css';
 import FileBase64 from 'react-file-base64';
+import Cookie from 'universal-cookie';
+var cookie = new Cookie();
 const Date = styled(DatePicker)`
     width: 300px
 `;
@@ -26,17 +28,19 @@ const StyledTable = styled(Table)`
 
 
 const EditItem = (props) => {
-    const [item, setItem] = useState({ title: '', amount: '', category: '', paymentType: '', dateOfInvoice: '', dateOfPayment: '', description: '', paymentProof: '' });
-    const { title, amount, category, paymentType, dateOfInvoice, dateOfPayment, description, paymentProof } = item;
+    let user = JSON.parse(localStorage.getItem('user-info'));
+    const [item, setItem] = useState({ title: '', amount: '', category: '', paymentType: '', dateOfInvoice: '', dateOfPayment: '', description: '', paymentProof: '', userId: user.id  });
+    const { title, amount, category, paymentType, dateOfInvoice, dateOfPayment, description, paymentProof, userId } = item;
    
     const { cItem, showModal, setShowModal } = props;
     const id = cItem._id;
 
+    cookie.set('user', userId, { path: '/' });
+
     useEffect(() => {
         const loadItemDetails = async () => {
-            const response = await getItems(id);
+            const response = await getItem(id);
             setItem(response.data);
-            
         }
         loadItemDetails();
     }, [id]);
@@ -72,27 +76,24 @@ const EditItem = (props) => {
             value: cItem.dateOfPayment,
             error: false,
             errorMessage: ''
-        },
-        description: {
-            value: cItem.description,
-            error: false,
-            errorMessage: ''
         }
     })
 
     const clear = () => {
-        setItem({ title: '', amount: '', category: '', paymentType: '', dateOfInvoice: null, dateOfPayment: null, description: '', paymentProof: '' });
+        setItem({ ...item, title: '', amount: '', category: '', paymentType: '', dateOfInvoice: null, dateOfPayment: null, description: '', paymentProof: '' });
     }
 
     const validateItemDetails = () => {
         const errorFields = Object.keys(errors);
         let newErrorValues = { ...errors }
         let values = Object.values(item)
+
         let cnt = 0;
-        for (let index = 0; index < errorFields.length; index++) {
+        for (let index = 0; index < errorFields.length-1; index++) {
             const currentField = errorFields[index];
             const currentValue = values[index+1];
             if (currentValue === '') {
+                console.log('currentvlus',currentValue,'curentfeild', currentField, values, index);
                 cnt= cnt+1;
                 newErrorValues = {
                     ...newErrorValues,
@@ -107,8 +108,9 @@ const EditItem = (props) => {
         }
 
         setErrors(newErrorValues);
-        
         if(cnt === 0)  editItemDetails();
+        else alert(cnt);
+        
     }
     const editItemDetails = async () => {
         await updateItem(id, item);
@@ -251,10 +253,7 @@ const EditItem = (props) => {
                                     fullWidth
                                     type={'text'} onChange={(e) => onValueChange(e)}
                                     name='description'
-                                    value={description} 
-                                    error={(errors.description.error)}
-                                    helperText={(errors.description.error && errors.description.errorMessage) }
-                                    ></TextField>
+                                    value={description} ></TextField>
 
                             </td>
                         </tr>

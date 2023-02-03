@@ -30,9 +30,9 @@ const Item = (props) => {
    const [showImgModal, setShowImgModal] = useState({ openImgDialog: false, id: '', paymentType: '', image: '' });
    const [delModal, setDelModal] = useState({ openDelDialog: false, deleteId: null });
 
-
    const getAllItems = async () => {
-      let response = await getItems();
+      let res = localStorage.getItem('user-info');
+      let response = await getItems(JSON.parse(res).id);
       setItems(response.data);
    }
 

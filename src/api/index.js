@@ -4,8 +4,11 @@ const url = process.env.REACT_APP_BASE_URL;
 
 // CRUD APIs
 export const getItems = async (id) => {
-   id = id || '';
+   
    return await axios.get(`${url}/${id}`);
+}
+export const getItem = async (id) => {
+   return await axios.get(`${url}/getedit${id}`);
 }
 export const createItem = async (newItem) => await axios.post(`${url}/add`, newItem);
 export const updateItem = async (id, updatedItem) => await axios.put(`${url}/${id}`, updatedItem);

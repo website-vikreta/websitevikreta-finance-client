@@ -16,7 +16,8 @@ import styled from "@emotion/styled";
 import { TextField } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import Cookie from 'universal-cookie';
+var cookie = new Cookie();
 const Date = styled(DatePicker)`
     width: 250px
 `;
@@ -35,6 +36,7 @@ export default function AllItems() {
 
    let navigate = useNavigate();
    const handleLogout = () => {
+      cookie.remove('user');
       localStorage.removeItem('user-info');
       navigate('/');
    };

@@ -13,8 +13,9 @@ import { Table } from '@mui/material';
 import FileBase64 from 'react-file-base64';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import Cookie from 'universal-cookie';
 import './ItemForm.css';
+var cookie = new Cookie();
 const Date = styled(DatePicker)`
     width: 250px
 `;
@@ -24,9 +25,13 @@ const StyledTable = styled(Table)`
 `;
 
 const ItemForm = (props) => {
-    const [itemData, setItemData] = useState({ title: '', amount: '', category: '', paymentType: '', dateOfInvoice: null, dateOfPayment: null, description: '', paymentProof: '' });
-    const { title, amount, category, paymentType, dateOfInvoice, dateOfPayment, description, paymentProof } = itemData;
+    
+    let user = JSON.parse(localStorage.getItem('user-info'));
+    const [itemData, setItemData] = useState({ title: '', amount: '', category: '', paymentType: '', dateOfInvoice: null, dateOfPayment: null, description: '', paymentProof: '', userId: user.id });
+    const { title, amount, category, paymentType, dateOfInvoice, dateOfPayment, description, paymentProof, userId } = itemData;
     const { showModal, setShowModal } = props;
+   
+    cookie.set('user', userId, { path: '/' })
     const [errors, setErrors] = useState({
         title: {
             value: title,
@@ -57,19 +62,10 @@ const ItemForm = (props) => {
             value: dateOfPayment,
             error: false,
             errorMessage: ''
-        },
-        description: {
-            value: description,
-            error: false,
-            errorMessage: ''
-        },
-        paymentProof: {
-            value: paymentProof,
-            error: false,
-            errorMessage: ''
-        },
+        }
     })
     const validateItemDetails = () => {
+        
         const errorFields = Object.keys(errors);
         let newErrorValues = { ...errors }
         let values = Object.values(itemData)
@@ -95,6 +91,10 @@ const ItemForm = (props) => {
         if(cnt === 0)  addItemDetails();
     }
     const addItemDetails = async () => {
+       
+        console.log(itemData.userId,'dffffffffffffffffffffffffff');
+      
+        console.log(itemData, 'dfsfsd', itemData.userId);
         await createItem(itemData);
         setShowModal({ ...showModal, openDialog: false });
         toast.success("Item Added Successfully!!", {
@@ -137,9 +137,7 @@ const ItemForm = (props) => {
             alert('File limit exceed');
         }
         console.log(paymentProof);
-        errors.paymentProof.error = false;
-        errors.paymentProof.errorMessage = '';
-
+       
     }
 
     return (
@@ -249,9 +247,6 @@ const ItemForm = (props) => {
                                     type={'text'} onChange={(e) => onValueChange(e)}
                                     name='description'
                                     value={description}
-                                    error={(errors.description.error)}
-                                    helperText={(errors.description.error && errors.description.errorMessage) }
-
                                 ></TextField>
 
                             </td>
@@ -269,8 +264,7 @@ const ItemForm = (props) => {
                                         onDone={({ base64 }) => { handleImageData(base64) }}
                                     />
                                 </span>
-                                <FormHelperText error>{errors.paymentProof.errorMessage}</FormHelperText>
-
+                                
                             </td>
                         </tr>
 

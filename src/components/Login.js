@@ -32,6 +32,11 @@ const Login = () => {
 
     const handleSubmit = async () => {
 
+        if(email === '' || password === ''){
+            errorMsg = "Please Fill Email and Password Properly";
+            setError(errorMsg);
+            return;
+        }
         const userDetails = { email, password };
         try {
             const res = await loginUser(userDetails);
@@ -46,6 +51,7 @@ const Login = () => {
             }
         } catch (err) {
             errorMsg = "Invalid Email or Password";
+            console.log(err.message,'errrr');
                 setError(errorMsg);
         }
 

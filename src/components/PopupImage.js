@@ -19,7 +19,7 @@ export default function PopupImage(props){
             <DialogTitle>
             <div style={{ display: 'flex' }}>
                     <Typography variant="h6" component="div" style={{ flexGrow: 1 }}>
-                        Imgafe
+                        Payment Proof
                     </Typography>
 
 
@@ -31,11 +31,14 @@ export default function PopupImage(props){
                 </div>
             </DialogTitle>
             <DialogContent dividers sx= {{paddingY:5}}>
+              {image ?
               <Container >
               <img src={`${image}`} alt='View after sometime or Download to view' style={{ width: '100%', height: 300 }}/>
               <Box><Button onClick={() => downloadBase64File(image)}>Download<DownloadIcon/></Button></Box>
               
-              </Container>
+              </Container> :
+              <Typography>Please upload Payment Proof</Typography>
+              }
             </DialogContent>
         </Dialog>
     );
