@@ -1,21 +1,26 @@
 
+import React from 'react'
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getItems, getMedia, deleteItem } from '../api/index';
-import { Grid } from '@mui/material';
+import { subDays } from 'date-fns';
+import DataTable from 'react-data-table-component';
+import { tableCustomStyles } from './TableStyle.js';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+// Import Icons
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import Popup from './Popup';
-import { subDays } from 'date-fns';
-import React from 'react'
-import DeletePopup from './DeletePopup';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import DataTable from 'react-data-table-component';
-import { tableCustomStyles } from './TableStyle.js';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import PopupImage from './PopupImage';
+
+import { Grid } from '@mui/material';
+
+import { getItems, getMedia, deleteItem } from '../../api/index';
+
+// Import Components
+import Popup from '../PopupModals/Popup';
+import DeletePopup from '../PopupModals/DeletePopup';
+import PopupImage from '../PopupModals/PopupImage';
 
 
 const Item = (props) => {
@@ -23,19 +28,18 @@ const Item = (props) => {
    const [items, setItems] = useState([]);
    const { type, dateFilter, startDate, endDate } = props;
 
-
    const [search, setSearch] = useState('');
    const [filteredElements, setFilteredElements] = useState('');
    const [showModal, setShowModal] = useState({ openDialog: false, currItem: '' });
    const [showImgModal, setShowImgModal] = useState({ openImgDialog: false, id: '', paymentType: '', image: '' });
    const [delModal, setDelModal] = useState({ openDelDialog: false, deleteId: null });
 
+   
    const getAllItems = async () => {
       let res = localStorage.getItem('user-info');
       let response = await getItems(JSON.parse(res).id);
       setItems(response.data);
    }
-
    useEffect(() => {
       getAllItems();
 
@@ -45,7 +49,6 @@ const Item = (props) => {
 
       function check(items, type) {
          if (type === '_id' || type === undefined) return items;
-
          return items.paymentType === type ? items : null;
       }
       function getQuarter(month) {
@@ -59,12 +62,13 @@ const Item = (props) => {
          if (getQuarter(quartr === 4)) {
             if (d.getFullYear() === now.getFullYear() && month <= 2) {
                return item;
-            } else
+            } else{
                if (d.getFullYear() === (now.getFullYear() - 1) && month >= 12) {
                   return item
                } else {
                   return null;
                }
+            }
          } else if (d.getFullYear() === now.getFullYear()) {
 
             if (quartr === 1)
@@ -73,14 +77,16 @@ const Item = (props) => {
                return d.getFullYear() === now.getFullYear() && month >= 6 && month <= 8 ? item : null;
             if (quartr === 3)
                return d.getFullYear() === now.getFullYear() && month >= 9 && month <= 11 ? item : null;
-         } else return null;
+
+         } else{
+            return null;
+         }
       }
-
-
       function lastQuarter(d, now, month, item) {
          return d.getFullYear() === (now.getFullYear() - 1) && month >= 9 && month <= 11 ? item : null;
       }
 
+      // Function to Select Items Date Range
       function checkDuration(item, dateFilter) {
          const now = new Date();
          const s = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -133,23 +139,27 @@ const Item = (props) => {
             return item;
          }
       }
+      
       var result = items.filter((e) => checkDuration(e, dateFilter))
          .filter((e) => check(e, type))
          .filter((item) => { return String(Object.values(item)).toLowerCase().includes(search.toLowerCase()); });
 
       setFilteredElements(result);
+
+
    }, [search, dateFilter, items, type, startDate, endDate]);
+
 
    const deleteItemData = (id) => {
       setDelModal({ openDelDialog: true, deleteId: id });
    }
 
    function confirm() {
-      deleteConfrim(delModal.deleteId);
+      deleteConfirm(delModal.deleteId);
       setDelModal({ openDelDialog: false, deleteId: null });
    }
 
-   const deleteConfrim = async (id) => {
+   const deleteConfirm = async (id) => {
       await deleteItem(id);
       toast(" Successfully Deleted", {
          position: "top-center",
@@ -242,36 +252,40 @@ const Item = (props) => {
 
 
    const customSort = (rows, selector, direction) => {
-      return rows.sort((rowA, rowB) => {
+      return rows.sort((firstRow, secondRow) => {
          // use the selector function to resolve your field names by passing the sort comparitors
-         const aField = selector(rowA)
-         const bField = selector(rowB)
+         const firstRowField = selector(firstRow)
+         const secondRowField = selector(secondRow)
 
          let comparison = 0;
-         if (typeof (aField) === 'number') {
-            if (aField > bField) {
+         if (typeof (firstRowField) === 'number') {
+            if (firstRowField > secondRowField) {
                comparison = 1;
-            } else if (aField < bField) {
+            } else if (firstRowField < secondRowField) {
                comparison = -1;
             }
-         } else if (aField.match(/\d{1,2}\/\d{1,2}\/\d{4}/)) {
-            var parts = aField.split('/');
+         } else if (firstRowField.match(/\d{1,2}\/\d{1,2}\/\d{4}/)) {
+            var parts = firstRowField.split('/');
             const d1 = new Date(parts[parts.length - 1], parts[1] - 1, parts[0]);
-            parts = bField.split('/');
+            parts = secondRowField.split('/');
             const d2 = new Date(parts[parts.length - 1], parts[1] - 1, parts[0]);
             if (d1 > d2) comparison = 1;
             else comparison = -1;
          }
-         else if (aField > bField) {
+         else if (firstRowField > secondRowField) {
             comparison = 1;
-         } else if (aField < bField) {
+         } else if (firstRowField < secondRowField) {
             comparison = -1;
          }
 
          return direction === 'desc' ? comparison * -1 : comparison;
       });
+
    };
+
+
    return (
+      
       <Grid container alignContent={'center'}>
 
          <Popup showModal={showModal} setShowModal={setShowModal} formType='Edit' ></Popup>

@@ -1,12 +1,12 @@
 
-import EditItem from './components/EditItem';
-import Index from './components/Index'
-import AllItems from './components/AllItems';
-import './index.css';
 import { BrowserRouter, Route,Routes } from 'react-router-dom';
-import Login from './components/Login';
+import Login from './Login';
+import Index from './components/Main'
+import AllItems from './components/Items/AllItems';
+import EditItem from './components/Items/EditItem';
 import ProtectedRoutes from './components/ProtectedRoutes';
-//  import ProtectedRoutes from "./components/ProtectedRoutes";
+
+import './styles/index.css';
 
 const App = () => {
 

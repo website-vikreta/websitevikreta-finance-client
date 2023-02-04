@@ -1,21 +1,19 @@
 import { useState, useEffect } from 'react';
+import FileBase64 from 'react-file-base64';
+import Cookie from 'universal-cookie';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import {  FormLabel, FormControlLabel, Radio, RadioGroup, Table } from '@mui/material';
+import { TextField, Container, Button, styled ,FormHelperText } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
-import {  Table } from '@mui/material';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
+import { updateItem, getItem } from '../../api/index';
 
-import { TextField, Container, Button, styled ,FormHelperText } from '@mui/material';
-import { updateItem, getItem } from '../api/index';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import './ItemForm.css';
-import FileBase64 from 'react-file-base64';
-import Cookie from 'universal-cookie';
+import '../../styles/ItemForm.css';
+
 var cookie = new Cookie();
 const Date = styled(DatePicker)`
     width: 300px
@@ -26,9 +24,10 @@ const StyledTable = styled(Table)`
    
 `;
 
-
 const EditItem = (props) => {
+
     let user = JSON.parse(localStorage.getItem('user-info'));
+    
     const [item, setItem] = useState({ title: '', amount: '', category: '', paymentType: '', dateOfInvoice: '', dateOfPayment: '', description: '', paymentProof: '', userId: user.id  });
     const { title, amount, category, paymentType, dateOfInvoice, dateOfPayment, description, paymentProof, userId } = item;
    

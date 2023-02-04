@@ -2,8 +2,8 @@
 import { TextField, Button, Grid, Paper, FormHelperText } from '@mui/material';
 import { useState, useEffect } from 'react';
 import React from 'react';
-import { loginUser } from '../api';
-import Index from './Index';
+import { loginUser } from './api';
+import Index from './components/Main';
 import { useNavigate } from 'react-router-dom';
 const Login = () => {
 

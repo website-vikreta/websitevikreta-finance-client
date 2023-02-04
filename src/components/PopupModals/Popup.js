@@ -1,8 +1,11 @@
 import { Button, Dialog, DialogContent, DialogTitle, Typography } from "@mui/material";
-import ItemForm from "./ItemForm";
 import CloseIcon from '@mui/icons-material/Close';
-import EditItem from "./EditItem";
+
+import ItemForm from "../Items/ItemForm";
+import EditItem from "../Items/EditItem";
+
 export default function Popup(props){
+    
     const {showModal,setShowModal, formType} = props;
     const {openDialog, currItem} = showModal;
     

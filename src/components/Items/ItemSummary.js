@@ -1,29 +1,12 @@
-// import Button from '@mui/material/Button';
+
 import { useState, useEffect } from 'react';
-// import styled from '@emotion/styled';
 
-import Items from './Items';
-import { getItems } from '../api';
-import Popup from './Popup';
-import { useNavigate, Link } from 'react-router-dom';
+import { getItems } from '../../api';
 
-// Image Imports
-import SiteLogo from "../assets/websitevikreta-finance.svg";
+const ItemsTable = () => {
 
-// Icon Imports
-import Logout from '@mui/icons-material/Logout';
-import Add from '@mui/icons-material/Add';
-
-//Cookie Import
-import Cookie from 'universal-cookie';
-var cookie = new Cookie();
-const Index = () => {
-
-   const [showModal, setShowModal] = useState({ openDialog: false, itemId: 0 });
    const [items, setItems] = useState([]);
 
-   let navigate = useNavigate();
-  
    useEffect(() => {
       const getAllItems = async () => {
 
@@ -33,11 +16,7 @@ const Index = () => {
       getAllItems();
      
    }, [items]);
-   const handleLogout = () => {
-      cookie.remove('user');
-      localStorage.removeItem('user-info');
-      navigate('/');
-   };
+  
 
    function getIncome(item, type) {
       if (item.paymentType === type) return item.amount;
@@ -50,7 +29,7 @@ const Index = () => {
       else if (month >= 9 && month <= 11) return 3;
       else return 4;
    }
-
+   
    function thisQuarter(d, now, month, quartr, item) {
       if (getQuarter(quartr === 4)) {
          if (d.getFullYear() === now.getFullYear() && month <= 2) {
@@ -72,6 +51,7 @@ const Index = () => {
       } else return null;
    }
 
+   
    function lastQuarter(d, now, month, item) {
       return d.getFullYear() === (now.getFullYear() - 1) && month >= 9 && month <= 11 ? item : null;
    }
@@ -118,7 +98,6 @@ const Index = () => {
       var currYear = currItems.filter((item) => getIncomeInDuration(item, currentDate, timeFilter)).map(item => item.amount);
       var total = 0;
       currYear.forEach(amount => total += amount);
-
       return total;
    }
 
@@ -147,31 +126,47 @@ const Index = () => {
    const lastQaurtrTotalExpense = getTotalRevenueDetails(items, 'Expense', new Date(), 5);
    const lastQaurtrTotalProfit = lastQaurtrTotalIncome - lastQaurtrTotalExpense;
 
+   const month = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEPT","OCT","NOV","DEC"];
 
+     // Calculate Current Months Details
+   const currentDate = new Date();
+   const currentMonth = month[currentDate.getMonth()];
+
+     // Calculate Last Months Details
+   var lastMonth = month[currentDate.getMonth()-1];
+   var lastMonthYear = currentDate.getFullYear();
+   if(currentMonth === 0){
+      lastMonth = 11;
+      lastMonthYear = currentDate.getFullYear()-1;
+   }
+   const lastYear = currentDate.getFullYear()-1;
+
+   // Calculate Current Quarter Months Details
+   const qaurters = [["MAR","MAY"],["JUN","AUG"],["SEPT","NOV"],["DEC","FEB"]];
+   var currQuartr = getQuarter(currentDate.getMonth()+1);
+   const currQuartrMonths = qaurters[currQuartr-1];
+   var currQuartrYear1 = currentDate.getFullYear();
+   var currQuartrYear2 = currentDate.getFullYear();
+   if(currQuartr === 4){
+      currQuartrYear1 = currentDate.getFullYear()-1;
+   }
+
+   // Calculate Last Quarter Months Details
+   var lastQuartrMonths = qaurters[currQuartr-2];
+   var lastQuartrYear1 = currentDate.getFullYear();
+   var lastQuartrYear2 = currentDate.getFullYear();
+   if(currQuartr === 1) {
+       lastQuartrMonths = qaurters[3];
+       lastQuartrYear1 = currentDate.getFullYear()-1;
+   }else if(currQuartr === 4) {
+      lastQuartrYear1 = currentDate.getFullYear()-1;
+      lastQuartrYear2 = currentDate.getFullYear()-1;
+  }
    return (
 
       // Defining Structure
       <>
-         <div className="App container">
-            {/* Header */}
-            <header className="header">
-               {/* Logo */}
-               <div>
-                  <img src={SiteLogo} alt="Logo Icon" />
-               </div>
-               {/* CTAs */}
-               <div className='ctaWrapper'>
-                  <div className="navLink">
-                     <Link to="/all">View All Records</Link>
-                  </div>
-                  <div className="navLink">
-                     <button className='linkBtn danger' onClick={handleLogout}>
-                        <span>Logout</span> <Logout fontSize="small" sx={{ color: 'red' }} />
-                     </button>
-                  </div>
-               </div>
-            </header>
-
+          
             {/* Main Content */}
             <main>
 
@@ -196,7 +191,7 @@ const Index = () => {
                            </div>
                         </div>
                         <hr />
-                        <div className='cardHeading'>This Month (Feb 2023)</div>
+                        <div className='cardHeading'>This Month ({currentMonth +' '+ currentDate.getFullYear()})</div>
                      </div>
 
                      {/* Last */}
@@ -216,7 +211,7 @@ const Index = () => {
                            </div>
                         </div>
                         <hr />
-                        <div className='cardHeading'>Last Month (Jan 2023)</div>
+                        <div className='cardHeading'>Last Month ({lastMonth +' '+lastMonthYear})</div>
                      </div>
                   </div>
 
@@ -237,7 +232,7 @@ const Index = () => {
                            </div>
                         </div>
                         <hr />
-                        <div className='cardHeading this'>This Quarter (JAN23 - MAR23)</div>
+                        <div className='cardHeading this'>This Quarter ({currQuartrMonths[0]+(currQuartrYear1%100)+' - '+currQuartrMonths[1]+(currQuartrYear2%100)})</div>
                      </div>
                      <div className="card">
                         <div className="numberWrapper">
@@ -255,7 +250,7 @@ const Index = () => {
                            </div>
                         </div>
                         <hr />
-                        <div className='cardHeading'>Last Quarter (OCT22 - DEC22)</div>
+                        <div className='cardHeading'>Last Quarter ({lastQuartrMonths[0]+(lastQuartrYear1%100)+' - '+lastQuartrMonths[1]+(lastQuartrYear2%100)})</div>
                      </div>
                   </div>
                   <div className="row">
@@ -295,60 +290,20 @@ const Index = () => {
                            </div>
                         </div>
                         <hr />
-                        <div className='cardHeading'>Last Year  ({new Date().getFullYear()-1})</div>
+                        <div className='cardHeading'>Last Year  ({lastYear})</div>
                      </div>
                   </div>
 
                </section>
-
-               {/* Charts */}
-               <section className='chartWrapper'>
-                  <div className="card">Chart 1</div>
-
-                  {/* grid */}
-                  <div className="chartGrid">
-                     <div className="card">Chart 2</div>
-                     <div className="card">Chart 3</div>
-                     <div className="card">Chart 4</div>
-                     <div className="card">Chart 5</div>
-                  </div>
-               </section>
-
-               {/* Table & Glimpse */}
-               <div className="table">
-                  <div className="card">
-                     <Items />
-                  </div>
-               </div>
-
             </main>
 
             {/* Footer */}
             <footer className='footer'></footer>
 
 
-            {/* Add Button Fixed */}
-            <button
-               className='btn btn-primary addItemFloating'
-               onClick={() => setShowModal({ ...showModal, openDialog: true })}
-               title="Add new item">
-               <Add fontSize='medium' />
-            </button>
-         </div>
-
-         <div className="App">
-            <header className="App-header">
-
-
-
-            </header>
-            <Popup showModal={showModal} setShowModal={setShowModal} formType='Add'></Popup>
-
-
-         </div>
       </>
    );
 
 }
 
-export default Index;
+export default ItemsTable;

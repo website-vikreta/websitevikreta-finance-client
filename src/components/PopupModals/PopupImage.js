@@ -3,6 +3,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import CloseIcon from '@mui/icons-material/Close';
 
 export default function PopupImage(props){
+    
     const {showImgModal,setShowImgModal} = props;
     const {openImgDialog, id, paymentType, image} = showImgModal;
   

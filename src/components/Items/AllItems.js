@@ -1,49 +1,40 @@
 import React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Button from '@mui/material/Button';
+import { useState } from 'react';
 
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import Item from './Items';
+import { AppBar, Box, Button, Select, FormControl, MenuItem, InputLabel, Toolbar, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import styled from "@emotion/styled";
-import { TextField } from '@mui/material';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Cookie from 'universal-cookie';
-var cookie = new Cookie();
+
+import Item from './Items';
+
 const Date = styled(DatePicker)`
     width: 250px
 `;
+
 export default function AllItems() {
+
    const [val, setVal] = useState('');
+
    const [dateRange, setDateRange] = useState({ startDate: null, endDate: null });
    const { startDate, endDate } = dateRange;
+
    const [open, setOpen] = useState(false);
+
    const [filtr, setFilter] = useState({ filter: '_id', allActive: true, incomeActive: false, expenseActive: false, });
    const { filter, allActive, incomeActive, expenseActive } = filtr;
-   const handleClose = () => {
-      setOpen(false);
-   };
 
 
-
-   let navigate = useNavigate();
-   const handleLogout = () => {
-      cookie.remove('user');
-      localStorage.removeItem('user-info');
-      navigate('/');
-   };
+ 
 
    const handleOpen = () => {
       setOpen(true);
    };
+   const handleClose = () => {
+      setOpen(false);
+   };
+
    const handleChange = (event) => {
       setVal(event.target.value);
       if (val !== 8) setDateRange({ startDate: null, endDate: null });
@@ -51,34 +42,37 @@ export default function AllItems() {
 
    return (
       <Box sx={{ flexGrow: 1, m: 3 }}>
+
+         {/* All Table Filters */}
          <AppBar position="static" sx={{ backgroundColor: '#FFFFFF', boxShadow: 'none' }}>
             <Toolbar>
                <div className="d-inline-flex p-2">
-                  <Button sx={{
-                     p: 2, color: allActive ? 'white' : 'black', backgroundColor: allActive ? "#7700FF" : "white", borderColor: 'black', border: 1, ':hover': {
+                  <Button 
+                     sx={{ p: 2, color: allActive ? 'white' : 'black', backgroundColor: allActive ? "#7700FF" : "white", borderColor: 'black', border: 1, ':hover': {
                         bgcolor: '#7700FF',
                         color: 'white',
-                     }
-
-                  }} onClick={(() => setFilter({ filter: '_id', allActive: true }))}
+                     }}} 
+                     onClick={(() => setFilter({ filter: '_id', allActive: true }))}
                   >All</Button>
-                  <Button sx={{
-                     p: 2, color: incomeActive ? 'white' : 'black', backgroundColor: incomeActive ? "#7700FF" : "white", borderColor: 'black', border: 1, ':hover': {
+
+                  <Button 
+                     sx={{ p: 2, color: incomeActive ? 'white' : 'black', backgroundColor: incomeActive ? "#7700FF" : "white", borderColor: 'black', border: 1, ':hover': {
                         bgcolor: '#7700FF',
                         color: 'white',
-                     }
-                  }} onClick={(() => setFilter({ filter: 'Income', incomeActive: true }))}>
-                     Income</Button>
-                  <Button sx={{
-                     p: 2, color: expenseActive ? 'white' : 'black', backgroundColor: expenseActive ? "#7700FF" : "white", borderColor: 'black', border: 1, ':hover': {
+                     }}} 
+                     onClick={(() => setFilter({ filter: 'Income', incomeActive: true }))}
+                  >Income</Button>
+                  
+                  <Button 
+                     sx={{ p: 2, color: expenseActive ? 'white' : 'black', backgroundColor: expenseActive ? "#7700FF" : "white", borderColor: 'black', border: 1, ':hover': {
                         bgcolor: '#7700FF',
                         color: 'white',
-                     }
-                  }} onClick={(() => setFilter({ filter: 'Expense', expenseActive: true }))}
+                     }}} 
+                     onClick={(() => setFilter({ filter: 'Expense', expenseActive: true }))} 
                   >Expense</Button>
                </div>
-               <FormControl sx={{ m: 2, width: '250px' }}>
 
+               <FormControl sx={{ m: 2, width: '250px' }}>
                   <InputLabel id="demo-simple-select-label">Filter Records</InputLabel>
                   <Select
                      labelId="demo-simple-select-label"
@@ -88,8 +82,8 @@ export default function AllItems() {
                      onClose={handleClose}
                      onOpen={handleOpen}
                      label="Filter"
-                     onChange={handleChange}
-                  >
+                     onChange={handleChange}>
+
                      <MenuItem value={1}>Today</MenuItem>
                      <MenuItem value={2}>Past 7 Days</MenuItem>
                      <MenuItem value={3}>Past 30 Days</MenuItem>
@@ -102,7 +96,8 @@ export default function AllItems() {
 
                   </Select>
                </FormControl>
-
+               
+               {/* Visible on Date Range Selecting Custom Range Menu */}
                {val === 9 &&
 
                   <Box component="div" sx={{ display: 'inline' }}>
@@ -116,7 +111,6 @@ export default function AllItems() {
                                  renderInput={(params) => <TextField {...params} />}
                                  value={startDate}
                                  onChange={((date) => setDateRange({ ...dateRange, startDate: date }))}
-
                               />
                            </LocalizationProvider>
                         </span>
@@ -128,17 +122,17 @@ export default function AllItems() {
                                  name='endDate'
                                  renderInput={(params) => <TextField {...params} />}
                                  value={endDate}
-                                 onChange={((date) => setDateRange({ ...dateRange, endDate: date }))}
+                                 onChange={((date) => setDateRange({ ...dateRange, endDate: date }))} 
                               />
-
                            </LocalizationProvider>
                         </span>
                      </span>
                   </Box>
                }
             </Toolbar>
-            <button className='btn btn-primary' onClick={handleLogout}>Logout</button>
          </AppBar>
+
+         {/* Item Data Table  */}
          <Item type={filter} dateFilter={val} startDate={startDate} endDate={endDate} />
       </Box>
    );
