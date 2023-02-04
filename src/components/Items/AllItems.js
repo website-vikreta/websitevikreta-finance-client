@@ -12,7 +12,6 @@ import Item from './Items';
 const Date = styled(DatePicker)`
     width: 250px
 `;
-
 export default function AllItems() {
 
    const [val, setVal] = useState('');

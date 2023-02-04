@@ -8,6 +8,7 @@ export const getItems = async (id) => {
    return await axios.get(`${url}/${id}`);
 }
 export const getItem = async (id) => {
+   console.log(id,typeof(id), 'index');
    return await axios.get(`${url}/getedit${id}`);
 }
 export const createItem = async (newItem) => await axios.post(`${url}/add`, newItem);

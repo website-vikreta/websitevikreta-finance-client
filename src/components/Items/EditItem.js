@@ -40,6 +40,7 @@ const EditItem = (props) => {
         const loadItemDetails = async () => {
             const response = await getItem(id);
             setItem(response.data);
+            console.log(response.data, response, 'response', id)
         }
         loadItemDetails();
     }, [id]);
@@ -160,8 +161,8 @@ const EditItem = (props) => {
 
                                 <TextField variant='outlined' fullWidth
                                     type={'text'} onChange={(e) => onValueChange(e)}
-                                    error={(errors.title.error) || (!title.match(/^[A-Za-z]+$/) && title !== '')}
-                                    helperText={(errors.title.error && errors.title.errorMessage) || (!title.match(/^[A-Za-z]+$/) && title !== '' ? 'Item title should contain only characters. Special chracters, whitespaces, digits are not allowed' : ' ')}
+                                    error={(errors.title.error) }
+                                    helperText={(errors.title.error && errors.title.errorMessage)}
 
                                     name='title' value={title}></TextField>
 
@@ -176,8 +177,7 @@ const EditItem = (props) => {
                                     name='amount'
                                     fullWidth
                                     error={(errors.amount.error) || (amount !== '' && !String(amount).match(/^\d+$/))}
-                                    helperText={(errors.amount.error && errors.amount.errorMessage) || (!String(amount).match(/^\d+$/) && amount !== '' ? 'Only digits are allowed' : ' ')}
-                                   
+                                    helperText={(errors.amount.error && errors.amount.errorMessage) || (!String(amount).match(/^\d+$/) && amount !== '' ? 'Only digits are allowed' : ' ')} 
                                     value={amount}></TextField>
 
                             </td>
@@ -190,10 +190,8 @@ const EditItem = (props) => {
                                 <TextField fullWidth
                                     type={'text'} onChange={(e) => onValueChange(e)}
                                     name='category'
-                                    error={(errors.category.error) || (category !== '' && !category.match(/^[A-Za-z]+$/))}
-                                    helperText={(errors.category.error && errors.category.errorMessage) || (!category.match(/^[A-Za-z]+$/) && category !== '' ?
-                                        'Category should contain only characters. Special chracters, whitespaces, digits are not allowed' : ' ')}
-
+                                    error={(errors.category.error)}
+                                    helperText={(errors.category.error && errors.category.errorMessage)}
                                     value={category}></TextField>
 
                             </td>

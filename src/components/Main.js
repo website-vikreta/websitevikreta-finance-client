@@ -19,9 +19,9 @@ const Index = () => {
 
    const [showModal, setShowModal] = useState({ openDialog: false, itemId: 0 });
   
+
    let navigate = useNavigate();
-  
- 
+
    const handleLogout = () => {
       var cookie = new Cookie();
       cookie.remove('user');
@@ -40,6 +40,10 @@ const Index = () => {
                {/* Logo */}
                <div>
                   <img src={SiteLogo} alt="Logo Icon" />
+                 
+               </div>
+               <div>
+               <span>Welcome {JSON.parse(localStorage.getItem('user-info')).username}</span>
                </div>
                {/* CTAs */}
                <div className='ctaWrapper'>
@@ -74,7 +78,7 @@ const Index = () => {
                {/* Table & Glimpse */}
                <div className="table">
                   <div className="card">
-                  <AllItems/>
+                  <AllItems />
                   </div>
                </div>
 

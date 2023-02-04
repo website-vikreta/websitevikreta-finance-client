@@ -88,6 +88,7 @@ const ItemForm = (props) => {
 
         }
 
+        console.log(cnt);
         setErrors(newErrorValues);
         if(cnt === 0)  addItemDetails();
     }
@@ -153,8 +154,8 @@ const ItemForm = (props) => {
 
                                 <TextField variant='outlined' fullWidth
                                     type={'text'} onChange={(e) => onValueChange(e)}
-                                    error={(errors.title.error) || (!title.match(/^[A-Za-z]+$/) && title !== '')}
-                                    helperText={(errors.title.error && errors.title.errorMessage) || (!title.match(/^[A-Za-z]+$/) && title !== '' ? 'Item title should contain only characters. Special chracters, whitespaces, digits are not allowed' : ' ')}
+                                    error={(errors.title.error)}
+                                    helperText={(errors.title.error && errors.title.errorMessage)}
 
                                     name='title' value={title}
                                 ></TextField>
@@ -183,10 +184,8 @@ const ItemForm = (props) => {
                                 <TextField fullWidth
                                     type={'text'} onChange={(e) => onValueChange(e)}
                                     name='category'
-                                    error={(errors.category.error) || (category !== '' && !category.match(/^[A-Za-z]+$/))}
-                                    helperText={(errors.category.error && errors.category.errorMessage) || (!category.match(/^[A-Za-z]+$/) && category !== '' ?
-                                        'Category should contain only characters. Special chracters, whitespaces, digits are not allowed' : ' ')}
-
+                                    error={(errors.category.error)}
+                                    helperText={(errors.category.error && errors.category.errorMessage)}
                                     value={category}
                                 ></TextField>
 
