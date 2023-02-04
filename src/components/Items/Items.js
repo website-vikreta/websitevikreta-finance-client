@@ -37,6 +37,7 @@ const Item = (props) => {
    
    const getAllItems = async () => {
       let res = localStorage.getItem('user-info');
+
       let response = await getItems(JSON.parse(res).id);
       setItems(response.data);
    }
@@ -58,93 +59,98 @@ const Item = (props) => {
          else return 4;
       }
 
-      function thisQuarter(d, now, month, quartr, item) {
+      function thisQuarter(itemDate, now, month, quartr, item) {
          if (getQuarter(quartr === 4)) {
-            if (d.getFullYear() === now.getFullYear() && month <= 2) {
+            if (itemDate.getFullYear() === now.getFullYear() && month <= 2) {
                return item;
             } else{
-               if (d.getFullYear() === (now.getFullYear() - 1) && month >= 12) {
+               if (itemDate.getFullYear() === (now.getFullYear() - 1) && month >= 12) {
                   return item
                } else {
                   return null;
                }
             }
-         } else if (d.getFullYear() === now.getFullYear()) {
+         } else if (itemDate.getFullYear() === now.getFullYear()) {
 
             if (quartr === 1)
-               return d.getFullYear() === now.getFullYear() && month >= 3 && month <= 5 ? item : null;
+               return itemDate.getFullYear() === now.getFullYear() && month >= 3 && month <= 5 ? item : null;
             if (quartr === 2)
-               return d.getFullYear() === now.getFullYear() && month >= 6 && month <= 8 ? item : null;
+               return itemDate.getFullYear() === now.getFullYear() && month >= 6 && month <= 8 ? item : null;
             if (quartr === 3)
-               return d.getFullYear() === now.getFullYear() && month >= 9 && month <= 11 ? item : null;
+               return itemDate.getFullYear() === now.getFullYear() && month >= 9 && month <= 11 ? item : null;
 
          } else{
             return null;
          }
       }
-      function lastQuarter(d, now, month, item) {
-         return d.getFullYear() === (now.getFullYear() - 1) && month >= 9 && month <= 11 ? item : null;
+      function lastQuarter(itemDate, now, month, item) {
+         return itemDate.getFullYear() === (now.getFullYear() - 1) && month >= 9 && month <= 11 ? item : null;
       }
 
       // Function to Select Items Date Range
       function checkDuration(item, dateFilter) {
          const now = new Date();
-         const s = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+         
          const currDate = new Date(item.dateOfInvoice);
-         const d = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate());
-         const month = (d.getMonth() + 1);
+         const currentDate = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate());
+         const month = (currentDate.getMonth() + 1);
          if (dateFilter === 1) {
 
-            return (d.getFullYear() === s.getFullYear() && d.getMonth() === s.getMonth() && d.getDate() === s.getDate()) ? item : null;
+            return (currentDate.getFullYear() === now.getFullYear() && currentDate.getMonth() === now.getMonth() && currentDate.getDate() === now.getDate()) ? item : null;
 
          } else if (dateFilter === 2) {
 
-            const e = new Date(now.getFullYear(), now.getMonth(), (now.getDate() - 7));
-            return d <= s && d >= e ? item : null;
+            const lastDate = new Date(now.getFullYear(), now.getMonth(), (now.getDate() - 7));
+            return currentDate <= now && currentDate >= lastDate ? item : null;
 
          } else if (dateFilter === 3) {
 
-            const e = subDays(now, 30);
-            return d <= s && d >= e ? item : null;
+            const lastDate = subDays(now, 30);
+            return currentDate <= now && currentDate >= lastDate ? item : null;
 
          } else if (dateFilter === 4) {
-            const quartr = getQuarter(d.getMonth() + 1);
-            return thisQuarter(d, now, month, quartr, item);
+            const quartr = getQuarter(currentDate.getMonth() + 1);
+            return thisQuarter(currentDate, now, month, quartr, item);
 
          } else if (dateFilter === 5) {
 
-            const quartr = getQuarter(d.getMonth() + 1);
-            if (quartr === 1) return thisQuarter(d, now, month, 4, item);
-            if (quartr === 4 || ((d.getFullYear() === now.getFullYear() - 1) && quartr === 3)) return lastQuarter(d, now, month, item);
-            return thisQuarter(d, now, month, quartr - 1, item);
+            const quartr = getQuarter(currentDate.getMonth() + 1);
+            if (quartr === 1) return thisQuarter(currentDate, now, month, 4, item);
+            if (quartr === 4 || ((currentDate.getFullYear() === now.getFullYear() - 1) && quartr === 3)) return lastQuarter(currentDate, now, month, item);
+            return thisQuarter(currentDate, now, month, quartr - 1, item);
 
          } else if (dateFilter === 6) {
 
-            return s.getFullYear() === d.getFullYear() ? item : null;
+            return now.getFullYear() === currentDate.getFullYear() ? item : null;
 
          } else if (dateFilter === 7) {
 
-            return (s.getFullYear() - 1) === d.getFullYear() ? item : null;
+            return (now.getFullYear() - 1) === currentDate.getFullYear() ? item : null;
 
          } else if (dateFilter === 8) {
 
-            return d.getFullYear() === 2021 ? item : null;
+            return currentDate.getFullYear() === 2021 ? item : null;
 
-         } else if (dateFilter === 9 && startDate && endDate) {
-            const d1 = new Date(startDate);
-            const d2 = new Date(endDate);
-            return (d >= d1) && (d <= d2) ? item : null;
+         }else if (dateFilter === 9) {
+
+            return item;
+
+         } else if (dateFilter === 10 && startDate && endDate) {
+            const startDate_ = new Date(startDate);
+            const endDate_ = new Date(endDate);
+            return (currentDate >= startDate_) && (currentDate <= endDate_) ? item : null;
          }
          else {
             return item;
          }
       }
       
-      var result = items.filter((e) => checkDuration(e, dateFilter))
-         .filter((e) => check(e, type))
+      var result = items.filter((item) => checkDuration(item, dateFilter))
+         .filter((item) => check(item, type))
          .filter((item) => { return String(Object.values(item)).toLowerCase().includes(search.toLowerCase()); });
 
       setFilteredElements(result);
+
 
 
    }, [search, dateFilter, items, type, startDate, endDate]);
@@ -173,8 +179,8 @@ const Item = (props) => {
 
 
 
-   const formatedate = (d) => {
-      return d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear()
+   const formatedate = (date) => {
+      return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear()
    };
 
    const getProof = async (id) => {
@@ -265,11 +271,14 @@ const Item = (props) => {
                comparison = -1;
             }
          } else if (firstRowField.match(/\d{1,2}\/\d{1,2}\/\d{4}/)) {
+
             var parts = firstRowField.split('/');
-            const d1 = new Date(parts[parts.length - 1], parts[1] - 1, parts[0]);
+            const firstRowDate = new Date(parts[parts.length - 1], parts[1] - 1, parts[0]);
+
             parts = secondRowField.split('/');
-            const d2 = new Date(parts[parts.length - 1], parts[1] - 1, parts[0]);
-            if (d1 > d2) comparison = 1;
+            const secondRowDate = new Date(parts[parts.length - 1], parts[1] - 1, parts[0]);
+
+            if (firstRowDate > secondRowDate) comparison = 1;
             else comparison = -1;
          }
          else if (firstRowField > secondRowField) {

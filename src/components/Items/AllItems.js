@@ -25,8 +25,6 @@ export default function AllItems() {
    const { filter, allActive, incomeActive, expenseActive } = filtr;
 
 
- 
-
    const handleOpen = () => {
       setOpen(true);
    };
@@ -91,13 +89,14 @@ export default function AllItems() {
                      <MenuItem value={6}>This Year</MenuItem>
                      <MenuItem value={7}>Last Year</MenuItem>
                      <MenuItem value={8}>2021</MenuItem>
-                     <MenuItem value={9}>Custom Range</MenuItem>
+                     <MenuItem value={9}>All</MenuItem>
+                     <MenuItem value={10}>Custom Range</MenuItem>
 
                   </Select>
                </FormControl>
                
                {/* Visible on Date Range Selecting Custom Range Menu */}
-               {val === 9 &&
+               {val === 10 &&
 
                   <Box component="div" sx={{ display: 'inline' }}>
 
