@@ -1,4 +1,10 @@
 const tableCustomStyles = {
+   table: {
+      style: {
+         padding: '0',
+         margin: '0'
+      }
+   },
    rows: {
       style: {
          fontSize: '1rem',

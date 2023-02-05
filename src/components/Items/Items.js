@@ -1,7 +1,7 @@
 
 import React from 'react'
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { subDays } from 'date-fns';
 import DataTable from 'react-data-table-component';
 import { tableCustomStyles } from './TableStyle.js';
@@ -34,7 +34,7 @@ const Item = (props) => {
    const [showImgModal, setShowImgModal] = useState({ openImgDialog: false, id: '', paymentType: '', image: '' });
    const [delModal, setDelModal] = useState({ openDelDialog: false, deleteId: null });
 
-   
+
    const getAllItems = async () => {
       let res = localStorage.getItem('user-info');
 
@@ -63,7 +63,7 @@ const Item = (props) => {
          if (getQuarter(quartr === 4)) {
             if (itemDate.getFullYear() === now.getFullYear() && month <= 2) {
                return item;
-            } else{
+            } else {
                if (itemDate.getFullYear() === (now.getFullYear() - 1) && month >= 12) {
                   return item
                } else {
@@ -79,7 +79,7 @@ const Item = (props) => {
             if (quartr === 3)
                return itemDate.getFullYear() === now.getFullYear() && month >= 9 && month <= 11 ? item : null;
 
-         } else{
+         } else {
             return null;
          }
       }
@@ -90,7 +90,7 @@ const Item = (props) => {
       // Function to Select Items Date Range
       function checkDuration(item, dateFilter) {
          const now = new Date();
-         
+
          const currDate = new Date(item.dateOfInvoice);
          const currentDate = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate());
          const month = (currentDate.getMonth() + 1);
@@ -131,7 +131,7 @@ const Item = (props) => {
 
             return currentDate.getFullYear() === 2021 ? item : null;
 
-         }else if (dateFilter === 9) {
+         } else if (dateFilter === 9) {
 
             return item;
 
@@ -144,7 +144,7 @@ const Item = (props) => {
             return item;
          }
       }
-      
+
       var result = items.filter((item) => checkDuration(item, dateFilter))
          .filter((item) => check(item, type))
          .filter((item) => { return String(Object.values(item)).toLowerCase().includes(search.toLowerCase()); });
@@ -294,8 +294,8 @@ const Item = (props) => {
 
 
    return (
-      
-      <Grid container alignContent={'center'}>
+
+      <Grid className='tableWrapper' container alignContent={'center'}>
 
          <Popup showModal={showModal} setShowModal={setShowModal} formType='Edit' ></Popup>
          <DeletePopup delModal={delModal} setDelModal={setDelModal} confirm={confirm}></DeletePopup>
@@ -314,8 +314,8 @@ const Item = (props) => {
                subHeaderComponent={
                   <div className='tableSubHeaderComponent'>
                      <div className='headingWrapper'>
-                        <h5 className='heading heading-two'>Latest records</h5>
-                        <Link to="/all">View All Records</Link>
+                        <h5 className='heading heading-two'>All records</h5>
+                        {/* <Link to="/all">View All Records</Link> */}
                      </div>
                      <input
                         type='text'

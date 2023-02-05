@@ -1,6 +1,6 @@
 
-import {  useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Cookie from 'universal-cookie';
 
 // Image Imports
@@ -18,7 +18,7 @@ import ItemsTable from './Items/ItemSummary';
 const Index = () => {
 
    const [showModal, setShowModal] = useState({ openDialog: false, itemId: 0 });
-  
+
 
    let navigate = useNavigate();
 
@@ -38,17 +38,13 @@ const Index = () => {
             {/* Header */}
             <header className="header">
                {/* Logo */}
-               <div>
+               <div className='logoWrapper'>
                   <img src={SiteLogo} alt="Logo Icon" />
-                 
-               </div>
-               <div>
-               <span>Welcome {JSON.parse(localStorage.getItem('user-info')).username}</span>
                </div>
                {/* CTAs */}
                <div className='ctaWrapper'>
                   <div className="navLink">
-                     <Link to="/all">View All Records</Link>
+                     <span className='welcomeText'>Welcome back, <b>{JSON.parse(localStorage.getItem('user-info')).username}</b></span>
                   </div>
                   <div className="navLink">
                      <button className='linkBtn danger' onClick={handleLogout}>
@@ -60,7 +56,7 @@ const Index = () => {
 
             {/* Main Content */}
             <main>
-               <ItemsTable/>
+               <ItemsTable />
                {/* Charts */}
                <section className='chartWrapper'>
                   <div className="card">Chart 1</div>
@@ -74,11 +70,11 @@ const Index = () => {
                   </div>
                </section>
 
-              
+
                {/* Table & Glimpse */}
                <div className="table">
                   <div className="card">
-                  <AllItems />
+                     <AllItems />
                   </div>
                </div>
 

@@ -44,6 +44,12 @@ a {
    align-items: center;
    gap: 2rem;
 }
+.header .ctaWrapper .welcomeText {
+   font-weight: 300;
+}
+.header .ctaWrapper .welcomeText b {
+   font-weight: 500;
+}
 
 .navLink a,
 .linkBtn {
@@ -103,6 +109,11 @@ a {
 .btn.btn-secondary:hover {
    color: var(--white-color);
    background: var(--primary-color);
+}
+.btn.login-btn {
+   height: initial;
+   padding: 1rem 2rem;
+   min-width: 200px;
 }
 .linkBtn {
    padding: 0;
@@ -196,7 +207,14 @@ main {
 
 .table header {
    padding: 0 !important;
+}
+.tableWrapper header {
    padding-bottom: 0.9rem !important;
+}
+
+.tableWrapper {
+   margin: 0 !important;
+   padding: 0 !important;
 }
 .tableSubHeaderComponent {
    display: flex;
@@ -239,6 +257,55 @@ main {
    grid-template-columns: 1fr 1fr;
 }
 
+.divider {
+   border-radius: 0;
+   height: 40px;
+   background: var(--light-color) !important;
+   margin-block: 1rem;
+}
+
+.filterToolbar {
+   border-radius: 5px;
+   margin: 0 !important;
+   padding: 0 !important;
+   display: flex;
+   justify-content: flex-start;
+   align-items: center;
+   gap: 1rem;
+   min-height: initial !important;
+}
+.filterButtonWrapper {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   gap: 0;
+   padding: 0;
+   margin: 0;
+   border-radius: 5px;
+   overflow: hidden;
+}
+.filterButtonWrapper button {
+   border-radius: 0;
+   padding: 1rem 1rem;
+   min-width: 100px;
+}
+
+.FilterFormControl {
+   min-width: 250px;
+   font-size: 1rem;
+   padding: 0;
+}
+
+.loginGrid {
+   max-width: 500px;
+   width: 100%;
+   margin: 50px auto;
+
+   display: flex;
+   flex-direction: column !important;
+   gap: 1rem;
+}
+
 @media screen and (max-width: 768px) {
    body {
       font-size: 14px;
@@ -266,6 +333,20 @@ main {
    .tableSubHeaderComponent .headingWrapper {
       flex-direction: column;
       gap: 0.25rem;
+   }
+
+   .filterToolbar {
+      flex-direction: column;
+   }
+   .filterButtonWrapper {
+      width: 100%;
+   }
+   .filterButtonWrapper button {
+      flex: 1;
+      padding: 0.8rem;
+   }
+   .FilterFormControl {
+      width: 100%;
    }
 }
 

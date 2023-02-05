@@ -4,6 +4,13 @@
     @license MIT
     */
 
+/*!
+ * cookie
+ * Copyright(c) 2012-2014 Roman Shtylman
+ * Copyright(c) 2015 Douglas Christopher Wilson
+ * MIT Licensed
+ */
+
 /*! *****************************************************************************
   Copyright (c) Microsoft Corporation.
   
@@ -73,17 +80,6 @@
 
 /**
  * @remix-run/router v1.3.0
- *
- * Copyright (c) Remix Software Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.md file in the root directory of this source tree.
- *
- * @license MIT
- */
-
-/**
- * React Router DOM v6.7.0
  *
  * Copyright (c) Remix Software Inc.
  *

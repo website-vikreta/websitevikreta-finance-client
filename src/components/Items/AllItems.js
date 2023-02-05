@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 
-import { AppBar, Box, Button, Select, FormControl, MenuItem, InputLabel, Toolbar, TextField } from '@mui/material';
+import { AppBar, Box, Select, FormControl, MenuItem, InputLabel, Toolbar, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -38,38 +38,30 @@ export default function AllItems() {
    };
 
    return (
-      <Box sx={{ flexGrow: 1, m: 3 }}>
+      <Box sx={{ flexGrow: 1 }}>
 
          {/* All Table Filters */}
          <AppBar position="static" sx={{ backgroundColor: '#FFFFFF', boxShadow: 'none' }}>
-            <Toolbar>
-               <div className="d-inline-flex p-2">
-                  <Button 
-                     sx={{ p: 2, color: allActive ? 'white' : 'black', backgroundColor: allActive ? "#7700FF" : "white", borderColor: 'black', border: 1, ':hover': {
-                        bgcolor: '#7700FF',
-                        color: 'white',
-                     }}} 
-                     onClick={(() => setFilter({ filter: '_id', allActive: true }))}
-                  >All</Button>
-
-                  <Button 
-                     sx={{ p: 2, color: incomeActive ? 'white' : 'black', backgroundColor: incomeActive ? "#7700FF" : "white", borderColor: 'black', border: 1, ':hover': {
-                        bgcolor: '#7700FF',
-                        color: 'white',
-                     }}} 
-                     onClick={(() => setFilter({ filter: 'Income', incomeActive: true }))}
-                  >Income</Button>
-                  
-                  <Button 
-                     sx={{ p: 2, color: expenseActive ? 'white' : 'black', backgroundColor: expenseActive ? "#7700FF" : "white", borderColor: 'black', border: 1, ':hover': {
-                        bgcolor: '#7700FF',
-                        color: 'white',
-                     }}} 
-                     onClick={(() => setFilter({ filter: 'Expense', expenseActive: true }))} 
-                  >Expense</Button>
+            <Toolbar className='filterToolbar'>
+               <div className="filterButtonWrapper">
+                  <button
+                     className={`btn ${allActive ? 'btn-primary' : 'btn-secondary'}`}
+                     onClick={(() => setFilter({ filter: '_id', allActive: true }))}>
+                     All
+                  </button>
+                  <button
+                     className={`btn ${incomeActive ? 'btn-primary' : 'btn-secondary'}`}
+                     onClick={(() => setFilter({ filter: 'Income', incomeActive: true }))}>
+                     Income
+                  </button>
+                  <button
+                     className={`btn ${expenseActive ? 'btn-primary' : 'btn-secondary'}`}
+                     onClick={(() => setFilter({ filter: 'Expense', expenseActive: true }))}>
+                     Expense
+                  </button>
                </div>
 
-               <FormControl sx={{ m: 2, width: '250px' }}>
+               <FormControl className='FilterFormControl' sx={{ minWidth: '250px' }} size="small">
                   <InputLabel id="demo-simple-select-label">Filter Records</InputLabel>
                   <Select
                      labelId="demo-simple-select-label"
@@ -94,7 +86,7 @@ export default function AllItems() {
 
                   </Select>
                </FormControl>
-               
+
                {/* Visible on Date Range Selecting Custom Range Menu */}
                {val === 10 &&
 
@@ -120,7 +112,7 @@ export default function AllItems() {
                                  name='endDate'
                                  renderInput={(params) => <TextField {...params} />}
                                  value={endDate}
-                                 onChange={((date) => setDateRange({ ...dateRange, endDate: date }))} 
+                                 onChange={((date) => setDateRange({ ...dateRange, endDate: date }))}
                               />
                            </LocalizationProvider>
                         </span>
@@ -129,6 +121,10 @@ export default function AllItems() {
                }
             </Toolbar>
          </AppBar>
+
+         <div className='divider'>
+         </div>
+
 
          {/* Item Data Table  */}
          <Item type={filter} dateFilter={val} startDate={startDate} endDate={endDate} />
