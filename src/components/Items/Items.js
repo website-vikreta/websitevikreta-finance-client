@@ -46,6 +46,7 @@ const Item = (props) => {
 
    }, [items]);
 
+  
    useEffect(() => {
 
       function check(items, type) {

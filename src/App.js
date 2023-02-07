@@ -1,7 +1,7 @@
 
 import { BrowserRouter, Route,Routes } from 'react-router-dom';
 import Login from './Login';
-import Index from './components/Main'
+import Main from './components/Main'
 import AllItems from './components/Items/AllItems';
 import EditItem from './components/Items/EditItem';
 import ProtectedRoutes from './components/ProtectedRoutes';
@@ -13,10 +13,9 @@ const App = () => {
   return (
 
     <BrowserRouter>
-
       <Routes>
         <Route element = {<ProtectedRoutes/>}>
-          <Route path="/home" element={<Index />} />
+          <Route path="/home" element={<Main />} />
           <Route path="all" element={<AllItems />} />
           <Route path="/edit/:id" element={<EditItem />} />
         </Route>

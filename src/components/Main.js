@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookie from 'universal-cookie';
 
@@ -14,17 +14,30 @@ import Add from '@mui/icons-material/Add';
 import AllItems from './Items/AllItems';
 import Popup from './PopupModals/Popup';
 import ItemsTable from './Items/ItemSummary';
-
+import { getItems } from '../api';
+import LineChart from './charts/LineChart';
+import PieChart from './charts/PieChart';
+// import BarChart from './charts/BarChart';
 const Index = () => {
-
+   const [items, setItems] = useState([]);
    const [showModal, setShowModal] = useState({ openDialog: false, itemId: 0 });
+   const getAllItems = async () => {
+      document.title = 'Home | WV Finance'
+      let res = localStorage.getItem('user-info');
+      let response = await getItems(JSON.parse(res).id);
+      setItems(response.data);
+   }
+   useEffect(() => {
+      getAllItems();
 
+   }, [items]);
 
    let navigate = useNavigate();
 
    const handleLogout = () => {
       var cookie = new Cookie();
       cookie.remove('user');
+      document.title = 'Login | WV Finance'
       localStorage.removeItem('user-info');
       navigate('/');
    };
@@ -59,18 +72,20 @@ const Index = () => {
                <ItemsTable />
                {/* Charts */}
                <section className='chartWrapper'>
-                  <div className="card">Chart 1</div>
-
+                  {/* current year monthly data */}
+                  <div className="card"><LineChart /></div>
                   {/* grid */}
                   <div className="chartGrid">
-                     <div className="card">Chart 2</div>
+                     {/* about to fix this */}
+                      {/* <div className="card"><BarChart/></div> */}
+                     {/* current year income expense */}
+                     <div className="card"><PieChart /></div>
                      <div className="card">Chart 3</div>
                      <div className="card">Chart 4</div>
                      <div className="card">Chart 5</div>
+                    
                   </div>
                </section>
-
-
                {/* Table & Glimpse */}
                <div className="table">
                   <div className="card">

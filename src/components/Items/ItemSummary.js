@@ -101,6 +101,9 @@ const ItemsTable = () => {
       return total;
    }
 
+   function currency(value){
+      return value.toLocaleString('en-IN');
+   }
 
    const currentYearTotalIncome = getTotalRevenueDetails(items, 'Income', new Date(), 0);
    const currentYearTotalExpense = getTotalRevenueDetails(items, 'Expense', new Date(), 0);
@@ -178,15 +181,15 @@ const ItemsTable = () => {
                      <div className="card this">
                         <div className="numberWrapper">
                            <div className="item">
-                              <span className='digits'>₹ {currMonthTotalIncome}</span>
+                              <span className='digits'>₹ {currency(currMonthTotalIncome)}</span>
                               <span className='label'>Sales</span>
                            </div>
                            <div className="item">
-                              <span className='digits'>₹ {currMonthTotalExpense}</span>
+                              <span className='digits'>₹ {currency(currMonthTotalExpense)}</span>
                               <span className='label'>Expense</span>
                            </div>
                            <div className="item">
-                              <span className='digits green'>₹ {currMonthTotalProfit}</span>
+                              <span className='digits green'>₹ {currency(currMonthTotalProfit)}</span>
                               <span className='label'>Profit</span>
                            </div>
                         </div>
@@ -198,15 +201,15 @@ const ItemsTable = () => {
                      <div className="card">
                         <div className="numberWrapper">
                            <div className="item">
-                              <span className='digits'>₹ {lastMonthTotalIncome}</span>
+                              <span className='digits'>₹ {currency(lastMonthTotalIncome)}</span>
                               <span className='label'>Sales</span>
                            </div>
                            <div className="item">
-                              <span className='digits'>₹ {lastMonthTotalExpense}</span>
+                              <span className='digits'>₹ {currency(lastMonthTotalExpense)}</span>
                               <span className='label'>Expense</span>
                            </div>
                            <div className="item">
-                              <span className='digits green'>₹ {lastMonthTotalProfit}</span>
+                              <span className='digits green'>₹ {currency(lastMonthTotalProfit)}</span>
                               <span className='label'>Profit</span>
                            </div>
                         </div>
@@ -219,15 +222,15 @@ const ItemsTable = () => {
                      <div className="card">
                         <div className="numberWrapper">
                            <div className="item">
-                              <span className='digits'>₹ {currQaurtrTotalIncome}</span>
+                              <span className='digits'>₹ {currency(currQaurtrTotalIncome)}</span>
                               <span className='label'>Sales</span>
                            </div>
                            <div className="item">
-                              <span className='digits'>₹ {currQaurtrTotalExpense}</span>
+                              <span className='digits'>₹ {currency(currQaurtrTotalExpense)}</span>
                               <span className='label'>Expense</span>
                            </div>
                            <div className="item">
-                              <span className='digits green'>₹ {currQaurtrTotalProfit}</span>
+                              <span className='digits green'>₹ {currency(currQaurtrTotalProfit)}</span>
                               <span className='label'>Profit</span>
                            </div>
                         </div>
@@ -237,15 +240,15 @@ const ItemsTable = () => {
                      <div className="card">
                         <div className="numberWrapper">
                            <div className="item">
-                              <span className='digits'>₹ {lastQaurtrTotalIncome}</span>
+                              <span className='digits'>₹ {currency(lastQaurtrTotalIncome)}</span>
                               <span className='label'>Sales</span>
                            </div>
                            <div className="item">
-                              <span className='digits'>₹ {lastQaurtrTotalExpense}</span>
+                              <span className='digits'>₹ {currency(lastQaurtrTotalExpense)}</span>
                               <span className='label'>Expense</span>
                            </div>
                            <div className="item">
-                              <span className='digits green'>₹ {lastQaurtrTotalProfit}</span>
+                              <span className='digits green'>₹ {currency(lastQaurtrTotalProfit)}</span>
                               <span className='label'>Profit</span>
                            </div>
                         </div>
@@ -258,15 +261,15 @@ const ItemsTable = () => {
                      <div className="card">
                         <div className="numberWrapper">
                            <div className="item">
-                              <span className='digits'>₹ {currentYearTotalIncome}</span>
+                              <span className='digits'>₹ {currency(currentYearTotalIncome)}</span>
                               <span className='label'>Sales</span>
                            </div>
                            <div className="item">
-                              <span className='digits'>₹ {currentYearTotalExpense}</span>
+                              <span className='digits'>₹ {currency(currentYearTotalExpense)}</span>
                               <span className='label'>Expense</span>
                            </div>
                            <div className="item">
-                              <span className='digits green'>₹ {currentYearTotalProfit}</span>
+                              <span className='digits green'>₹ {currency(currentYearTotalProfit)}</span>
                               <span className='label'>Profit</span>
                            </div>
                         </div>
@@ -277,15 +280,15 @@ const ItemsTable = () => {
                      <div className="card">
                         <div className="numberWrapper">
                            <div className="item">
-                              <span className='digits'>₹ {lastYearTotalIncome}</span>
+                              <span className='digits'>₹ {currency(lastYearTotalIncome)}</span>
                               <span className='label'>Sales</span>
                            </div>
                            <div className="item">
-                              <span className='digits'>₹ {lastYearTotalExpense}</span>
+                              <span className='digits'>₹ {currency(lastYearTotalExpense)}</span>
                               <span className='label'>Expense</span>
                            </div>
                            <div className="item">
-                              <span className='digits green'>₹ {lastYearTotalProfit}</span>
+                              <span className='digits green'>₹ {currency(lastYearTotalProfit)}</span>
                               <span className='label'>Profit</span>
                            </div>
                         </div>

@@ -15,11 +15,12 @@ const Login = () => {
    const [error, setError] = useState("");
    var errorMsg = error;
    let navigate = useNavigate();
-
+   
 
    useEffect(() => {
+      
       const loggedInUser = localStorage.getItem("user-info");
-
+      
       if (loggedInUser) {
 
          const foundUser = JSON.parse(loggedInUser);
