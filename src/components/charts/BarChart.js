@@ -25,6 +25,25 @@ const BarChart = () => {
     getAllItems();
   }, []);
   
+
+ 
+  function getThisYear(items, paymentType, thisYear) {
+    var monthTotal = Array.from({length: 5}, () => {return 0});
+    for (var item=0; item<items.length; item++) {
+      if((thisYear.getFullYear() === new Date(items[item].dateOfInvoice).getFullYear()) && items[item].paymentType === paymentType){
+        let currMonth = new Date(items[item].dateOfInvoice).getMonth();
+        monthTotal[currMonth] += items[item].amount;
+      }
+    }
+    return monthTotal;
+  }
+  function getProfit(monthlyIncome, monthlyExpense) {
+    var monthTotal = Array.from({length: 5}, () => {return 0});
+    for (var i=0; i<monthlyIncome.length; i++) {
+        monthTotal[i] = monthlyIncome[i]-monthlyExpense[i];
+    }
+    return monthTotal;
+  }
       function getThisYear(items, paymentType, thisYear) {
           var total = 0;
           for (var item of items) {
