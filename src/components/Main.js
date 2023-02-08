@@ -17,7 +17,8 @@ import ItemsTable from './Items/ItemSummary';
 import { getItems } from '../api';
 import LineChart from './charts/LineChart';
 import PieChart from './charts/PieChart';
-// import BarChart from './charts/BarChart';
+import BarChart from './charts/BarChart';
+import DoughnutChart from './charts/DoughnutChart';
 const Index = () => {
    const [items, setItems] = useState([]);
    const [showModal, setShowModal] = useState({ openDialog: false, itemId: 0 });
@@ -73,17 +74,16 @@ const Index = () => {
                {/* Charts */}
                <section className='chartWrapper'>
                   {/* current year monthly data */}
-                  <div className="card"><LineChart /></div>
+                  <div className="card"><LineChart setItems = {setItems}/></div>
                   {/* grid */}
                   <div className="chartGrid">
-                     {/* about to fix this */}
-                      {/* <div className="card"><BarChart/></div> */}
+                       {/* yearly income expense and profit  */}
+                      <div className="card"><BarChart setItems = {setItems}/></div>
                      {/* current year income expense */}
-                     <div className="card"><PieChart /></div>
-                     <div className="card">Chart 3</div>
+                     <div className="card"><PieChart  setItems = {setItems} /></div>
+                     <div className="card"><DoughnutChart setItems = {setItems}/></div>
                      <div className="card">Chart 4</div>
                      <div className="card">Chart 5</div>
-                    
                   </div>
                </section>
                {/* Table & Glimpse */}
