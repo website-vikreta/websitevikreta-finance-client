@@ -13,9 +13,8 @@ ChartJS.register(
   BarElement
 );
 
-const BarChart = (props) => {
+const BarChart = ({items}) => {
 
-  const { setItems } = props;
   const [Data, setData] = useState([]);
 
   useEffect(() => {
@@ -23,7 +22,6 @@ const BarChart = (props) => {
       document.title = 'Home | WV Finance'
       let res = localStorage.getItem('user-info');
       let response = await getItems(JSON.parse(res).id);
-      setItems(response.data);
       let currData = [];
       const yearTotal = getTotalYears(response.data);
       currData.push(yearTotal)
@@ -34,10 +32,10 @@ const BarChart = (props) => {
       currData.push(expenseTotal);
       currData.push(profitTotal);
       setData(currData);
-
+     
     }
     getAllItems();
-  });
+  },[items]);
 
 
   function getTotalYears(items) {

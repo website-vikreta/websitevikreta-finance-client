@@ -7,16 +7,13 @@ import { Doughnut } from 'react-chartjs-2';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 
-const DoughnutChart = (props) => {
-
-    const { setItems } = props;
+const DoughnutChart = ({items}) => {
     const [Data, setData] = useState([]);
 
     useEffect(() => {
         const getAllItems = async () => {
             let res = localStorage.getItem('user-info');
             let response = await getItems(JSON.parse(res).id);
-            setItems(response.data);
             let thisYear = new Date();
             let currData = [];
             let thisMonthIncome = getThisMonth(response.data, 'Income', thisYear);
@@ -26,11 +23,12 @@ const DoughnutChart = (props) => {
             currData.push(thisMonthExpense);
             currData.push(thisMonthProfit);
             setData(currData);
-
+           
         }
         getAllItems();
 
-    });
+    },[items]);
+   
 
     function getThisMonth(items, paymentType, thisYear) {
         var total = 0;
@@ -44,7 +42,7 @@ const DoughnutChart = (props) => {
     var data = {
         labels: ['Income', 'Expense', 'Profit'],
         datasets: [{
-            label: 'Profit',
+            label: 'Amount',
             data: Data,
             backgroundColor: [
                 '#e4ccff',

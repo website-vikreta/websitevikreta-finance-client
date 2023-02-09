@@ -7,13 +7,12 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import styled from "@emotion/styled";
 
-import Item from './Items';
+const Item = React.lazy(() => import('./Items'));
 
 const Date = styled(DatePicker)`
     width: 250px
 `;
-export default function AllItems() {
-
+export default function AllItems({items, setItems, render, setRender}) {
    const [val, setVal] = useState('');
 
    const [dateRange, setDateRange] = useState({ startDate: null, endDate: null });
@@ -24,7 +23,7 @@ export default function AllItems() {
    const [filtr, setFilter] = useState({ filter: '_id', allActive: true, incomeActive: false, expenseActive: false, });
    const { filter, allActive, incomeActive, expenseActive } = filtr;
 
-
+   
    const handleOpen = () => {
       setOpen(true);
    };
@@ -127,7 +126,7 @@ export default function AllItems() {
 
 
          {/* Item Data Table  */}
-         <Item type={filter} dateFilter={val} startDate={startDate} endDate={endDate} />
+         <Item items={items} setItems={setItems} render={render} setRender={setRender} type={filter} dateFilter={val} startDate={startDate} endDate={endDate} />
       </Box>
    );
 }

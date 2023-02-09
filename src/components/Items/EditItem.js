@@ -29,18 +29,16 @@ const EditItem = (props) => {
     let user = JSON.parse(localStorage.getItem('user-info'));
     
     const [item, setItem] = useState({ title: '', amount: '', category: '', paymentType: '', dateOfInvoice: '', dateOfPayment: '', description: '', paymentProof: '', userId: user.id  });
-    const { title, amount, category, paymentType, dateOfInvoice, dateOfPayment, description, paymentProof, userId } = item;
+    const { title, amount, category, paymentType, dateOfInvoice, dateOfPayment, description, userId } = item;
    
-    const { cItem, showModal, setShowModal } = props;
+    const { setRender, cItem, showModal, setShowModal } = props;
     const id = cItem._id;
-
     cookie.set('user', userId, { path: '/' });
 
     useEffect(() => {
         const loadItemDetails = async () => {
             const response = await getItem(id);
             setItem(response.data);
-            console.log(response.data, response, 'response', id)
         }
         loadItemDetails();
     }, [id]);
@@ -93,7 +91,6 @@ const EditItem = (props) => {
             const currentField = errorFields[index];
             const currentValue = values[index+1];
             if (currentValue === '') {
-                console.log('currentvlus',currentValue,'curentfeild', currentField, values, index);
                 cnt= cnt+1;
                 newErrorValues = {
                     ...newErrorValues,
@@ -115,6 +112,7 @@ const EditItem = (props) => {
     const editItemDetails = async () => {
         await updateItem(id, item);
         setShowModal({ ...showModal, openDialog: false });
+        setRender('editSet');
         toast.success("Item updated Successfully!!", {
             position: "top-center",
             autoClose: 2000,
@@ -139,12 +137,6 @@ const EditItem = (props) => {
     const handleImageData = (img) => {
         setItem({ ...item, paymentProof: img });
     }
-
-     //To Avoid Warning
-     let payproof = paymentProof;
-     payproof = '';
-     console.log(payproof);
-
 
     return (
 

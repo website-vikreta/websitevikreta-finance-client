@@ -23,30 +23,28 @@ import DeletePopup from '../PopupModals/DeletePopup';
 import PopupImage from '../PopupModals/PopupImage';
 
 
-const Item = (props) => {
-
-   const [items, setItems] = useState([]);
-   const { type, dateFilter, startDate, endDate } = props;
-
+const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate, endDate }) => {
+   
    const [search, setSearch] = useState('');
    const [filteredElements, setFilteredElements] = useState('');
    const [showModal, setShowModal] = useState({ openDialog: false, currItem: '' });
    const [showImgModal, setShowImgModal] = useState({ openImgDialog: false, id: '', paymentType: '', image: '' });
    const [delModal, setDelModal] = useState({ openDelDialog: false, deleteId: null });
 
-
    const getAllItems = async () => {
       let res = localStorage.getItem('user-info');
-
       let response = await getItems(JSON.parse(res).id);
       setItems(response.data);
    }
    useEffect(() => {
+      const getAllItems = async () => {
+         let res = localStorage.getItem('user-info');
+         let response = await getItems(JSON.parse(res).id);
+         setItems(response.data);
+      }
       getAllItems();
-
-   }, [items]);
-
-  
+      setRender('unset');
+   }, [render,setItems, setRender]);
    useEffect(() => {
 
       function check(items, type) {
@@ -184,7 +182,7 @@ const Item = (props) => {
 
    const getProof = async (id) => {
       let response = await getMedia(id);
-      console.log(response.data);
+
       setShowImgModal({ openImgDialog: true, id: response.data._id, paymentType: response.data.paymentType, image: response.data.paymentProof })
    }
 
@@ -296,7 +294,7 @@ const Item = (props) => {
 
       <Grid className='tableWrapper' container alignContent={'center'}>
 
-         <Popup showModal={showModal} setShowModal={setShowModal} formType='Edit' ></Popup>
+         <Popup  setRender={setRender} showModal={showModal} setShowModal={setShowModal} formType='Edit' ></Popup>
          <DeletePopup delModal={delModal} setDelModal={setDelModal} confirm={confirm}></DeletePopup>
          <PopupImage showImgModal={showImgModal} setShowImgModal={setShowImgModal}></PopupImage>
          <ToastContainer />

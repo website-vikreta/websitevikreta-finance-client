@@ -6,9 +6,8 @@ import EditItem from "../Items/EditItem";
 
 export default function Popup(props){
     
-    const {showModal,setShowModal, formType} = props;
+    const {setRender, showModal,setShowModal, formType} = props;
     const {openDialog, currItem} = showModal;
-    
     return(
         <Dialog open= {openDialog} maxWidth='md'>
             <DialogTitle>
@@ -24,7 +23,7 @@ export default function Popup(props){
                 </div>
             </DialogTitle>
             <DialogContent dividers sx= {{paddingY:5}}>
-              {formType === 'Add'? <ItemForm showModal= {showModal} setShowModal = {setShowModal} /> : <EditItem cItem = {currItem} showModal = {showModal} setShowModal = {setShowModal}/>}
+              {formType === 'Add'? <ItemForm setRender = {setRender} showModal= {showModal} setShowModal = {setShowModal} /> : <EditItem setRender = {setRender} cItem = {currItem} showModal = {showModal} setShowModal = {setShowModal}/>}
             </DialogContent>
         </Dialog>
     );

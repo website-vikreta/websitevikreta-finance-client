@@ -7,26 +7,24 @@ import { Pie } from 'react-chartjs-2';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 
-const PieChart = (props) => {
+const PieChart = ({items}) => {
 
-  const { setItems } = props;
   const [Data, setData] = useState([]);
 
   useEffect(() => {
     const getAllItems = async () => {
       let res = localStorage.getItem('user-info');
       let response = await getItems(JSON.parse(res).id);
-      setItems(response.data);
       let thisYear = new Date().getFullYear();
       let currData = [];
       currData.push(getThisYear(response.data, 'Income', thisYear));
       currData.push(getThisYear(response.data, 'Expense', thisYear));
       setData(currData);
-
+     
     }
     getAllItems();
 
-  });
+  },[items]);
 
   function getThisYear(items, paymentType, thisYear) {
     var total = 0;
@@ -39,7 +37,7 @@ const PieChart = (props) => {
   var data = {
     labels: ['Income', 'Expense'],
     datasets: [{
-      label: 'Profit',
+      label: 'Amount',
       data: Data,
       backgroundColor: [
         ' #e4ccff',

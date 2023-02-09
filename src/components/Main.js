@@ -14,25 +14,26 @@ import Add from '@mui/icons-material/Add';
 import AllItems from './Items/AllItems';
 import Popup from './PopupModals/Popup';
 import ItemsTable from './Items/ItemSummary';
+import BarChart from './charts/BarChart'
+import DoughnutChart from './charts/DoughnutChart'
+import PieChart from './charts/PieChart'
+import LineChart from './charts/LineChart'
 import { getItems } from '../api';
-import LineChart from './charts/LineChart';
-import PieChart from './charts/PieChart';
-import BarChart from './charts/BarChart';
-import DoughnutChart from './charts/DoughnutChart';
 const Index = () => {
-   const [items, setItems] = useState([]);
+   
    const [showModal, setShowModal] = useState({ openDialog: false, itemId: 0 });
+   const [items, setItems] = useState([]);
+   const [render, setRender] = useState('unset');
+
    const getAllItems = async () => {
-      document.title = 'Home | WV Finance'
       let res = localStorage.getItem('user-info');
       let response = await getItems(JSON.parse(res).id);
       setItems(response.data);
    }
    useEffect(() => {
       getAllItems();
-
-   }, [items]);
-
+   }, [render]);
+   
    let navigate = useNavigate();
 
    const handleLogout = () => {
@@ -70,26 +71,28 @@ const Index = () => {
 
             {/* Main Content */}
             <main>
-               <ItemsTable />
+               <ItemsTable items={items} />
                {/* Charts */}
                <section className='chartWrapper'>
                   {/* current year monthly data */}
-                  <div className="card"><LineChart setItems = {setItems}/></div>
-                  {/* grid */}
-                  <div className="chartGrid">
-                       {/* yearly income expense and profit  */}
-                      <div className="card"><BarChart setItems = {setItems}/></div>
-                     {/* current year income expense */}
-                     <div className="card"><PieChart  setItems = {setItems} /></div>
-                     <div className="card"><DoughnutChart setItems = {setItems}/></div>
-                     <div className="card">Chart 4</div>
-                     <div className="card">Chart 5</div>
-                  </div>
+                 
+                     <div className="card"><LineChart  items={items} /></div>
+                     {/* grid */}
+                     <div className="chartGrid">
+                        {/* yearly income expense and profit  */}
+                        <div className="card"><BarChart  items={items}/></div>
+                        {/* current year income expense */}
+                        <div className="card"><PieChart  items={items} /></div>
+                        <div className="card"><DoughnutChart  items={items}/></div>
+                        <div className="card">Chart 4</div>
+                        <div className="card">Chart 5</div>
+                     </div>
+                  
                </section>
                {/* Table & Glimpse */}
                <div className="table">
                   <div className="card">
-                     <AllItems />
+                     <AllItems items={items} setItems={setItems} render={render} setRender={setRender}/>
                   </div>
                </div>
 
@@ -106,7 +109,7 @@ const Index = () => {
                title="Add new item">
                <Add fontSize='medium' />
             </button>
-            <Popup showModal={showModal} setShowModal={setShowModal} formType='Add'></Popup>
+            <Popup setRender = {setRender} showModal={showModal} setShowModal={setShowModal} formType='Add'></Popup>
 
          </div>
       </>

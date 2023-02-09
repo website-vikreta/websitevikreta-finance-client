@@ -1,22 +1,5 @@
 
-import { useState, useEffect } from 'react';
-
-import { getItems } from '../../api';
-
-const ItemsTable = () => {
-
-   const [items, setItems] = useState([]);
-
-   useEffect(() => {
-      const getAllItems = async () => {
-
-         let response = await getItems(JSON.parse(localStorage.getItem('user-info')).id);
-         setItems(response.data);
-      }
-      getAllItems();
-     
-   }, [items]);
-  
+const ItemsTable = ({items}) => {
 
    function getIncome(item, type) {
       if (item.paymentType === type) return item.amount;
@@ -29,7 +12,7 @@ const ItemsTable = () => {
       else if (month >= 9 && month <= 11) return 3;
       else return 4;
    }
-   
+
    function thisQuarter(d, now, month, quartr, item) {
       if (getQuarter(quartr === 4)) {
          if (d.getFullYear() === now.getFullYear() && month <= 2) {
@@ -51,7 +34,7 @@ const ItemsTable = () => {
       } else return null;
    }
 
-   
+
    function lastQuarter(d, now, month, item) {
       return d.getFullYear() === (now.getFullYear() - 1) && month >= 9 && month <= 11 ? item : null;
    }
@@ -101,7 +84,7 @@ const ItemsTable = () => {
       return total;
    }
 
-   function currency(value){
+   function currency(value) {
       return value.toLocaleString('en-IN');
    }
 
@@ -129,179 +112,174 @@ const ItemsTable = () => {
    const lastQaurtrTotalExpense = getTotalRevenueDetails(items, 'Expense', new Date(), 5);
    const lastQaurtrTotalProfit = lastQaurtrTotalIncome - lastQaurtrTotalExpense;
 
-   const month = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEPT","OCT","NOV","DEC"];
+   const month = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEPT", "OCT", "NOV", "DEC"];
 
-     // Calculate Current Months Details
+   // Calculate Current Months Details
    const currentDate = new Date();
    const currentMonth = month[currentDate.getMonth()];
 
-     // Calculate Last Months Details
-   var lastMonth = month[currentDate.getMonth()-1];
+   // Calculate Last Months Details
+   var lastMonth = month[currentDate.getMonth() - 1];
    var lastMonthYear = currentDate.getFullYear();
-   if(currentMonth === 0){
+   if (currentMonth === 0) {
       lastMonth = 11;
-      lastMonthYear = currentDate.getFullYear()-1;
+      lastMonthYear = currentDate.getFullYear() - 1;
    }
-   const lastYear = currentDate.getFullYear()-1;
+   const lastYear = currentDate.getFullYear() - 1;
 
    // Calculate Current Quarter Months Details
-   const qaurters = [["MAR","MAY"],["JUN","AUG"],["SEPT","NOV"],["DEC","FEB"]];
-   var currQuartr = getQuarter(currentDate.getMonth()+1);
-   const currQuartrMonths = qaurters[currQuartr-1];
+   const qaurters = [["MAR", "MAY"], ["JUN", "AUG"], ["SEPT", "NOV"], ["DEC", "FEB"]];
+   var currQuartr = getQuarter(currentDate.getMonth() + 1);
+   const currQuartrMonths = qaurters[currQuartr - 1];
    var currQuartrYear1 = currentDate.getFullYear();
    var currQuartrYear2 = currentDate.getFullYear();
-   if(currQuartr === 4){
-      currQuartrYear1 = currentDate.getFullYear()-1;
+   if (currQuartr === 4) {
+      currQuartrYear1 = currentDate.getFullYear() - 1;
    }
 
    // Calculate Last Quarter Months Details
-   var lastQuartrMonths = qaurters[currQuartr-2];
+   var lastQuartrMonths = qaurters[currQuartr - 2];
    var lastQuartrYear1 = currentDate.getFullYear();
    var lastQuartrYear2 = currentDate.getFullYear();
-   if(currQuartr === 1) {
-       lastQuartrMonths = qaurters[3];
-       lastQuartrYear1 = currentDate.getFullYear()-1;
-   }else if(currQuartr === 4) {
-      lastQuartrYear1 = currentDate.getFullYear()-1;
-      lastQuartrYear2 = currentDate.getFullYear()-1;
-  }
+   if (currQuartr === 1) {
+      lastQuartrMonths = qaurters[3];
+      lastQuartrYear1 = currentDate.getFullYear() - 1;
+   } else if (currQuartr === 4) {
+      lastQuartrYear1 = currentDate.getFullYear() - 1;
+      lastQuartrYear2 = currentDate.getFullYear() - 1;
+   }
    return (
 
       // Defining Structure
       <>
-          
-            {/* Main Content */}
-            <main>
 
-               {/* Numbers */}
-               <section className="numbers">
+         {/* Numbers */}
+         <section className="numbers">
 
-                  <div className="row">
-                     {/* This */}
-                     <div className="card this">
-                        <div className="numberWrapper">
-                           <div className="item">
-                              <span className='digits'>₹ {currency(currMonthTotalIncome)}</span>
-                              <span className='label'>Sales</span>
-                           </div>
-                           <div className="item">
-                              <span className='digits'>₹ {currency(currMonthTotalExpense)}</span>
-                              <span className='label'>Expense</span>
-                           </div>
-                           <div className="item">
-                              <span className='digits green'>₹ {currency(currMonthTotalProfit)}</span>
-                              <span className='label'>Profit</span>
-                           </div>
-                        </div>
-                        <hr />
-                        <div className='cardHeading'>This Month ({currentMonth +' '+ currentDate.getFullYear()})</div>
+            <div className="row">
+               {/* This */}
+               <div className="card this">
+                  <div className="numberWrapper">
+                     <div className="item">
+                        <span className='digits'>₹ {currency(currMonthTotalIncome)}</span>
+                        <span className='label'>Sales</span>
                      </div>
-
-                     {/* Last */}
-                     <div className="card">
-                        <div className="numberWrapper">
-                           <div className="item">
-                              <span className='digits'>₹ {currency(lastMonthTotalIncome)}</span>
-                              <span className='label'>Sales</span>
-                           </div>
-                           <div className="item">
-                              <span className='digits'>₹ {currency(lastMonthTotalExpense)}</span>
-                              <span className='label'>Expense</span>
-                           </div>
-                           <div className="item">
-                              <span className='digits green'>₹ {currency(lastMonthTotalProfit)}</span>
-                              <span className='label'>Profit</span>
-                           </div>
-                        </div>
-                        <hr />
-                        <div className='cardHeading'>Last Month ({lastMonth +' '+lastMonthYear})</div>
+                     <div className="item">
+                        <span className='digits'>₹ {currency(currMonthTotalExpense)}</span>
+                        <span className='label'>Expense</span>
+                     </div>
+                     <div className="item">
+                        <span className='digits green'>₹ {currency(currMonthTotalProfit)}</span>
+                        <span className='label'>Profit</span>
                      </div>
                   </div>
+                  <hr />
+                  <div className='cardHeading'>This Month ({currentMonth + ' ' + currentDate.getFullYear()})</div>
+               </div>
 
-                  <div className="row">
-                     <div className="card">
-                        <div className="numberWrapper">
-                           <div className="item">
-                              <span className='digits'>₹ {currency(currQaurtrTotalIncome)}</span>
-                              <span className='label'>Sales</span>
-                           </div>
-                           <div className="item">
-                              <span className='digits'>₹ {currency(currQaurtrTotalExpense)}</span>
-                              <span className='label'>Expense</span>
-                           </div>
-                           <div className="item">
-                              <span className='digits green'>₹ {currency(currQaurtrTotalProfit)}</span>
-                              <span className='label'>Profit</span>
-                           </div>
-                        </div>
-                        <hr />
-                        <div className='cardHeading this'>This Quarter ({currQuartrMonths[0]+(currQuartrYear1%100)+' - '+currQuartrMonths[1]+(currQuartrYear2%100)})</div>
+               {/* Last */}
+               <div className="card">
+                  <div className="numberWrapper">
+                     <div className="item">
+                        <span className='digits'>₹ {currency(lastMonthTotalIncome)}</span>
+                        <span className='label'>Sales</span>
                      </div>
-                     <div className="card">
-                        <div className="numberWrapper">
-                           <div className="item">
-                              <span className='digits'>₹ {currency(lastQaurtrTotalIncome)}</span>
-                              <span className='label'>Sales</span>
-                           </div>
-                           <div className="item">
-                              <span className='digits'>₹ {currency(lastQaurtrTotalExpense)}</span>
-                              <span className='label'>Expense</span>
-                           </div>
-                           <div className="item">
-                              <span className='digits green'>₹ {currency(lastQaurtrTotalProfit)}</span>
-                              <span className='label'>Profit</span>
-                           </div>
-                        </div>
-                        <hr />
-                        <div className='cardHeading'>Last Quarter ({lastQuartrMonths[0]+(lastQuartrYear1%100)+' - '+lastQuartrMonths[1]+(lastQuartrYear2%100)})</div>
+                     <div className="item">
+                        <span className='digits'>₹ {currency(lastMonthTotalExpense)}</span>
+                        <span className='label'>Expense</span>
+                     </div>
+                     <div className="item">
+                        <span className='digits green'>₹ {currency(lastMonthTotalProfit)}</span>
+                        <span className='label'>Profit</span>
                      </div>
                   </div>
-                  <div className="row">
-                     {/* This */}
-                     <div className="card">
-                        <div className="numberWrapper">
-                           <div className="item">
-                              <span className='digits'>₹ {currency(currentYearTotalIncome)}</span>
-                              <span className='label'>Sales</span>
-                           </div>
-                           <div className="item">
-                              <span className='digits'>₹ {currency(currentYearTotalExpense)}</span>
-                              <span className='label'>Expense</span>
-                           </div>
-                           <div className="item">
-                              <span className='digits green'>₹ {currency(currentYearTotalProfit)}</span>
-                              <span className='label'>Profit</span>
-                           </div>
-                        </div>
-                        <hr />
-                        <div className='cardHeading this'>This Year ({new Date().getFullYear()})</div>
+                  <hr />
+                  <div className='cardHeading'>Last Month ({lastMonth + ' ' + lastMonthYear})</div>
+               </div>
+            </div>
+
+            <div className="row">
+               <div className="card">
+                  <div className="numberWrapper">
+                     <div className="item">
+                        <span className='digits'>₹ {currency(currQaurtrTotalIncome)}</span>
+                        <span className='label'>Sales</span>
                      </div>
-                     {/* Last */}
-                     <div className="card">
-                        <div className="numberWrapper">
-                           <div className="item">
-                              <span className='digits'>₹ {currency(lastYearTotalIncome)}</span>
-                              <span className='label'>Sales</span>
-                           </div>
-                           <div className="item">
-                              <span className='digits'>₹ {currency(lastYearTotalExpense)}</span>
-                              <span className='label'>Expense</span>
-                           </div>
-                           <div className="item">
-                              <span className='digits green'>₹ {currency(lastYearTotalProfit)}</span>
-                              <span className='label'>Profit</span>
-                           </div>
-                        </div>
-                        <hr />
-                        <div className='cardHeading'>Last Year  ({lastYear})</div>
+                     <div className="item">
+                        <span className='digits'>₹ {currency(currQaurtrTotalExpense)}</span>
+                        <span className='label'>Expense</span>
+                     </div>
+                     <div className="item">
+                        <span className='digits green'>₹ {currency(currQaurtrTotalProfit)}</span>
+                        <span className='label'>Profit</span>
                      </div>
                   </div>
+                  <hr />
+                  <div className='cardHeading this'>This Quarter ({currQuartrMonths[0] + (currQuartrYear1 % 100) + ' - ' + currQuartrMonths[1] + (currQuartrYear2 % 100)})</div>
+               </div>
+               <div className="card">
+                  <div className="numberWrapper">
+                     <div className="item">
+                        <span className='digits'>₹ {currency(lastQaurtrTotalIncome)}</span>
+                        <span className='label'>Sales</span>
+                     </div>
+                     <div className="item">
+                        <span className='digits'>₹ {currency(lastQaurtrTotalExpense)}</span>
+                        <span className='label'>Expense</span>
+                     </div>
+                     <div className="item">
+                        <span className='digits green'>₹ {currency(lastQaurtrTotalProfit)}</span>
+                        <span className='label'>Profit</span>
+                     </div>
+                  </div>
+                  <hr />
+                  <div className='cardHeading'>Last Quarter ({lastQuartrMonths[0] + (lastQuartrYear1 % 100) + ' - ' + lastQuartrMonths[1] + (lastQuartrYear2 % 100)})</div>
+               </div>
+            </div>
+            <div className="row">
+               {/* This */}
+               <div className="card">
+                  <div className="numberWrapper">
+                     <div className="item">
+                        <span className='digits'>₹ {currency(currentYearTotalIncome)}</span>
+                        <span className='label'>Sales</span>
+                     </div>
+                     <div className="item">
+                        <span className='digits'>₹ {currency(currentYearTotalExpense)}</span>
+                        <span className='label'>Expense</span>
+                     </div>
+                     <div className="item">
+                        <span className='digits green'>₹ {currency(currentYearTotalProfit)}</span>
+                        <span className='label'>Profit</span>
+                     </div>
+                  </div>
+                  <hr />
+                  <div className='cardHeading this'>This Year ({new Date().getFullYear()})</div>
+               </div>
+               {/* Last */}
+               <div className="card">
+                  <div className="numberWrapper">
+                     <div className="item">
+                        <span className='digits'>₹ {currency(lastYearTotalIncome)}</span>
+                        <span className='label'>Sales</span>
+                     </div>
+                     <div className="item">
+                        <span className='digits'>₹ {currency(lastYearTotalExpense)}</span>
+                        <span className='label'>Expense</span>
+                     </div>
+                     <div className="item">
+                        <span className='digits green'>₹ {currency(lastYearTotalProfit)}</span>
+                        <span className='label'>Profit</span>
+                     </div>
+                  </div>
+                  <hr />
+                  <div className='cardHeading'>Last Year  ({lastYear})</div>
+               </div>
+            </div>
 
-               </section>
-            </main>
+         </section>
 
-            {/* Footer */}
-            <footer className='footer'></footer>
+
 
 
       </>

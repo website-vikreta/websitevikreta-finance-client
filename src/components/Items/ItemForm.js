@@ -29,8 +29,8 @@ const ItemForm = (props) => {
     const [itemData, setItemData] = useState({ title: '', amount: '', category: '', paymentType: '', dateOfInvoice: null, dateOfPayment: null, description: '', paymentProof: '', userId: user.id });
     const { title, amount, category, paymentType, dateOfInvoice, dateOfPayment, description, paymentProof, userId } = itemData;
     
-    const { showModal, setShowModal } = props;
-   
+    const { setRender, showModal, setShowModal } = props;
+  
     var cookie = new Cookie();
     cookie.set('user', userId, { path: '/' })
     const [errors, setErrors] = useState({
@@ -88,7 +88,6 @@ const ItemForm = (props) => {
 
         }
 
-        console.log(cnt);
         setErrors(newErrorValues);
         if(cnt === 0)  addItemDetails();
     }
@@ -96,6 +95,8 @@ const ItemForm = (props) => {
        
         await createItem(itemData);
         setShowModal({ ...showModal, openDialog: false });
+        setRender('addSet');
+    
         toast.success("Item Added Successfully!!", {
             position: "top-center",
             autoClose: 2000,
@@ -123,7 +124,7 @@ const ItemForm = (props) => {
     }
 
     const handleImageData = (img) => {
-        console.log('befor', itemData);
+        
         setItemData({ ...itemData, paymentProof: img });
         const validExtensions = ['png', 'jpeg', 'jpg', 'pdf'];
         const fileExtension = img.split(';')[0].split('/')[1]

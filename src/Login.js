@@ -7,6 +7,8 @@ import Index from './components/Main';
 import { useNavigate } from 'react-router-dom';
 // Image Imports
 import SiteLogo from "./assets/websitevikreta-finance.svg";
+
+   
 const Login = () => {
 
    const [email, setEmail] = useState("");
@@ -14,8 +16,7 @@ const Login = () => {
    const [user, setUser] = useState("");
    const [error, setError] = useState("");
    var errorMsg = error;
-   let navigate = useNavigate();
-   
+   const navigate = useNavigate();
 
    useEffect(() => {
       
