@@ -63,7 +63,9 @@ const BarChart = ({items}) => {
   function getProfit(incomeTotal, expenseTotal) {
     var profitTotal = Array.from({ length: incomeTotal.length }, () => { return 0 });
     for (var i = 0; i < incomeTotal.length; i++) {
-      profitTotal[i] = incomeTotal[i] - expenseTotal[i];
+      let profit = incomeTotal[i] - expenseTotal[i];
+      profitTotal[i] =  profit > 0 ? profit: 0;
+     
     }
     return profitTotal;
   }

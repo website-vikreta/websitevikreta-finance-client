@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookie from 'universal-cookie';
-
+import React from 'react';
 // Image Imports
 import SiteLogo from "../assets/websitevikreta-finance.svg";
 
@@ -12,13 +12,15 @@ import Add from '@mui/icons-material/Add';
 
 // Import Components
 import AllItems from './Items/AllItems';
-import Popup from './PopupModals/Popup';
+// import Popup from './PopupModals/Popup';
 import ItemsTable from './Items/ItemSummary';
 import BarChart from './charts/BarChart'
 import DoughnutChart from './charts/DoughnutChart'
 import PieChart from './charts/PieChart'
 import LineChart from './charts/LineChart'
 import { getItems } from '../api';
+import QuartersChart from './charts/QuartersChart';
+const Popup = React.lazy(() => import('./PopupModals/Popup'));
 const Index = () => {
    
    const [showModal, setShowModal] = useState({ openDialog: false, itemId: 0 });
@@ -84,8 +86,7 @@ const Index = () => {
                         {/* current year income expense */}
                         <div className="card"><PieChart  items={items} /></div>
                         <div className="card"><DoughnutChart  items={items}/></div>
-                        <div className="card">Chart 4</div>
-                        <div className="card">Chart 5</div>
+                        <div className="card"><QuartersChart/></div>
                      </div>
                   
                </section>

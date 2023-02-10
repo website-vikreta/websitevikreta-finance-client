@@ -18,9 +18,10 @@ import { Grid } from '@mui/material';
 import { getItems, getMedia, deleteItem } from '../../api/index';
 
 // Import Components
-import Popup from '../PopupModals/Popup';
-import DeletePopup from '../PopupModals/DeletePopup';
-import PopupImage from '../PopupModals/PopupImage';
+const Popup = React.lazy(() => import('../PopupModals/Popup'));
+const DeletePopup = React.lazy(() => import('../PopupModals/DeletePopup'));
+const PopupImage = React.lazy(() => import('../PopupModals/PopupImage'));
+
 
 
 const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate, endDate }) => {

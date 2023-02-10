@@ -15,7 +15,7 @@ function PaperComponent(props) {
 }
 
 export default function DeletePopup(props) {
-  
+  console.log('deletepopup')
   const {delModal,setDelModal, confirm} = props;
  
   const handleClose = () => {

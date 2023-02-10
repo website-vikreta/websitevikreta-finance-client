@@ -47,7 +47,7 @@ const LineChart = ({items}) => {
     let labels = [];
     for(var i=0; i<yearTotal.length; i++){
       let y = yearTotal[i]%200;
-      labels.push("Jan"+y, "May"+y, "June"+y, "July"+y, "Aug"+y, "Sept"+y, "Oct"+y, "Nov"+y, "Dec"+y);
+      labels.push("Jan"+y,"Feb"+y, "Mar"+y, "Apr"+y, "May"+y, "June"+y, "July"+y, "Aug"+y, "Sept"+y, "Oct"+y, "Nov"+y, "Dec"+y);
     }
    
     return labels;
@@ -80,7 +80,8 @@ const LineChart = ({items}) => {
   function getProfit(monthlyIncome, monthlyExpense, yearTotal) {
     var monthTotal = Array.from({ length: yearTotal.length * 12 }, () => { return 0 });
     for (var i = 0; i < monthlyIncome.length; i++) {
-      monthTotal[i] = monthlyIncome[i] - monthlyExpense[i];
+      let profit = monthlyIncome[i] - monthlyExpense[i];
+      monthTotal[i] = profit > 0 ? profit: 0;
     }
     return monthTotal;
   }
@@ -93,7 +94,6 @@ const LineChart = ({items}) => {
       data: Data.monthlyIncome,
       backgroundColor: ' #e4ccff',
       borderColor: '#7700ff',
-      
       borderWidth: 1
     },
     {

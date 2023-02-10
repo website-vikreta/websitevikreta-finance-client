@@ -37,7 +37,6 @@ const PieChart = ({items}) => {
   var data = {
     labels: ['Income', 'Expense'],
     datasets: [{
-      label: 'Amount',
       data: Data,
       backgroundColor: [
         ' #e4ccff',
