@@ -7,36 +7,33 @@ const ItemsTable = ({items}) => {
    }
 
    function getQuarter(month) {
-      if (month >= 3 && month <= 5) return 1;
-      else if (month >= 6 && month <= 8) return 2;
-      else if (month >= 9 && month <= 11) return 3;
+      if (month >= 4 && month <= 6) return 1;
+      else if (month >= 7 && month <= 9) return 2;
+      else if (month >= 10 && month <= 12) return 3;
       else return 4;
    }
 
-   function thisQuarter(d, now, month, quartr, item) {
+   function thisQuarter(currentDate, now, month, quartr, item) {
       if (getQuarter(quartr === 4)) {
-         if (d.getFullYear() === now.getFullYear() && month <= 2) {
+         if (currentDate.getFullYear() === now.getFullYear() && (month <= 3)) {
             return item;
-         } else
-            if (d.getFullYear() === (now.getFullYear() - 1) && month >= 12) {
-               return item
-            } else {
-               return null;
-            }
-      } else if (d.getFullYear() === now.getFullYear()) {
+         } else{
+            return null;
+         }
+      } else if (currentDate.getFullYear() === now.getFullYear()) {
 
          if (quartr === 1)
-            return d.getFullYear() === now.getFullYear() && month >= 3 && month <= 5 ? item : null;
+            return currentDate.getFullYear() === now.getFullYear() && month >= 4 && month <= 6 ? item : null;
          if (quartr === 2)
-            return d.getFullYear() === now.getFullYear() && month >= 6 && month <= 8 ? item : null;
+            return currentDate.getFullYear() === now.getFullYear() && month >= 7 && month <= 9 ? item : null;
          if (quartr === 3)
-            return d.getFullYear() === now.getFullYear() && month >= 9 && month <= 11 ? item : null;
+            return currentDate.getFullYear() === now.getFullYear() && month >= 10 && month <= 12 ? item : null;
       } else return null;
    }
 
 
-   function lastQuarter(d, now, month, item) {
-      return d.getFullYear() === (now.getFullYear() - 1) && month >= 9 && month <= 11 ? item : null;
+   function lastQuarter(currentDate, now, month, item) {
+      return currentDate.getFullYear() === (now.getFullYear() - 1) && month >= 10 && month <= 12 ? item : null;
    }
 
    function getIncomeInDuration(item, currentDate, timeFilter) {
@@ -68,7 +65,7 @@ const ItemsTable = ({items}) => {
 
          const quartr = getQuarter(currentDate.getMonth() + 1);
          if (quartr === 1) return thisQuarter(itemDate, currentDate, itemDate.getMonth() + 1, 4, item);
-         if (quartr === 4 || ((itemDate.getFullYear() === currentDate.getFullYear() - 1) && quartr === 3)) return lastQuarter(itemDate, currentDate, itemDate.getMonth() + 1, item);
+         if (quartr === 4) return lastQuarter(itemDate, currentDate, itemDate.getMonth() + 1, item);
          return thisQuarter(itemDate, currentDate, itemDate.getMonth() + 1, quartr - 1, item);
 
       } else {
@@ -128,14 +125,12 @@ const ItemsTable = ({items}) => {
    const lastYear = currentDate.getFullYear() - 1;
 
    // Calculate Current Quarter Months Details
-   const qaurters = [["MAR", "MAY"], ["JUN", "AUG"], ["SEPT", "NOV"], ["DEC", "FEB"]];
+   const qaurters = [["APR", "JUN"], ["JUL", "SEPT"], ["OCT", "DEC"], ["JAN", "MAR"]];
    var currQuartr = getQuarter(currentDate.getMonth() + 1);
    const currQuartrMonths = qaurters[currQuartr - 1];
    var currQuartrYear1 = currentDate.getFullYear();
    var currQuartrYear2 = currentDate.getFullYear();
-   if (currQuartr === 4) {
-      currQuartrYear1 = currentDate.getFullYear() - 1;
-   }
+  
 
    // Calculate Last Quarter Months Details
    var lastQuartrMonths = qaurters[currQuartr - 2];

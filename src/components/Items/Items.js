@@ -16,7 +16,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Grid } from '@mui/material';
 
 import { getItems, getMedia, deleteItem } from '../../api/index';
-
+import '../../styles/item.css';
 // Import Components
 const Popup = React.lazy(() => import('../PopupModals/Popup'));
 const DeletePopup = React.lazy(() => import('../PopupModals/DeletePopup'));
@@ -25,13 +25,15 @@ const PopupImage = React.lazy(() => import('../PopupModals/PopupImage'));
 
 
 const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate, endDate }) => {
-   
+
    const [search, setSearch] = useState('');
    const [filteredElements, setFilteredElements] = useState('');
    const [showModal, setShowModal] = useState({ openDialog: false, currItem: '' });
    const [showImgModal, setShowImgModal] = useState({ openImgDialog: false, id: '', paymentType: '', image: '' });
    const [delModal, setDelModal] = useState({ openDelDialog: false, deleteId: null });
-
+   const [page, setPage] = useState(1);
+   const handlePageChange = (page) => setPage(page);
+  
    const getAllItems = async () => {
       let res = localStorage.getItem('user-info');
       let response = await getItems(JSON.parse(res).id);
@@ -45,7 +47,7 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
       }
       getAllItems();
       setRender('unset');
-   }, [render,setItems, setRender]);
+   }, [render, setItems, setRender]);
    useEffect(() => {
 
       function check(items, type) {
@@ -53,38 +55,32 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
          return items.paymentType === type ? items : null;
       }
       function getQuarter(month) {
-         if (month >= 3 && month <= 5) return 1;
-         else if (month >= 6 && month <= 8) return 2;
-         else if (month >= 9 && month <= 11) return 3;
+         if (month >= 4 && month <= 6) return 1;
+         else if (month >= 7 && month <= 9) return 2;
+         else if (month >= 10 && month <= 12) return 3;
          else return 4;
       }
 
-      function thisQuarter(itemDate, now, month, quartr, item) {
+      function thisQuarter(currentDate, now, month, quartr, item) {
          if (getQuarter(quartr === 4)) {
-            if (itemDate.getFullYear() === now.getFullYear() && month <= 2) {
+            if (currentDate.getFullYear() === now.getFullYear() && (month <= 3)) {
                return item;
             } else {
-               if (itemDate.getFullYear() === (now.getFullYear() - 1) && month >= 12) {
-                  return item
-               } else {
-                  return null;
-               }
+               return null;
             }
-         } else if (itemDate.getFullYear() === now.getFullYear()) {
+         } else if (currentDate.getFullYear() === now.getFullYear()) {
 
             if (quartr === 1)
-               return itemDate.getFullYear() === now.getFullYear() && month >= 3 && month <= 5 ? item : null;
+               return currentDate.getFullYear() === now.getFullYear() && month >= 4 && month <= 6 ? item : null;
             if (quartr === 2)
-               return itemDate.getFullYear() === now.getFullYear() && month >= 6 && month <= 8 ? item : null;
+               return currentDate.getFullYear() === now.getFullYear() && month >= 7 && month <= 9 ? item : null;
             if (quartr === 3)
-               return itemDate.getFullYear() === now.getFullYear() && month >= 9 && month <= 11 ? item : null;
-
-         } else {
-            return null;
-         }
+               return currentDate.getFullYear() === now.getFullYear() && month >= 10 && month <= 12 ? item : null;
+         } else return null;
       }
-      function lastQuarter(itemDate, now, month, item) {
-         return itemDate.getFullYear() === (now.getFullYear() - 1) && month >= 9 && month <= 11 ? item : null;
+
+      function lastQuarter(currentDate, now, month, item) {
+         return currentDate.getFullYear() === (now.getFullYear() - 1) && month >= 10 && month <= 12 ? item : null;
       }
 
       // Function to Select Items Date Range
@@ -116,7 +112,7 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
 
             const quartr = getQuarter(currentDate.getMonth() + 1);
             if (quartr === 1) return thisQuarter(currentDate, now, month, 4, item);
-            if (quartr === 4 || ((currentDate.getFullYear() === now.getFullYear() - 1) && quartr === 3)) return lastQuarter(currentDate, now, month, item);
+            if (quartr === 4 ) return lastQuarter(currentDate, now, month, item);
             return thisQuarter(currentDate, now, month, quartr - 1, item);
 
          } else if (dateFilter === 6) {
@@ -187,46 +183,56 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
       setShowImgModal({ openImgDialog: true, id: response.data._id, paymentType: response.data.paymentType, image: response.data.paymentProof })
    }
 
+   const rowsPerPage = 10;
    const columns = [
       {
          name: 'Sr. No.',
-         cell: (row, index) => index + 1
+         cell: (row, index) => (page - 1) * rowsPerPage + index + 1,
+         sortable: true,
+
       },
       {
          name: 'Title',
-         selector: row => row.title,
+         selector: row => <div style={{ whiteSpace: 'pre-wrap'}}>{row.title}</div>,
          sortable: true,
+         
       },
       {
          name: 'Amount',
          selector: row => row.amount,
          sortable: true,
+       
 
       },
       {
          name: 'Category',
-         selector: row => row.category,
+         selector: row => <div style={{ whiteSpace: 'pre-wrap'}}>{row.category}</div>,
          sortable: true,
+       
 
       },
 
       {
          name: 'Payment Type',
          selector: row => row.paymentType,
+        
       },
       {
          name: 'Date of Invoice',
          selector: row => formatedate(new Date(row.dateOfInvoice)),
          sortable: true,
+         
       },
       {
          name: 'Date of Payment',
          selector: row => formatedate(new Date(row.dateOfPayment)),
          sortable: true,
+        
       },
       {
          name: 'Description',
-         selector: row => row.description,
+         selector: row => <div style={{ whiteSpace: 'pre-wrap'}}>{row.description}</div>,
+        
       },
       {
          name: 'Payment Proof',
@@ -236,7 +242,7 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
                   onClick={() => getProof(row._id)}>
                   <VisibilityIcon fontSize='small' />
                </IconButton>
-            </>
+            </>,
       },
 
       {
@@ -295,11 +301,11 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
 
       <Grid className='tableWrapper' container alignContent={'center'}>
 
-         <Popup  setRender={setRender} showModal={showModal} setShowModal={setShowModal} formType='Edit' ></Popup>
+         <Popup setRender={setRender} showModal={showModal} setShowModal={setShowModal} formType='Edit' ></Popup>
          <DeletePopup delModal={delModal} setDelModal={setDelModal} confirm={confirm}></DeletePopup>
          <PopupImage showImgModal={showImgModal} setShowImgModal={setShowImgModal}></PopupImage>
          <ToastContainer />
-         <div style={{ width: '100%' }}>
+         <div style={{width: '100%'}}>
             <DataTable
                columns={columns}
                data={filteredElements}
@@ -307,7 +313,17 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
                customStyles={tableCustomStyles}
                fixedHeader
                pagination
-               dense
+               
+               paginationResetDefaultPage={true}
+               paginationTotalRows={filteredElements.length}
+               paginationComponentOptions={{
+                  rowsPerPageText: "Rows per page:",
+                  rangeSeparatorText: "of",
+                  noRowsPerPage: false,
+                  selectAllRowsItem: false,
+                  selectAllRowsItemText: "All",
+                }}
+               
                subHeader
                subHeaderComponent={
                   <div className='tableSubHeaderComponent'>
@@ -324,6 +340,8 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
                      />
                   </div>
                }
+               onChangePage={handlePageChange}
+               highlightOnHover
             />
          </div>
 

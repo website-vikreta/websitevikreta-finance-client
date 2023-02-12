@@ -86,13 +86,14 @@ const Index = () => {
                         {/* current year income expense */}
                         <div className="card"><PieChart  items={items} /></div>
                         <div className="card"><DoughnutChart  items={items}/></div>
-                        <div className="card"><QuartersChart/></div>
+                        <div className="card"><QuartersChart items={items}/></div>
                      </div>
                   
                </section>
                {/* Table & Glimpse */}
                <div className="table">
                   <div className="card">
+                     
                      <AllItems items={items} setItems={setItems} render={render} setRender={setRender}/>
                   </div>
                </div>

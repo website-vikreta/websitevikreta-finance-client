@@ -7,7 +7,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import styled from "@emotion/styled";
 
-const Item = React.lazy(() => import('./Items'));
+import Item from './Items';
+// const Item = React.lazy(() => import('./Items'));
 
 const Date = styled(DatePicker)`
     width: 250px
@@ -37,8 +38,7 @@ export default function AllItems({items, setItems, render, setRender}) {
    };
 
    return (
-      <Box sx={{ flexGrow: 1 }}>
-
+      <div>
          {/* All Table Filters */}
          <AppBar position="static" sx={{ backgroundColor: '#FFFFFF', boxShadow: 'none' }}>
             <Toolbar className='filterToolbar'>
@@ -127,6 +127,6 @@ export default function AllItems({items, setItems, render, setRender}) {
 
          {/* Item Data Table  */}
          <Item items={items} setItems={setItems} render={render} setRender={setRender} type={filter} dateFilter={val} startDate={startDate} endDate={endDate} />
-      </Box>
+      </div>
    );
 }

@@ -14,42 +14,42 @@ ChartJS.register(
 );
 
 
-const LineChart = ({items}) => {
+const LineChart = ({ items }) => {
 
   const [Data, setData] = useState({ labels: [], monthlyIncome: [], monthlyExpense: [], monthlyProfit: [] });
 
   useEffect(() => {
     const getAllItems = async () => {
-      
+
       let res = localStorage.getItem('user-info');
       let response = await getItems(JSON.parse(res).id);
 
       let res_data = response.data;
-      const yearTotal = getTotalYears(res_data);
-      res_data.sort((item1, item2) => {return new Date(item1.dateOfInvoice) - new Date(item2.dateOfInvoice)});
-    
+      let yearTotal = getTotalYears(res_data);
+      res_data.sort((item1, item2) => { return new Date(item1.dateOfInvoice) - new Date(item2.dateOfInvoice) });
+
       let labels = getLabels(yearTotal);
-     
+
       let monthlyIncome = getThisYear(res_data, 'Income', yearTotal);
       let monthlyExpense = getThisYear(res_data, 'Expense', yearTotal);
-     
-      const monthlyProfit = getProfit(monthlyIncome, monthlyExpense, yearTotal);
-      setData({ labels, monthlyIncome, monthlyExpense, monthlyProfit });
-      
+      let data = getData(monthlyIncome, monthlyExpense, yearTotal, labels);
+      console.log('data', data);
+      setData(data);
+
     }
     getAllItems();
 
-  },[items]);
- 
+  }, [items]);
 
-  function getLabels(yearTotal){
-   
+
+  function getLabels(yearTotal) {
+
     let labels = [];
-    for(var i=0; i<yearTotal.length; i++){
-      let y = yearTotal[i]%200;
-      labels.push("Jan"+y,"Feb"+y, "Mar"+y, "Apr"+y, "May"+y, "June"+y, "July"+y, "Aug"+y, "Sept"+y, "Oct"+y, "Nov"+y, "Dec"+y);
+    for (var i = 0; i < yearTotal.length; i++) {
+      let y = yearTotal[i] % 200;
+      labels.push("Jan" + y, "Feb" + y, "Mar" + y, "Apr" + y, "May" + y, "June" + y, "July" + y, "Aug" + y, "Sept" + y, "Oct" + y, "Nov" + y, "Dec" + y);
     }
-   
+
     return labels;
   }
 
@@ -66,51 +66,64 @@ const LineChart = ({items}) => {
   }
 
   function getThisYear(items, paymentType, yearTotal) {
-    var monthTotal = Array.from({ length: yearTotal.length*12 }, () => { return 0 });
-    for(var year=0; year<yearTotal.length; year++){
-      for(var item=0; item<items.length; item++){
+    var monthTotal = Array.from({ length: yearTotal.length * 12 }, () => { return 0 });
+    for (var year = 0; year < yearTotal.length; year++) {
+      for (var item = 0; item < items.length; item++) {
         if ((yearTotal[year] === new Date(items[item].dateOfInvoice).getFullYear()) && items[item].paymentType === paymentType) {
           let currMonth = year * 12 + (new Date(items[item].dateOfInvoice).getMonth());
           monthTotal[currMonth] += items[item].amount;
         }
       }
     }
+    console.log('monthtotl', monthTotal);
     return monthTotal;
   }
-  function getProfit(monthlyIncome, monthlyExpense, yearTotal) {
-    var monthTotal = Array.from({ length: yearTotal.length * 12 }, () => { return 0 });
-    for (var i = 0; i < monthlyIncome.length; i++) {
-      let profit = monthlyIncome[i] - monthlyExpense[i];
-      monthTotal[i] = profit > 0 ? profit: 0;
+
+  function getData(monthlyIncome, monthlyExpense, yearTotal, labels){
+   
+    let i  =0;
+    while (monthlyIncome[i] === 0 && monthlyExpense[i] === 0) {
+      i++;
     }
-    return monthTotal;
+    monthlyIncome.splice(0, i);
+    monthlyExpense.splice(0, i);
+    let monthlyProfit = Array.from({ length: yearTotal.length * 12 }, () => { return 0 });
+    for (var ii = 0; ii < monthlyIncome.length; ii++) {
+      let profit = monthlyIncome[ii] - monthlyExpense[ii];
+      monthlyProfit[ii] = profit > 0 ? profit : 0;
+    }
+    
+    labels.splice(0,i);
+    
+    let data = [labels, monthlyIncome, monthlyExpense, monthlyProfit]
+   
+    return data;
   }
-
-
+ 
   var data = {
-    labels: Data.labels,
+    labels: Data[0],
     datasets: [{
       label: 'Income',
-      data: Data.monthlyIncome,
+      data: Data[1],
       backgroundColor: ' #e4ccff',
       borderColor: '#7700ff',
       borderWidth: 1
     },
     {
       label: 'Epense',
-      data: Data.monthlyExpense,
+      data: Data[2],
       backgroundColor: 'rgba(54, 162, 235, 0.2)',
-      
+
       borderColor: 'rgba(54, 162, 235, 1)',
-     
+
       borderWidth: 1
     },
     {
       label: 'Profit',
-      data: Data.monthlyProfit,
+      data: Data[3],
       backgroundColor: 'rgba(255, 206, 86, 0.2)',
       borderColor: 'rgba(255, 206, 86, 1)',
-    
+
       borderWidth: 1
     }
     ]

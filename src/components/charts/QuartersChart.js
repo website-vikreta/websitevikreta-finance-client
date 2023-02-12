@@ -19,16 +19,15 @@ const QuartersChart = ({ items }) => {
 
     useEffect(() => {
         const getAllItems = async () => {
-            document.title = 'Home | WV Finance'
             let res = localStorage.getItem('user-info');
             let response = await getItems(JSON.parse(res).id);
-            let currData = [];
             let thisYear = new Date();
-            const incomeTotal = getTotal(response.data, 'Income', thisYear);
-            const expenseTotal = getTotal(response.data, 'Expense', thisYear);
-            const profitTotal = getProfit(incomeTotal, expenseTotal);
-            const labels = getLabels(thisYear);
-            currData.push(labels);
+            let currData = [];
+            let quartr = getQuarter(thisYear.getMonth()+1);
+            let incomeTotal = getTotal(response.data, 'Income', thisYear, quartr);
+            let expenseTotal = getTotal(response.data, 'Expense', thisYear, quartr);
+            let profitTotal = getProfit(incomeTotal, expenseTotal);
+            currData.push(getLabels(thisYear, quartr))
             currData.push(incomeTotal);
             currData.push(expenseTotal);
             currData.push(profitTotal);
@@ -38,49 +37,80 @@ const QuartersChart = ({ items }) => {
         getAllItems();
     }, [items]);
 
-    function getLabels(thisYear){
-        let year = thisYear.getFullYear()%200;
-        let labels = [];
-        labels.push('MAR'+year+'-MAY'+year, 'JUN'+year+'-AUG'+year, 'SEPT'+year+'-NOV'+year,'DEC'+(year-1)+'-FEB'+year);
-        return labels;
+
+    function getProfit(incomeTotal, expenseTotal) {
+        var profitTotal = Array.from({ length: 4 }, () => { return 0 });
+        for (var i = 0; i < incomeTotal.length; i++) {
+            let profit = incomeTotal[i] - expenseTotal[i]; 
+            profitTotal[i] =  profit > 0 ? profit: 0;
+
+        }
+        return profitTotal;
     }
 
-    function getTotal(items, paymentType, thisYear) {
+
+    function getTotal(items, paymentType, thisYear, quartr) {
         var total = Array.from({ length: 4 }, () => { return 0 });
 
         for (var item = 0; item < items.length; item++) {
             let currentItem = items[item];
             let currentDate = new Date(currentItem.dateOfInvoice);
             let currentMonth = currentDate.getMonth() + 1;
-            
-            if (currentDate.getFullYear() === thisYear.getFullYear()) {
-               
-                if (currentMonth >= 3 && currentMonth <= 5) {
-                    console.log(currentMonth)
-                    total[0] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
-                } else if (currentMonth >= 6 && currentMonth <= 8) {
-                    total[1] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
 
-                } else if (currentMonth >= 9 && currentMonth <= 11) {
-                    total[2] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
-                } else if (currentMonth <= 2) {
-                    total[3] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
+            if(quartr === 4){
+                if (currentDate.getFullYear() === (thisYear.getFullYear() - 1)) {
+                    if (currentMonth >= 4 && currentMonth <= 6) {
+
+                        total[0] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
+                    } else if (currentMonth >= 7 && currentMonth <= 9) {
+                        total[1] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
+                    } else if (currentMonth >= 10 && currentMonth <= 12) {
+                        total[2] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
+                    }
+                }else if(currentDate.getFullYear() === thisYear.getFullYear()) {
+                    if (currentMonth <= 3) {
+                        total[3] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
+                    }
                 }
-            } else if (currentDate.getFullYear() === (thisYear.getFullYear() - 1) && currentMonth >= 12) {
-                total[3] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
+            }else{
+                if (currentDate.getFullYear() === thisYear.getFullYear()) {
+                    if (currentMonth >= 4 && currentMonth <= 6) {
+                        total[0] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
+                    } else if (currentMonth >= 7 && currentMonth <= 9) {
+                        total[1] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
+                    } else if (currentMonth >= 10 && currentMonth <= 12) {
+                        total[2] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
+                    }
+                }else if(currentDate.getFullYear() === thisYear.getFullYear()+1) {
+                    if (currentMonth <= 3) {
+                        total[3] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
+                    }
+                }
             }
         }
+
         return total;
     }
-    function getProfit(incomeTotal, expenseTotal) {
-        var profitTotal = Array.from({ length: incomeTotal.length }, () => { return 0 });
-        for (var i = 0; i < incomeTotal.length; i++) {
-            let profit = incomeTotal[i] - expenseTotal[i]; 
-            profitTotal[i] =  profit > 0 ? profit: 0;
-            
+
+    function getLabels(thisYear, quartr) {
+        let year = thisYear.getFullYear() % 200;
+        let labels = [];
+        if (quartr === 4) {
+            labels.push('APR' + (year - 1) + '-JUN' + (year - 1), 'JUL' + (year - 1) + '-SEPT' + (year - 1), 'OCT' + (year - 1) + '-DEC' + (year - 1), 'JAN' + year + '-MAR' + year);
+            return labels;
         }
-        return profitTotal;
+
+        labels.push('APR' + year + '-JUN' + year, 'JUL' + year + '-SEPT' + year, 'OCT' + year + '-DEC' + year, 'JAN' + (year + 1) + '-MAR' + (year + 1));
+        return labels;
     }
+
+    function getQuarter(month) {
+        if (month >= 4 && month <= 6) return 1;
+        else if (month >= 7 && month <= 9) return 2;
+        else if (month >= 10 && month <= 12) return 3;
+        else return 4;
+    }
+   
 
 
     var data = {
@@ -91,6 +121,7 @@ const QuartersChart = ({ items }) => {
                 data: Data[1],
                 backgroundColor: ' #e4ccff',
                 borderColor: '#7700ff',
+
                 borderWidth: 1
             },
             {
@@ -137,5 +168,6 @@ const QuartersChart = ({ items }) => {
         </div>
     )
 }
+
 
 export default QuartersChart;
