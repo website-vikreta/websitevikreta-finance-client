@@ -186,27 +186,31 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
    const rowsPerPage = 10;
    const columns = [
       {
-         name: 'Sr. No.',
+         name: 'Sr.No.',
          cell: (row, index) => (page - 1) * rowsPerPage + index + 1,
          sortable: true,
+         width: '90px',
+         
 
       },
       {
          name: 'Title',
-         selector: row => <div style={{ whiteSpace: 'pre-wrap'}}>{row.title}</div>,
+         selector: row => row.title,
+         cell: row => <><div className="cell-with-tooltip" title={row.title}>{row.title}</div></>,
          sortable: true,
          
       },
       {
          name: 'Amount',
          selector: row => row.amount,
+         cell: row => <><div className="cell-with-tooltip" title={row.amount}>{row.amount}</div></>,
          sortable: true,
-       
+        
 
       },
       {
          name: 'Category',
-         selector: row => <div style={{ whiteSpace: 'pre-wrap'}}>{row.category}</div>,
+         cell: row => <><div className="cell-with-tooltip" title={row.category}>{row.category}</div></>,
          sortable: true,
        
 
@@ -214,24 +218,28 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
 
       {
          name: 'Payment Type',
-         selector: row => row.paymentType,
+         cell: row => <><div className="cell-with-tooltip" title={row.paymentType}>{row.paymentType}</div></>,
         
       },
       {
          name: 'Date of Invoice',
          selector: row => formatedate(new Date(row.dateOfInvoice)),
+         cell: row => <><div className="cell-with-tooltip" title={formatedate(new Date(row.dateOfInvoice))}>{formatedate(new Date(row.dateOfInvoice))}</div></>,
          sortable: true,
+         width: '135px',
          
       },
       {
          name: 'Date of Payment',
          selector: row => formatedate(new Date(row.dateOfPayment)),
+         cell: row => <><div className="cell-with-tooltip" title={formatedate(new Date(row.dateOfPayment))}>{formatedate(new Date(row.dateOfPayment))}</div></>,
          sortable: true,
+         width: '145px',
         
       },
       {
          name: 'Description',
-         selector: row => <div style={{ whiteSpace: 'pre-wrap'}}>{row.description}</div>,
+         cell: row => <><div className="cell-with-tooltip" title={row.description}>{row.description}</div></>,
         
       },
       {
@@ -243,10 +251,11 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
                   <VisibilityIcon fontSize='small' />
                </IconButton>
             </>,
+         width: '120px',
       },
 
       {
-         name: 'Action ',
+         name: 'Action',
          cell: row =>
             <>
                <IconButton title='Edit Item' sx={{ color: '#7700ff', padding: '0 2px' }} variant="contained" style={{ marginRight: 10 }} onClick={() => setShowModal({ openDialog: true, currItem: row })}>
@@ -255,7 +264,8 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
                <IconButton title='Delete Item' sx={{ color: 'red', padding: '0 2px' }} variant="contained" onClick={() => deleteItemData(row._id)}>
                   <DeleteIcon fontSize='small' />
                </IconButton>
-            </>
+            </>,
+         width: '90px',
 
       },
    ];

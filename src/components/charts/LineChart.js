@@ -33,7 +33,7 @@ const LineChart = ({ items }) => {
       let monthlyIncome = getThisYear(res_data, 'Income', yearTotal);
       let monthlyExpense = getThisYear(res_data, 'Expense', yearTotal);
       let data = getData(monthlyIncome, monthlyExpense, yearTotal, labels);
-      console.log('data', data);
+     
       setData(data);
 
     }
@@ -75,7 +75,7 @@ const LineChart = ({ items }) => {
         }
       }
     }
-    console.log('monthtotl', monthTotal);
+   
     return monthTotal;
   }
 
