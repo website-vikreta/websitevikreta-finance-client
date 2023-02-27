@@ -1,6 +1,15 @@
+import '@fortawesome/fontawesome-free/css/all.css';
+
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+library.add(fas);
 
 const ItemsTable = ({items}) => {
 
+   //const [isArrowUp, setArrowUp] = useState({thisMonth: false, thisQuarter: false, thisYear: false, lastMonth: false, lastQuarter: false, lastYear: false });
+  
    function getIncome(item, type) {
       if (item.paymentType === type) return item.amount;
       else return null;
@@ -143,6 +152,16 @@ const ItemsTable = ({items}) => {
       lastQuartrYear1 = currentDate.getFullYear() - 1;
       lastQuartrYear2 = currentDate.getFullYear() - 1;
    }
+   //const [isArrowUp, setArrowUp] = useState({thisMonth: false, thisQuarter: false, thisYear: false, lastMonth: false, lastQuarter: false, lastYear: false });
+
+   const thisYearProfitArrow = currentYearTotalIncome >= currentYearTotalExpense;
+   const lastYearProfitArrow = lastYearTotalIncome >= lastYearTotalExpense;
+   const currMonthProfitArrow = currMonthTotalIncome >= currMonthTotalExpense;
+   const lastMonthProfitArrow = lastMonthTotalIncome >= lastMonthTotalExpense;
+   const currQuarterProfitArrow = currQaurtrTotalIncome >= currQaurtrTotalExpense;
+   const lastQuarterProfitArrow = lastQaurtrTotalIncome >= lastQaurtrTotalExpense;
+
+  
    return (
 
       // Defining Structure
@@ -167,6 +186,8 @@ const ItemsTable = ({items}) => {
                         <span className='digits green'>₹ {currency(currMonthTotalProfit)}</span>
                         <span className='label'>Profit</span>
                      </div>
+                     {currMonthProfitArrow ? (<FontAwesomeIcon icon="arrow-up" style={{width: '25px', height: '70px', color: 'white'}}/>) : (<FontAwesomeIcon icon="arrow-down" style={{width: '25px', height: '50px', color: 'red'}}/> )}
+                    
                   </div>
                   <hr />
                   <div className='cardHeading'>This Month ({currentMonth + ' ' + currentDate.getFullYear()})</div>
@@ -185,8 +206,12 @@ const ItemsTable = ({items}) => {
                      </div>
                      <div className="item">
                         <span className='digits green'>₹ {currency(lastMonthTotalProfit)}</span>
-                        <span className='label'>Profit</span>
+                        <span className='label'>Profit </span>
+                        
                      </div>
+                     {lastMonthProfitArrow? (<FontAwesomeIcon icon="arrow-up" style={{width: '25px', height: '50px', color: 'green'}}/>) : (<FontAwesomeIcon icon="arrow-down" style={{width: '25px', height: '50px', color: 'red'}}/> )}
+                    
+                    
                   </div>
                   <hr />
                   <div className='cardHeading'>Last Month ({lastMonth + ' ' + lastMonthYear})</div>
@@ -208,6 +233,8 @@ const ItemsTable = ({items}) => {
                         <span className='digits green'>₹ {currency(currQaurtrTotalProfit)}</span>
                         <span className='label'>Profit</span>
                      </div>
+                     {currQuarterProfitArrow? (<FontAwesomeIcon icon="arrow-up" style={{width: '25px', height: '50px', color: 'green'}}/>) : (<FontAwesomeIcon icon="arrow-down" style={{width: '25px', height: '50px', color: 'red'}}/> )}
+                    
                   </div>
                   <hr />
                   <div className='cardHeading this'>This Quarter ({currQuartrMonths[0] + (currQuartrYear1 % 100) + ' - ' + currQuartrMonths[1] + (currQuartrYear2 % 100)})</div>
@@ -226,6 +253,8 @@ const ItemsTable = ({items}) => {
                         <span className='digits green'>₹ {currency(lastQaurtrTotalProfit)}</span>
                         <span className='label'>Profit</span>
                      </div>
+                     {lastQuarterProfitArrow? (<FontAwesomeIcon icon="arrow-up" style={{width: '25px', height: '50px', color: 'green'}}/>) : (<FontAwesomeIcon icon="arrow-down" style={{width: '25px', height: '50px', color: 'red'}}/> )}
+                    
                   </div>
                   <hr />
                   <div className='cardHeading'>Last Quarter ({lastQuartrMonths[0] + (lastQuartrYear1 % 100) + ' - ' + lastQuartrMonths[1] + (lastQuartrYear2 % 100)})</div>
@@ -247,6 +276,8 @@ const ItemsTable = ({items}) => {
                         <span className='digits green'>₹ {currency(currentYearTotalProfit)}</span>
                         <span className='label'>Profit</span>
                      </div>
+                     {thisYearProfitArrow? (<FontAwesomeIcon icon="arrow-up" style={{width: '25px', height: '50px', color: 'green'}}/>) : (<FontAwesomeIcon icon="arrow-down" style={{width: '25px', height: '50px', color: 'red'}}/> )}
+                    
                   </div>
                   <hr />
                   <div className='cardHeading this'>This Year ({new Date().getFullYear()})</div>
@@ -266,6 +297,8 @@ const ItemsTable = ({items}) => {
                         <span className='digits green'>₹ {currency(lastYearTotalProfit)}</span>
                         <span className='label'>Profit</span>
                      </div>
+                     {lastYearProfitArrow? (<FontAwesomeIcon icon="arrow-up" style={{width: '25px', height: '50px', color: 'green'}}/>) : (<FontAwesomeIcon icon="arrow-down" style={{width: '25px', height: '50px', color: 'red'}}/> )}
+                    
                   </div>
                   <hr />
                   <div className='cardHeading'>Last Year  ({lastYear})</div>

@@ -16,4 +16,8 @@ export const getMedia = async (id) => {
 
 // Authentication APIs
 export const loginUser = async (user) => await axios.post(`${url}`, user);
-
+export const getPassword = async (id, password) => await axios.post(`${url}/password${id}`, password);
+export const updatePassword = async (id, updatedPassword) => await axios.put(`${url}/password${id}`, updatedPassword);
+export const forgotPassword = async (id, token) => await axios.get(`${url}/forgotpassword${id}/${token}`);
+export const sendPasswordLink = async (email) =>  await axios.post(`${url}/sendpasswordlink`, email);
+export const setNewPassword = async (id, token, password) => await axios.post(`${url}/${id}/${token}`, password);

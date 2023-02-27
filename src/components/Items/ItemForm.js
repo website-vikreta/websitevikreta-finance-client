@@ -12,7 +12,7 @@ import styled from "@emotion/styled";
 
 import { createItem } from '../../api/index';
 import '../../styles/ItemForm.css';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Date = styled(DatePicker)`
     width: 250px
@@ -23,14 +23,16 @@ const StyledTable = styled(Table)`
 `;
 
 const ItemForm = (props) => {
-    
+
     let user = JSON.parse(localStorage.getItem('user-info'));
-    
+
     const [itemData, setItemData] = useState({ title: '', amount: '', category: '', paymentType: '', dateOfInvoice: null, dateOfPayment: null, description: '', paymentProof: '', userId: user.id });
     const { title, amount, category, paymentType, dateOfInvoice, dateOfPayment, description, paymentProof, userId } = itemData;
-    
+
     const { setRender, showModal, setShowModal } = props;
-  
+    const [isLoading, setIsLoading] = useState(false);
+
+
     var cookie = new Cookie();
     cookie.set('user', userId, { path: '/' })
     const [errors, setErrors] = useState({
@@ -65,8 +67,9 @@ const ItemForm = (props) => {
             errorMessage: ''
         }
     })
-    const validateItemDetails = () => {
-        
+    
+    function validateItemDetails(){
+        setIsLoading(true);
         const errorFields = Object.keys(errors);
         let newErrorValues = { ...errors }
         let values = Object.values(itemData)
@@ -75,7 +78,7 @@ const ItemForm = (props) => {
             const currentField = errorFields[index];
             const currentValue = values[index];
             if (currentValue === '') {
-                cnt= cnt+1;
+                cnt = cnt + 1;
                 newErrorValues = {
                     ...newErrorValues,
                     [currentField]: {
@@ -89,14 +92,17 @@ const ItemForm = (props) => {
         }
 
         setErrors(newErrorValues);
-        if(cnt === 0)  addItemDetails();
+        if (cnt === 0) { 
+            addItemDetails();
+        }
+        setIsLoading(false);
     }
     const addItemDetails = async () => {
-       
+
         await createItem(itemData);
         setShowModal({ ...showModal, openDialog: false });
         setRender('addSet');
-    
+
         toast.success("Item Added Successfully!!", {
             position: "top-center",
             autoClose: 2000,
@@ -105,11 +111,12 @@ const ItemForm = (props) => {
             theme: "light",
         });
     }
-
+    const buttonDisabled = isLoading ? true : false;
+    console.log('butondsables', buttonDisabled, 'isloadingz', isLoading);
     const clear = () => {
         setItemData({ title: '', amount: '', category: '', paymentType: '', dateOfInvoice: null, dateOfPayment: null, description: '', paymentProof: '' });
     }
-    
+
     const onValueChange = (e) => {
 
         setErrors({
@@ -124,7 +131,7 @@ const ItemForm = (props) => {
     }
 
     const handleImageData = (img) => {
-        
+
         setItemData({ ...itemData, paymentProof: img });
         const validExtensions = ['png', 'jpeg', 'jpg', 'pdf'];
         const fileExtension = img.split(';')[0].split('/')[1]
@@ -138,7 +145,7 @@ const ItemForm = (props) => {
             alert('File limit exceed');
         }
         console.log(paymentProof);
-       
+
     }
 
     return (
@@ -256,7 +263,7 @@ const ItemForm = (props) => {
                         <tr>
                             <td colSpan='2' className='tr-row'>
                                 <FormLabel id="demo-controlled-radio-buttons-group">Payment Proof</FormLabel>
-                                <br/>
+                                <br />
                                 <span className="input-file" >
                                     <FileBase64
                                         type="file"
@@ -265,7 +272,7 @@ const ItemForm = (props) => {
                                         onDone={({ base64 }) => { handleImageData(base64) }}
                                     />
                                 </span>
-                                
+
                             </td>
                         </tr>
 
@@ -284,7 +291,10 @@ const ItemForm = (props) => {
                                         bgcolor: '#7700FF',
                                         color: 'black',
                                     }
-                                }}>Add Item</Button>
+                                }} disabled={buttonDisabled}>
+                                {isLoading && <FontAwesomeIcon icon="spinner" spin /> }
+                                {isLoading ? 'Adding...' : 'Add Item'}
+                                </Button>
                             </td>
                         </tr>
 

@@ -12,6 +12,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import { updateItem, getItem } from '../../api/index';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '../../styles/ItemForm.css';
 
 var cookie = new Cookie();
@@ -30,7 +31,7 @@ const EditItem = (props) => {
     
     const [item, setItem] = useState({ title: '', amount: '', category: '', paymentType: '', dateOfInvoice: '', dateOfPayment: '', description: '', paymentProof: '', userId: user.id  });
     const { title, amount, category, paymentType, dateOfInvoice, dateOfPayment, description, userId } = item;
-   
+    const [isLoading, setIsLoading] = useState(false);
     const { setRender, cItem, showModal, setShowModal } = props;
     const id = cItem._id;
     cookie.set('user', userId, { path: '/' });
@@ -81,7 +82,9 @@ const EditItem = (props) => {
         setItem({ ...item, title: '', amount: '', category: '', paymentType: '', dateOfInvoice: null, dateOfPayment: null, description: '', paymentProof: '' });
     }
 
-    const validateItemDetails = () => {
+    function validateItemDetails(){
+        setIsLoading(true);
+        console.log('loigng', isLoading)
         const errorFields = Object.keys(errors);
         let newErrorValues = { ...errors }
         let values = Object.values(item)
@@ -106,7 +109,9 @@ const EditItem = (props) => {
 
         setErrors(newErrorValues);
         if(cnt === 0)  editItemDetails();
-        else alert(cnt);
+        console.log('loigfggggggggggng', isLoading)
+        setIsLoading(false);
+        console.log('lossssssssssssssigng', isLoading)
         
     }
     const editItemDetails = async () => {
@@ -137,6 +142,7 @@ const EditItem = (props) => {
     const handleImageData = (img) => {
         setItem({ ...item, paymentProof: img });
     }
+    const buttonDisabled = isLoading ? true : false;
 
     return (
 
@@ -274,7 +280,12 @@ const EditItem = (props) => {
                                         bgcolor: '#7700FF',
                                         color: 'black',
                                     }
-                                }}>Edit Item</Button>
+                                }} disabled={buttonDisabled}> {isLoading ? (
+                                    <FontAwesomeIcon icon="spinner" spin />
+                                  ) : (
+                                    <FontAwesomeIcon icon="spinner"  />
+                                  )}
+                                  {isLoading ? 'Loading...' : 'Click me'}</Button>
                             </td>
                         </tr>
 

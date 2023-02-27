@@ -20,6 +20,7 @@ import PieChart from './charts/PieChart'
 import LineChart from './charts/LineChart'
 import { getItems } from '../api';
 import QuartersChart from './charts/QuartersChart';
+import { Button } from '@mui/material';
 const Popup = React.lazy(() => import('./PopupModals/Popup'));
 const Index = () => {
    
@@ -63,6 +64,10 @@ const Index = () => {
                   <div className="navLink">
                      <span className='welcomeText'>Welcome back, <b>{JSON.parse(localStorage.getItem('user-info')).username}</b></span>
                   </div>
+                  <div className="navLink">
+                     <Button onClick={()=> navigate('/ChangePassword')}>Change Password</Button>
+                  </div>
+                  
                   <div className="navLink">
                      <button className='linkBtn danger' onClick={handleLogout}>
                         <span>Logout</span> <Logout fontSize="small" sx={{ color: 'red' }} />
