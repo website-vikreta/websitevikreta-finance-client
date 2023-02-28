@@ -44,7 +44,7 @@ export default function AllItems({ items, setItems, render, setRender }) {
             <Toolbar className='filterToolbar'>
                <div className="filterButtonWrapper">
                   <button
-                     className={`btn ${allActive ? 'btn-primary' : 'btn-secondary'}`}
+                     className={`btn ${ allActive ? 'btn-primary' : 'btn-secondary'}`}
                      onClick={(() => setFilter({ filter: '_id', allActive: true }))}>
                      All
                   </button>

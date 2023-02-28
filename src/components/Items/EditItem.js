@@ -31,11 +31,11 @@ const EditItem = (props) => {
     
     const [item, setItem] = useState({ title: '', amount: '', category: '', paymentType: '', dateOfInvoice: '', dateOfPayment: '', description: '', paymentProof: '', userId: user.id  });
     const { title, amount, category, paymentType, dateOfInvoice, dateOfPayment, description, userId } = item;
-    const [isLoading, setIsLoading] = useState(false);
+   
     const { setRender, cItem, showModal, setShowModal } = props;
     const id = cItem._id;
     cookie.set('user', userId, { path: '/' });
-    const buttonRef = useRef(null);
+    const loadingRef = useRef(false);
 
     useEffect(() => {
         const loadItemDetails = async () => {
@@ -84,9 +84,8 @@ const EditItem = (props) => {
     }
 
     function validateItemDetails(){
-        setIsLoading(true);
-        buttonRef.current.disabled = true;
-        
+        loadingRef.current = true;
+
         const errorFields = Object.keys(errors);
         let newErrorValues = { ...errors }
         let values = Object.values(item)
@@ -111,9 +110,10 @@ const EditItem = (props) => {
 
         setErrors(newErrorValues);
         if(cnt === 0)  editItemDetails();
-        console.log('loigfggggggggggng', isLoading)
-        setIsLoading(false);
-        console.log('lossssssssssssssigng', isLoading)
+        setTimeout(() => {
+            loadingRef.current = false;
+            
+        }, 2000);
     }
     const editItemDetails = async () => {
         await updateItem(id, item);
@@ -143,8 +143,7 @@ const EditItem = (props) => {
     const handleImageData = (img) => {
         setItem({ ...item, paymentProof: img });
     }
-    const buttonDisabled = isLoading ? true : false;
-
+   
     return (
 
         <Container >
@@ -276,15 +275,15 @@ const EditItem = (props) => {
                                 }}>Reset</Button>
                             </td>
                             <td align='right'>
-                                <Button variant="contained" color="primary" ref={buttonRef} onClick={() => validateItemDetails()} sx={{
+                                <Button variant="contained" color="primary" onClick={() => validateItemDetails()} sx={{
                                     color: 'white', backgroundColor: '#7700FF', borderColor: 'white', ':hover': {
                                         bgcolor: '#7700FF',
                                         color: 'black',
                                     }
-                                }} disabled={buttonDisabled}> {isLoading ? (
-                                    <FontAwesomeIcon icon="spinner" spin />
-                                  ) : <FontAwesomeIcon icon="edit"  />}
-                                  {isLoading ? 'Loading...' : 'Edit'}</Button>
+                                }} disabled={loadingRef.current}> {loadingRef.current ? 'Editting...' : 'Edit'}
+                                {loadingRef.current && <FontAwesomeIcon icon="spinner" spin />}
+                                </Button> 
+                                  
                             </td>
                         </tr>
 

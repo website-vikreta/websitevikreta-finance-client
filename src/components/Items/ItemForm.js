@@ -10,6 +10,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import styled from "@emotion/styled";
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { createItem } from '../../api/index';
 import '../../styles/ItemForm.css';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -30,8 +31,8 @@ const ItemForm = (props) => {
    const { title, amount, category, paymentType, dateOfInvoice, dateOfPayment, description, paymentProof, userId } = itemData;
 
    const { setRender, showModal, setShowModal } = props;
-   const [isLoading, setIsLoading] = useState(false);
-   const buttonRef = useRef(null);
+
+   const loadingRef = useRef(false);
 
    var cookie = new Cookie();
    cookie.set('user', userId, { path: '/' })
@@ -69,9 +70,8 @@ const ItemForm = (props) => {
    })
 
    function validateItemDetails() {
-      setIsLoading(true);
-      console.log(isLoading);
-      buttonRef.current.disabled = true;
+
+      loadingRef.current = true;
 
       const errorFields = Object.keys(errors);
       let newErrorValues = { ...errors }
@@ -96,6 +96,11 @@ const ItemForm = (props) => {
 
       setErrors(newErrorValues);
       if (cnt === 0) addItemDetails();
+      setTimeout(() => {
+         loadingRef.current = false;
+
+      }, 2000);
+
    }
    const addItemDetails = async () => {
 
@@ -286,12 +291,14 @@ const ItemForm = (props) => {
                         }}>Reset</Button>
                      </td>
                      <td align='right'>
-                        <Button variant="contained" color="primary" onClick={() => validateItemDetails()} sx={{
+                        <Button variant="contained" color="primary" disabled={loadingRef.current} onClick={() => validateItemDetails()} sx={{
                            color: 'white', backgroundColor: '#7700FF', borderColor: 'white', ':hover': {
                               bgcolor: '#7700FF',
                               color: 'black',
                            }
-                        }}>Add Item</Button>
+                        }}>{loadingRef.current ? 'Adding...' : 'Add Item'}
+                        {loadingRef.current && <FontAwesomeIcon icon="spinner" spin />}
+                        </Button>
                      </td>
                   </tr>
 

@@ -191,7 +191,7 @@ const ItemsTable = ({ items }) => {
                      </div>
                      <div>
                         <span>
-                        {currMonthProfitArrow ? (<FontAwesomeIcon icon="arrow-up" style={{ padding: 0, margin:0, width: '25px', height: '50px', color: 'white' }} />) : (<FontAwesomeIcon icon="arrow-down" style={{ width: '25px', height: '50px', color: 'white' }} />)}
+                        {currMonthProfitArrow ? (<FontAwesomeIcon icon="arrow-up" style={{ padding: 0, margin:0, width: '15px', height: '50px', color: 'white' }} />) : (<FontAwesomeIcon icon="arrow-down" style={{  width: '15px', height: '50px', color: 'white' }} />)}
                         {(currMonthTotalIncome >= currMonthTotalExpense) ? <strong style={{  color: 'white ' }}>{profitPercentage(currMonthTotalIncome, currMonthTotalExpense)+'%'}</strong> :  <strong style={{  color: 'white ' }}>{lossPercentage(currMonthTotalIncome, currMonthTotalExpense)+'%'}</strong>}
                   
                         </span>
@@ -219,7 +219,7 @@ const ItemsTable = ({ items }) => {
                      </div>
                       <div>
                         <span>
-                        {lastMonthProfitArrow ? (<FontAwesomeIcon icon="arrow-up" style={{ padding: 0, margin:0, width: '25px', height: '50px', color: 'green' }} />) : (<FontAwesomeIcon icon="arrow-down" style={{ width: '25px', height: '50px', color: 'red' }} />)}
+                        {lastMonthProfitArrow ? (<FontAwesomeIcon icon="arrow-up" style={{ padding: 0, margin:0,  width: '15px', height: '50px', color: 'green' }} />) : (<FontAwesomeIcon icon="arrow-down" style={{  width: '15px', height: '50px', color: 'red' }} />)}
                         {(lastMonthTotalIncome >= lastMonthTotalExpense) ? <strong style={{  color: 'green ' }}>{profitPercentage(lastMonthTotalIncome, lastMonthTotalExpense)+'%'}</strong> :  <strong style={{  color: 'red ' }}>{lossPercentage(lastMonthTotalIncome, lastMonthTotalExpense)+'%'}</strong>}
                   
                         </span>
@@ -248,7 +248,7 @@ const ItemsTable = ({ items }) => {
                      </div>
                      <div>
                         <span>
-                        {currQuarterProfitArrow ? (<FontAwesomeIcon icon="arrow-up" style={{ padding: 0, margin:0, width: '25px', height: '50px', color: 'green' }} />) : (<FontAwesomeIcon icon="arrow-down" style={{ width: '25px', height: '50px', color: 'red' }} />)}
+                        {currQuarterProfitArrow ? (<FontAwesomeIcon icon="arrow-up" style={{ padding: 0, margin:0,  width: '15px', height: '50px', color: 'green' }} />) : (<FontAwesomeIcon icon="arrow-down" style={{  width: '15px', height: '50px', color: 'red' }} />)}
                         {(currQaurtrTotalIncome >= currQaurtrTotalExpense) ? <strong style={{  color: 'green ' }}>{profitPercentage(currQaurtrTotalIncome, currQaurtrTotalExpense)+'%'}</strong> :  <strong style={{  color: 'red ' }}>{lossPercentage(currQaurtrTotalIncome, currQaurtrTotalExpense)+'%'}</strong>}
                   
                         </span>
@@ -273,7 +273,7 @@ const ItemsTable = ({ items }) => {
                      </div>
                      <div>
                         <span>
-                        {lastQuarterProfitArrow ? (<FontAwesomeIcon icon="arrow-up" style={{ padding: 0, margin:0, width: '25px', height: '50px', color: 'green' }} />) : (<FontAwesomeIcon icon="arrow-down" style={{ width: '25px', height: '50px', color: 'red' }} />)}
+                        {lastQuarterProfitArrow ? (<FontAwesomeIcon icon="arrow-up" style={{ padding: 0, margin:0,  width: '15px', height: '50px', color: 'green' }} />) : (<FontAwesomeIcon icon="arrow-down" style={{  width: '15px', height: '50px', color: 'red' }} />)}
                         {(lastQaurtrTotalIncome >= lastQaurtrTotalExpense) ? <strong style={{  color: 'green ' }}>{profitPercentage(lastQaurtrTotalIncome, lastQaurtrTotalExpense)+'%'}</strong> :  <strong style={{  color: 'red ' }}>{lossPercentage(lastQaurtrTotalIncome, lastQaurtrTotalExpense)+'%'}</strong>}
                         </span>
                      </div>
@@ -300,7 +300,7 @@ const ItemsTable = ({ items }) => {
                      </div>
                      <div>
                         <span>
-                        {thisYearProfitArrow ? (<FontAwesomeIcon icon="arrow-up" style={{ padding: 0, margin:0, width: '25px', height: '50px', color: 'green' }} />) : (<FontAwesomeIcon icon="arrow-down" style={{ width: '25px', height: '50px', color: 'red' }} />)}
+                        {thisYearProfitArrow ? (<FontAwesomeIcon icon="arrow-up" style={{ padding: 0, margin:0,  width: '15px', height: '50px', color: 'green' }} />) : (<FontAwesomeIcon icon="arrow-down" style={{  width: '15px', height: '50px', color: 'red' }} />)}
                         {(currentYearTotalIncome >= currentYearTotalExpense) ? <strong style={{  color: 'green ' }}>{profitPercentage(currentYearTotalIncome, currentYearTotalExpense)+'%'}</strong> :  <strong style={{  color: 'red ' }}>{lossPercentage(currentYearTotalIncome, currentYearTotalExpense)+'%'}</strong>}
                   
                         </span>
@@ -325,7 +325,7 @@ const ItemsTable = ({ items }) => {
                         <span className='label'>Profit</span>
                      </div>
                      <span>
-                     {lastYearProfitArrow ? (<FontAwesomeIcon icon="arrow-up" style={{ width: '25px', height: '50px', color: 'green' }} />) : (<FontAwesomeIcon icon="arrow-down" style={{ width: '25px', height: '50px', color: 'red' }} />)}
+                     {lastYearProfitArrow ? (<FontAwesomeIcon icon="arrow-up" style={{  width: '15px', height: '50px', color: 'green' }} />) : (<FontAwesomeIcon icon="arrow-down" style={{  width: '15px', height: '50px', color: 'red' }} />)}
                      {(lastYearTotalIncome >= lastYearTotalExpense) ? <strong style={{  color: 'green ' }}>{profitPercentage(lastYearTotalIncome, lastYearTotalExpense)+'%'}</strong> : <strong style={{  color: 'green ' }}>{lossPercentage(lastYearTotalIncome, lastYearTotalExpense)+'%'}</strong>}
 
                      </span>
