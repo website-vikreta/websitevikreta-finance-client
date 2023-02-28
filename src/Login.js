@@ -4,11 +4,11 @@ import { useState, useEffect } from 'react';
 import React from 'react';
 import { loginUser } from './api';
 import Index from './components/Main';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 // Image Imports
 import SiteLogo from "./assets/websitevikreta-finance.svg";
 
-   
+
 const Login = () => {
 
    const [email, setEmail] = useState("");
@@ -19,9 +19,9 @@ const Login = () => {
    const navigate = useNavigate();
 
    useEffect(() => {
-      
+
       const loggedInUser = localStorage.getItem("user-info");
-      
+
       if (loggedInUser) {
 
          const foundUser = JSON.parse(loggedInUser);
@@ -93,6 +93,11 @@ const Login = () => {
                      name='password'
                      value={password}
                   ></TextField>
+               </Grid>
+               <Grid item xs={12}>
+               <NavLink to="/passwordReset">Forgot Password?
+                 </NavLink>
+                  
                </Grid>
                <Grid item xs={12}>
                   <button className="btn btn-primary login-btn" onClick={() => handleSubmit()}>Login</button>

@@ -3,6 +3,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 
 import { Line } from 'react-chartjs-2';
 import { getItems } from '../../api';
+import { Box, CircularProgress } from '@mui/material';
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -16,8 +17,8 @@ ChartJS.register(
 
 const LineChart = ({ items }) => {
 
-  const [Data, setData] = useState({ labels: [], monthlyIncome: [], monthlyExpense: [], monthlyProfit: [] });
-
+  const [Data, setData] = useState({ labels: null, monthlyIncome: null, monthlyExpense: null, monthlyProfit: null });
+ 
   useEffect(() => {
     const getAllItems = async () => {
 
@@ -145,14 +146,19 @@ const LineChart = ({ items }) => {
       <div>
         <span> <strong>This Year Monthly Data</strong> </span>
       </div>
-      <div>
+      {Data.labels === null?  <Box sx={{ display: 'flex', justifyContent: "center", alignItems: "center" }}>
+                    Loading... &nbsp;
+                    <CircularProgress />
+                </Box> : 
+       <div>
         <Line
           data={data}
           height={400}
           options={options}
 
         />
-      </div>
+      </div>}
+     
     </div>
   )
 }

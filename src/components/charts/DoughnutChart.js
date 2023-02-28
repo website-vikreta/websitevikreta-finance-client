@@ -3,13 +3,14 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { getItems } from '../../api';
 
 import { Doughnut } from 'react-chartjs-2';
+import { Box, CircularProgress } from '@mui/material';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 
 const DoughnutChart = ({items}) => {
     const [Data, setData] = useState([]);
-
+    
     useEffect(() => {
         const getAllItems = async () => {
             let res = localStorage.getItem('user-info');
@@ -75,13 +76,19 @@ const DoughnutChart = ({items}) => {
             <div> 
                 <span> <strong>This Month</strong> </span>
             </div>
+            {Data.length === 0 ? <Box sx={{ display: 'flex', justifyContent: "center", alignItems: "center" }}>
+                Loading... &nbsp;
+                <CircularProgress />
+            </Box>:
             <div>
-                <Doughnut
-                    data={data}
-                    height={400}
-                    options={options}
-                />
-            </div>
+            <Doughnut
+                data={data}
+                height={400}
+                options={options}
+            />
+        </div>
+            }
+            
         </div>
     )
 }

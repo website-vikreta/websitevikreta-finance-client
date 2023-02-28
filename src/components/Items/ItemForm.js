@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import FileBase64 from 'react-file-base64';
 import { toast } from 'react-toastify';
 import Cookie from 'universal-cookie';
@@ -12,7 +12,7 @@ import styled from "@emotion/styled";
 
 import { createItem } from '../../api/index';
 import '../../styles/ItemForm.css';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Date = styled(DatePicker)`
     width: 250px
@@ -30,6 +30,8 @@ const ItemForm = (props) => {
    const { title, amount, category, paymentType, dateOfInvoice, dateOfPayment, description, paymentProof, userId } = itemData;
 
    const { setRender, showModal, setShowModal } = props;
+   const [isLoading, setIsLoading] = useState(false);
+   const buttonRef = useRef(null);
 
    var cookie = new Cookie();
    cookie.set('user', userId, { path: '/' })
@@ -65,7 +67,10 @@ const ItemForm = (props) => {
          errorMessage: ''
       }
    })
-   const validateItemDetails = () => {
+
+   function validateItemDetails() {
+      setIsLoading(true);
+      buttonRef.current.disabled = true;
 
       const errorFields = Object.keys(errors);
       let newErrorValues = { ...errors }
@@ -264,22 +269,34 @@ const ItemForm = (props) => {
                               sx={{ display: 'none' }}
                               multiple={false}
                               onDone={({ base64 }) => { handleImageData(base64) }}
-                              size="small"
                            />
                         </span>
 
                      </td>
                   </tr>
+
+                  <tr className='tr-row'>
+                     <td>
+                        <Button variant="contained" color="primary" onClick={() => clear()} sx={{
+                           color: 'red', backgroundColor: '#ffe6e6', borderColor: 'red', ':hover': {
+                              bgcolor: '#ffe6e6',
+                              color: 'red',
+                           }
+                        }}>Reset</Button>
+                     </td>
+                     <td align='right'>
+                        <Button variant="contained" color="primary" onClick={() => validateItemDetails()} sx={{
+                           color: 'white', backgroundColor: '#7700FF', borderColor: 'white', ':hover': {
+                              bgcolor: '#7700FF',
+                              color: 'black',
+                           }
+                        }}>Add Item</Button>
+                     </td>
+                  </tr>
+
                </tbody>
+
             </table>
-            <div className="d-flex justify-content-between">
-               <button className="btn btn-danger" onClick={() => clear()}>
-                  Reset
-               </button>
-               <button className="btn btn-primary" onClick={() => validateItemDetails()}>
-                  Add Item
-               </button>
-            </div>
          </StyledTable>
 
       </Container >
