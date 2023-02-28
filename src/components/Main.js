@@ -22,7 +22,7 @@ import { getItems } from '../api';
 import QuartersChart from './charts/QuartersChart';
 const Popup = React.lazy(() => import('./PopupModals/Popup'));
 const Index = () => {
-   
+
    const [showModal, setShowModal] = useState({ openDialog: false, itemId: 0 });
    const [items, setItems] = useState([]);
    const [render, setRender] = useState('unset');
@@ -35,7 +35,7 @@ const Index = () => {
    useEffect(() => {
       getAllItems();
    }, [render]);
-   
+
    let navigate = useNavigate();
 
    const handleLogout = () => {
@@ -77,24 +77,26 @@ const Index = () => {
                {/* Charts */}
                <section className='chartWrapper'>
                   {/* current year monthly data */}
-                 
-                     <div className="card"><LineChart  items={items} /></div>
-                     {/* grid */}
-                     <div className="chartGrid">
-                        {/* yearly income expense and profit  */}
-                        <div className="card"><BarChart  items={items}/></div>
-                        {/* current year income expense */}
-                        <div className="card"><PieChart  items={items} /></div>
-                        <div className="card"><DoughnutChart  items={items}/></div>
-                        <div className="card"><QuartersChart items={items}/></div>
-                     </div>
-                  
+
+                  <div className="chartGrid filterCharts">
+                     <div className="card col-span-2"><LineChart items={items} /></div>
+                     {/* yearly income expense and profit  */}
+                     <div className="card"><BarChart items={items} /></div>
+                  </div>
+                  {/* grid */}
+                  <div className="chartGrid normalCharts">
+                     <div className="card col-span-2"><QuartersChart items={items} /></div>
+                     {/* current year income expense */}
+                     <div className="card"><PieChart items={items} /></div>
+                     <div className="card"><DoughnutChart items={items} /></div>
+                  </div>
+
                </section>
                {/* Table & Glimpse */}
                <div className="table">
                   <div className="card">
-                     
-                     <AllItems items={items} setItems={setItems} render={render} setRender={setRender}/>
+
+                     <AllItems items={items} setItems={setItems} render={render} setRender={setRender} />
                   </div>
                </div>
 
@@ -111,7 +113,7 @@ const Index = () => {
                title="Add new item">
                <Add fontSize='medium' />
             </button>
-            <Popup setRender = {setRender} showModal={showModal} setShowModal={setShowModal} formType='Add'></Popup>
+            <Popup setRender={setRender} showModal={showModal} setShowModal={setShowModal} formType='Add'></Popup>
 
          </div>
       </>

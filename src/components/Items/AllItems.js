@@ -13,7 +13,7 @@ import Item from './Items';
 const Date = styled(DatePicker)`
     width: 250px
 `;
-export default function AllItems({items, setItems, render, setRender}) {
+export default function AllItems({ items, setItems, render, setRender }) {
    const [val, setVal] = useState('');
 
    const [dateRange, setDateRange] = useState({ startDate: null, endDate: null });
@@ -24,7 +24,7 @@ export default function AllItems({items, setItems, render, setRender}) {
    const [filtr, setFilter] = useState({ filter: '_id', allActive: true, incomeActive: false, expenseActive: false, });
    const { filter, allActive, incomeActive, expenseActive } = filtr;
 
-   
+
    const handleOpen = () => {
       setOpen(true);
    };
@@ -93,11 +93,12 @@ export default function AllItems({items, setItems, render, setRender}) {
 
                      <span>
                         <span style={{ padding: '0px 5px' }}>
+
                            <LocalizationProvider dateAdapter={AdapterDayjs}>
                               <Date
                                  label='Start Date'
                                  name='startDate'
-                                 renderInput={(params) => <TextField {...params} />}
+                                 renderInput={(params) => <TextField {...params} size="small" />}
                                  value={startDate}
                                  onChange={((date) => setDateRange({ ...dateRange, startDate: date }))}
                               />
@@ -109,7 +110,7 @@ export default function AllItems({items, setItems, render, setRender}) {
                                  toolbarTitle='End Date'
                                  label='End Date'
                                  name='endDate'
-                                 renderInput={(params) => <TextField {...params} />}
+                                 renderInput={(params) => <TextField {...params} size="small" />}
                                  value={endDate}
                                  onChange={((date) => setDateRange({ ...dateRange, endDate: date }))}
                               />

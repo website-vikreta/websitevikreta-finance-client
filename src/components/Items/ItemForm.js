@@ -23,280 +23,269 @@ const StyledTable = styled(Table)`
 `;
 
 const ItemForm = (props) => {
-    
-    let user = JSON.parse(localStorage.getItem('user-info'));
-    
-    const [itemData, setItemData] = useState({ title: '', amount: '', category: '', paymentType: '', dateOfInvoice: null, dateOfPayment: null, description: '', paymentProof: '', userId: user.id });
-    const { title, amount, category, paymentType, dateOfInvoice, dateOfPayment, description, paymentProof, userId } = itemData;
-    
-    const { setRender, showModal, setShowModal } = props;
-  
-    var cookie = new Cookie();
-    cookie.set('user', userId, { path: '/' })
-    const [errors, setErrors] = useState({
-        title: {
-            value: title,
-            error: false,
-            errorMessage: ''
-        },
-        amount: {
-            value: amount,
-            error: false,
-            errorMessage: ''
-        },
-        category: {
-            value: category,
-            error: false,
-            errorMessage: ''
-        },
-        paymentType: {
-            value: paymentType,
-            error: false,
-            errorMessage: ''
-        },
-        dateOfInvoice: {
-            value: dateOfInvoice,
-            error: false,
-            errorMessage: ''
-        },
-        dateOfPayment: {
-            value: dateOfPayment,
-            error: false,
-            errorMessage: ''
-        }
-    })
-    const validateItemDetails = () => {
-        
-        const errorFields = Object.keys(errors);
-        let newErrorValues = { ...errors }
-        let values = Object.values(itemData)
-        let cnt = 0;
-        for (let index = 0; index < errorFields.length; index++) {
-            const currentField = errorFields[index];
-            const currentValue = values[index];
-            if (currentValue === '') {
-                cnt= cnt+1;
-                newErrorValues = {
-                    ...newErrorValues,
-                    [currentField]: {
-                        ...newErrorValues[currentField],
-                        error: true,
-                        errorMessage: 'This field is required'
-                    }
-                }
+
+   let user = JSON.parse(localStorage.getItem('user-info'));
+
+   const [itemData, setItemData] = useState({ title: '', amount: '', category: '', paymentType: '', dateOfInvoice: null, dateOfPayment: null, description: '', paymentProof: '', userId: user.id });
+   const { title, amount, category, paymentType, dateOfInvoice, dateOfPayment, description, paymentProof, userId } = itemData;
+
+   const { setRender, showModal, setShowModal } = props;
+
+   var cookie = new Cookie();
+   cookie.set('user', userId, { path: '/' })
+   const [errors, setErrors] = useState({
+      title: {
+         value: title,
+         error: false,
+         errorMessage: ''
+      },
+      amount: {
+         value: amount,
+         error: false,
+         errorMessage: ''
+      },
+      category: {
+         value: category,
+         error: false,
+         errorMessage: ''
+      },
+      paymentType: {
+         value: paymentType,
+         error: false,
+         errorMessage: ''
+      },
+      dateOfInvoice: {
+         value: dateOfInvoice,
+         error: false,
+         errorMessage: ''
+      },
+      dateOfPayment: {
+         value: dateOfPayment,
+         error: false,
+         errorMessage: ''
+      }
+   })
+   const validateItemDetails = () => {
+
+      const errorFields = Object.keys(errors);
+      let newErrorValues = { ...errors }
+      let values = Object.values(itemData)
+      let cnt = 0;
+      for (let index = 0; index < errorFields.length; index++) {
+         const currentField = errorFields[index];
+         const currentValue = values[index];
+         if (currentValue === '') {
+            cnt = cnt + 1;
+            newErrorValues = {
+               ...newErrorValues,
+               [currentField]: {
+                  ...newErrorValues[currentField],
+                  error: true,
+                  errorMessage: 'This field is required'
+               }
             }
+         }
 
-        }
+      }
 
-        setErrors(newErrorValues);
-        if(cnt === 0)  addItemDetails();
-    }
-    const addItemDetails = async () => {
-       
-        await createItem(itemData);
-        setShowModal({ ...showModal, openDialog: false });
-        setRender('addSet');
-    
-        toast.success("Item Added Successfully!!", {
-            position: "top-center",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            theme: "light",
-        });
-    }
+      setErrors(newErrorValues);
+      if (cnt === 0) addItemDetails();
+   }
+   const addItemDetails = async () => {
 
-    const clear = () => {
-        setItemData({ title: '', amount: '', category: '', paymentType: '', dateOfInvoice: null, dateOfPayment: null, description: '', paymentProof: '' });
-    }
-    
-    const onValueChange = (e) => {
+      await createItem(itemData);
+      setShowModal({ ...showModal, openDialog: false });
+      setRender('addSet');
 
-        setErrors({
-            ...errors,
-            [e.target.name]: {
-                ...errors[e.target.name],
-                error: false,
-                errorMessage: ''
-            }
-        })
-        setItemData({ ...itemData, [e.target.name]: e.target.value })
-    }
+      toast.success("Item Added Successfully!!", {
+         position: "top-center",
+         autoClose: 2000,
+         hideProgressBar: false,
+         closeOnClick: true,
+         theme: "light",
+      });
+   }
 
-    const handleImageData = (img) => {
-        
-        setItemData({ ...itemData, paymentProof: img });
-        const validExtensions = ['png', 'jpeg', 'jpg', 'pdf'];
-        const fileExtension = img.split(';')[0].split('/')[1]
-        if (!validExtensions.includes(fileExtension)) {
-            alert('File must be in img and pdf format');
-        }
-        const newRes = (img.length * (3 / 4)) - 2;
-        const size = (newRes / (1024 * 1024)); //1048576;2,560,181
+   const clear = () => {
+      setItemData({ title: '', amount: '', category: '', paymentType: '', dateOfInvoice: null, dateOfPayment: null, description: '', paymentProof: '' });
+   }
 
-        if (size > 1.5) {
-            alert('File limit exceed');
-        }
-        console.log(paymentProof);
-       
-    }
+   const onValueChange = (e) => {
 
-    return (
+      setErrors({
+         ...errors,
+         [e.target.name]: {
+            ...errors[e.target.name],
+            error: false,
+            errorMessage: ''
+         }
+      })
+      setItemData({ ...itemData, [e.target.name]: e.target.value })
+   }
 
-        <Container >
+   const handleImageData = (img) => {
 
-            <StyledTable>
-                <table>
-                    <thead></thead>
-                    <tbody>
-                        <tr>
-                            <td colSpan='2'>
-                                <FormLabel id="demo-controlled-radio-buttons-group">Item Title</FormLabel>
+      setItemData({ ...itemData, paymentProof: img });
+      const validExtensions = ['png', 'jpeg', 'jpg', 'pdf'];
+      const fileExtension = img.split(';')[0].split('/')[1]
+      if (!validExtensions.includes(fileExtension)) {
+         alert('File must be in img and pdf format');
+      }
+      const newRes = (img.length * (3 / 4)) - 2;
+      const size = (newRes / (1024 * 1024)); //1048576;2,560,181
 
-                                <TextField variant='outlined' fullWidth
-                                    type={'text'} onChange={(e) => onValueChange(e)}
-                                    error={(errors.title.error)}
-                                    helperText={(errors.title.error && errors.title.errorMessage)}
+      if (size > 1.5) {
+         alert('File limit exceed');
+      }
+      console.log(paymentProof);
 
-                                    name='title' value={title}
-                                ></TextField>
+   }
 
-                            </td>
+   return (
 
-                        </tr>
-                        <tr >
-                            <td colSpan='2'>
-                                <FormLabel id="demo-controlled-radio-buttons-group">Amount</FormLabel>
+      <Container >
 
-                                <TextField type={'text'} onChange={(e) => onValueChange(e)}
-                                    name='amount' fullWidth
-                                    error={(errors.amount.error) || (amount !== '' && !amount.match(/^\d+$/))}
-                                    helperText={(errors.amount.error && errors.amount.errorMessage) || (!amount.match(/^\d+$/) && amount !== '' ? 'Only digits are allowed' : ' ')}
-                                    value={amount}
-                                ></TextField>
+         <StyledTable>
+            <table>
+               <tbody>
+                  <tr>
+                     <td colSpan='2'>
+                        <FormLabel id="demo-controlled-radio-buttons-group">Item Title</FormLabel>
 
-                            </td>
-                        </tr>
+                        <TextField variant='outlined' fullWidth
+                           type={'text'} onChange={(e) => onValueChange(e)}
+                           error={(errors.title.error)}
+                           helperText={(errors.title.error && errors.title.errorMessage)}
+                           name='title' value={title}
+                           size="small"
+                        ></TextField>
 
-                        <tr>
-                            <td colSpan='2' >
-                                <FormLabel id="demo-controlled-radio-buttons-group">Category</FormLabel>
+                     </td>
+                  </tr>
+                  <tr >
+                     <td colSpan='2'>
+                        <FormLabel id="demo-controlled-radio-buttons-group">Amount</FormLabel>
 
-                                <TextField fullWidth
-                                    type={'text'} onChange={(e) => onValueChange(e)}
-                                    name='category'
-                                    error={(errors.category.error)}
-                                    helperText={(errors.category.error && errors.category.errorMessage)}
-                                    value={category}
-                                ></TextField>
+                        <TextField type={'text'} onChange={(e) => onValueChange(e)}
+                           name='amount' fullWidth
+                           error={(errors.amount.error) || (amount !== '' && !amount.match(/^\d+$/))}
+                           helperText={(errors.amount.error && errors.amount.errorMessage) || (!amount.match(/^\d+$/) && amount !== '' ? 'Only digits are allowed' : ' ')}
+                           value={amount}
+                           size="small"
+                        ></TextField>
 
-                            </td>
+                     </td>
+                  </tr>
 
-                        </tr>
-                        <tr>
-                            <td className='tr-row'>
-                                <FormLabel id="demo-controlled-radio-buttons-group">Payment Type</FormLabel>
+                  <tr>
+                     <td colSpan='2' >
+                        <FormLabel id="demo-controlled-radio-buttons-group">Category</FormLabel>
 
-                                <RadioGroup row
-                                    aria-labelledby="demo-controlled-radio-buttons-group"
-                                    name="paymentType"
-                                    value={paymentType}
-                                    onChange={(e) => onValueChange(e)}
-                                >
-                                    <FormControlLabel value="Income" control={<Radio required={true} />} label="Income" />
-                                    <FormControlLabel value="Expense" control={<Radio required={true} />} label="Expense" />
-                                </RadioGroup>
-                                <FormHelperText error>{errors.paymentType.errorMessage}</FormHelperText>
+                        <TextField fullWidth
+                           type={'text'} onChange={(e) => onValueChange(e)}
+                           name='category'
+                           error={(errors.category.error)}
+                           helperText={(errors.category.error && errors.category.errorMessage)}
+                           value={category}
+                           size="small"
+                        ></TextField>
 
-                            </td>
-                        </tr>
-                        <tr >
-                            <td className='tr-row'>
-                                <FormLabel id="demo-controlled-radio-buttons-group">Date of Invoice</FormLabel>
+                     </td>
 
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <Date
-                                        name='dateOfInvoice'
-                                        renderInput={(params) => <TextField {...params} />}
-                                        value={dateOfInvoice}
-                                        onChange={((date) => setItemData({ ...itemData, dateOfInvoice: date }))}
+                  </tr>
+                  <tr>
+                     <td className='tr-row'>
+                        <FormLabel id="demo-controlled-radio-buttons-group">Payment Type</FormLabel>
 
-                                    />
-                                </LocalizationProvider>
-                            </td>
-                            <td>
-                                <FormLabel id="demo-controlled-radio-buttons-group">Date of Payment</FormLabel>
+                        <RadioGroup row
+                           aria-labelledby="demo-controlled-radio-buttons-group"
+                           name="paymentType"
+                           value={paymentType}
+                           onChange={(e) => onValueChange(e)}
+                        >
+                           <FormControlLabel value="Income" control={<Radio required={true} />} label="Income" />
+                           <FormControlLabel value="Expense" control={<Radio required={true} />} label="Expense" />
+                        </RadioGroup>
+                        <FormHelperText error>{errors.paymentType.errorMessage}</FormHelperText>
 
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <Date
-                                        name='dateOfPayment'
-                                        renderInput={(params) => <TextField {...params} />}
-                                        value={dateOfPayment}
-                                        onChange={((date) => setItemData({ ...itemData, dateOfPayment: date }))}
-                                    />
-                                </LocalizationProvider>
+                     </td>
+                  </tr>
+                  <tr >
+                     <td className='tr-row'>
+                        <FormLabel id="demo-controlled-radio-buttons-group">Date of Invoice</FormLabel>
 
-                            </td>
-                        </tr>
-                        <tr >
-                            <td colSpan='2' className='tr-row'>
-                                <FormLabel id="demo-controlled-radio-buttons-group">Description</FormLabel>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                           <Date
+                              name='dateOfInvoice'
+                              renderInput={(params) => <TextField {...params} size="small" />}
+                              value={dateOfInvoice}
+                              onChange={((date) => setItemData({ ...itemData, dateOfInvoice: date }))}
 
-                                <TextField
-                                    multiline rows={5}
-                                    fullWidth
-                                    type={'text'} onChange={(e) => onValueChange(e)}
-                                    name='description'
-                                    value={description}
-                                ></TextField>
+                           />
+                        </LocalizationProvider>
+                     </td>
+                     <td>
+                        <FormLabel id="demo-controlled-radio-buttons-group">Date of Payment</FormLabel>
 
-                            </td>
-                        </tr>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                           <Date
+                              name='dateOfPayment'
+                              renderInput={(params) => <TextField {...params} size="small" />}
+                              value={dateOfPayment}
+                              onChange={((date) => setItemData({ ...itemData, dateOfPayment: date }))}
+                           />
+                        </LocalizationProvider>
 
-                        <tr>
-                            <td colSpan='2' className='tr-row'>
-                                <FormLabel id="demo-controlled-radio-buttons-group">Payment Proof</FormLabel>
-                                <br/>
-                                <span className="input-file" >
-                                    <FileBase64
-                                        type="file"
-                                        sx={{ display: 'none' }}
-                                        multiple={false}
-                                        onDone={({ base64 }) => { handleImageData(base64) }}
-                                    />
-                                </span>
-                                
-                            </td>
-                        </tr>
+                     </td>
+                  </tr>
+                  <tr >
+                     <td colSpan='2' className='tr-row'>
+                        <FormLabel id="demo-controlled-radio-buttons-group">Description</FormLabel>
 
-                        <tr className='tr-row'>
-                            <td>
-                                <Button variant="contained" color="primary" onClick={() => clear()} sx={{
-                                    color: 'red', backgroundColor: '#ffe6e6', borderColor: 'red', ':hover': {
-                                        bgcolor: '#ffe6e6',
-                                        color: 'red',
-                                    }
-                                }}>Reset</Button>
-                            </td>
-                            <td align='right'>
-                                <Button variant="contained" color="primary" onClick={() => validateItemDetails()} sx={{
-                                    color: 'white', backgroundColor: '#7700FF', borderColor: 'white', ':hover': {
-                                        bgcolor: '#7700FF',
-                                        color: 'black',
-                                    }
-                                }}>Add Item</Button>
-                            </td>
-                        </tr>
+                        <TextField
+                           multiline rows={5}
+                           fullWidth
+                           type={'text'} onChange={(e) => onValueChange(e)}
+                           name='description'
+                           value={description}
+                           size="small"
+                        ></TextField>
 
-                    </tbody>
+                     </td>
+                  </tr>
 
-                </table>
-            </StyledTable>
+                  <tr>
+                     <td colSpan='2' className='tr-row'>
+                        <FormLabel id="demo-controlled-radio-buttons-group">Payment Proof</FormLabel>
+                        <br />
+                        <span className="input-file" >
+                           <FileBase64
+                              type="file"
+                              sx={{ display: 'none' }}
+                              multiple={false}
+                              onDone={({ base64 }) => { handleImageData(base64) }}
+                              size="small"
+                           />
+                        </span>
 
-        </Container >
+                     </td>
+                  </tr>
+               </tbody>
+            </table>
+            <div className="d-flex justify-content-between">
+               <button className="btn btn-danger" onClick={() => clear()}>
+                  Reset
+               </button>
+               <button className="btn btn-primary" onClick={() => validateItemDetails()}>
+                  Add Item
+               </button>
+            </div>
+         </StyledTable>
+
+      </Container >
 
 
-    );
+   );
 }
 
 export default ItemForm;
