@@ -12,7 +12,7 @@ import styled from "@emotion/styled";
 
 import { createItem } from '../../api/index';
 import '../../styles/ItemForm.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Date = styled(DatePicker)`
     width: 250px
@@ -70,6 +70,7 @@ const ItemForm = (props) => {
 
    function validateItemDetails() {
       setIsLoading(true);
+      console.log(isLoading);
       buttonRef.current.disabled = true;
 
       const errorFields = Object.keys(errors);
