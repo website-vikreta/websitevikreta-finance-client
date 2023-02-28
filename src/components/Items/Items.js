@@ -1,5 +1,5 @@
 
-import React from 'react'
+import React  from 'react'
 import { useState, useEffect } from 'react';
 // import { Link } from 'react-router-dom';
 import { subDays } from 'date-fns';
@@ -13,8 +13,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
-import { Grid } from '@mui/material';
-
+import { Box,  Button,  CircularProgress, Grid } from '@mui/material';
+import {utils, writeFileXLSX}  from 'xlsx';
 import { getItems, getMedia, deleteItem } from '../../api/index';
 import '../../styles/item.css';
 // Import Components
@@ -31,9 +31,10 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
    const [showModal, setShowModal] = useState({ openDialog: false, currItem: '' });
    const [showImgModal, setShowImgModal] = useState({ openImgDialog: false, id: '', paymentType: '', image: '' });
    const [delModal, setDelModal] = useState({ openDelDialog: false, deleteId: null });
+
    const [page, setPage] = useState(1);
    const handlePageChange = (page) => setPage(page);
-  
+
    const getAllItems = async () => {
       let res = localStorage.getItem('user-info');
       let response = await getItems(JSON.parse(res).id);
@@ -112,7 +113,7 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
 
             const quartr = getQuarter(currentDate.getMonth() + 1);
             if (quartr === 1) return thisQuarter(currentDate, now, month, 4, item);
-            if (quartr === 4 ) return lastQuarter(currentDate, now, month, item);
+            if (quartr === 4) return lastQuarter(currentDate, now, month, item);
             return thisQuarter(currentDate, now, month, quartr - 1, item);
 
          } else if (dateFilter === 6) {
@@ -190,7 +191,7 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
          cell: (row, index) => (page - 1) * rowsPerPage + index + 1,
          sortable: true,
          width: '90px',
-         
+
 
       },
       {
@@ -198,28 +199,28 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
          selector: row => row.title,
          cell: row => <><div className="cell-with-tooltip" title={row.title}>{row.title}</div></>,
          sortable: true,
-         
+
       },
       {
          name: 'Amount',
          selector: row => row.amount,
          cell: row => <><div className="cell-with-tooltip" title={row.amount}>{row.amount}</div></>,
          sortable: true,
-        
+
 
       },
       {
          name: 'Category',
          cell: row => <><div className="cell-with-tooltip" title={row.category}>{row.category}</div></>,
          sortable: true,
-       
+
 
       },
 
       {
          name: 'Payment Type',
          cell: row => <><div className="cell-with-tooltip" title={row.paymentType}>{row.paymentType}</div></>,
-        
+
       },
       {
          name: 'Date of Invoice',
@@ -227,7 +228,7 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
          cell: row => <><div className="cell-with-tooltip" title={formatedate(new Date(row.dateOfInvoice))}>{formatedate(new Date(row.dateOfInvoice))}</div></>,
          sortable: true,
          width: '135px',
-         
+
       },
       {
          name: 'Date of Payment',
@@ -235,12 +236,12 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
          cell: row => <><div className="cell-with-tooltip" title={formatedate(new Date(row.dateOfPayment))}>{formatedate(new Date(row.dateOfPayment))}</div></>,
          sortable: true,
          width: '145px',
-        
+
       },
       {
          name: 'Description',
          cell: row => <><div className="cell-with-tooltip" title={row.description}>{row.description}</div></>,
-        
+
       },
       {
          name: 'Payment Proof',
@@ -271,9 +272,10 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
    ];
 
 
+   //Custom Sort on Data Table
    const customSort = (rows, selector, direction) => {
       return rows.sort((firstRow, secondRow) => {
-         // use the selector function to resolve your field names by passing the sort comparitors
+         
          const firstRowField = selector(firstRow)
          const secondRowField = selector(secondRow)
 
@@ -306,7 +308,18 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
 
    };
 
-
+   //Export Table Data -> Excel
+   const handleDownloadExcel = (dataSource, sheetName, fileName) => {
+      const ws = utils.json_to_sheet(dataSource);
+      const wb = utils.book_new();
+      utils.book_append_sheet(wb, ws, sheetName);
+      writeFileXLSX(wb, `${fileName}.xlsx`);
+    };
+   
+    const donwloadExcel = () => {
+      handleDownloadExcel(filteredElements, "ITEMS_SHEET", "ALL_ITEMS");
+    }
+   
    return (
 
       <Grid className='tableWrapper' container alignContent={'center'}>
@@ -315,8 +328,10 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
          <DeletePopup delModal={delModal} setDelModal={setDelModal} confirm={confirm}></DeletePopup>
          <PopupImage showImgModal={showImgModal} setShowImgModal={setShowImgModal}></PopupImage>
          <ToastContainer />
-         <div style={{width: '100%'}}>
+         {filteredElements !== '' && filteredElements.length !== 0 && filteredElements !== null ? <div style={{ width: '100%' }}>
+           
             <DataTable
+
                columns={columns}
                data={filteredElements}
                sortFunction={customSort}
@@ -332,14 +347,14 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
                   noRowsPerPage: false,
                   selectAllRowsItem: false,
                   selectAllRowsItemText: "All",
-                }}
-               
+               }}
+
                subHeader
                subHeaderComponent={
                   <div className='tableSubHeaderComponent'>
                      <div className='headingWrapper'>
                         <h5 className='heading heading-two'>All records</h5>
-                        {/* <Link to="/all">View All Records</Link> */}
+                        <Button onClick={donwloadExcel}>Export Excel</Button>
                      </div>
                      <input
                         type='text'
@@ -352,8 +367,14 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
                }
                onChangePage={handlePageChange}
                highlightOnHover
-            />
-         </div>
+            /></div>
+            :
+            <Box sx={{ display: 'flex', justifyContent: "center", alignItems: "center" }}>
+               Loading... &nbsp;
+               <CircularProgress />
+            </Box>
+         }
+
 
       </Grid>
    );

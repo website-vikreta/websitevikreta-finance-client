@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, BarElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { getItems } from '../../api';
+import { Box, CircularProgress } from '@mui/material';
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -13,10 +14,10 @@ ChartJS.register(
   BarElement
 );
 
-const BarChart = ({items}) => {
+const BarChart = ({ items }) => {
 
   const [Data, setData] = useState([]);
-
+  
   useEffect(() => {
     const getAllItems = async () => {
       document.title = 'Home | WV Finance'
@@ -32,10 +33,10 @@ const BarChart = ({items}) => {
       currData.push(expenseTotal);
       currData.push(profitTotal);
       setData(currData);
-     
+
     }
     getAllItems();
-  },[items]);
+  }, [items]);
 
 
   function getTotalYears(items) {
@@ -64,8 +65,8 @@ const BarChart = ({items}) => {
     var profitTotal = Array.from({ length: incomeTotal.length }, () => { return 0 });
     for (var i = 0; i < incomeTotal.length; i++) {
       let profit = incomeTotal[i] - expenseTotal[i];
-      profitTotal[i] =  profit > 0 ? profit: 0;
-     
+      profitTotal[i] = profit > 0 ? profit : 0;
+
     }
     return profitTotal;
   }
@@ -115,14 +116,19 @@ const BarChart = ({items}) => {
       <div>
         <span> <strong>Overall Summary</strong> </span>
       </div>
-      <div>
-        <Bar
-          data={data}
-          height={400}
-          options={options}
+      {Data.length === 0 ? <Box sx={{ display: 'flex', justifyContent: "center", alignItems: "center" }}>
+                    Loading... &nbsp;
+                    <CircularProgress />
+                </Box> :
+        <div>
+          <Bar
+            data={data}
+            height={400}
+            options={options}
 
-        />
-      </div>
+          />
+        </div>
+      }
     </div>
   )
 }

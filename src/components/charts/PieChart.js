@@ -3,6 +3,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { getItems } from '../../api';
 
 import { Pie } from 'react-chartjs-2';
+import { Box, CircularProgress } from '@mui/material';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -10,7 +11,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 const PieChart = ({items}) => {
 
   const [Data, setData] = useState([]);
-
+ 
   useEffect(() => {
     const getAllItems = async () => {
       let res = localStorage.getItem('user-info');
@@ -68,14 +69,21 @@ const PieChart = ({items}) => {
       <div>
         <span> <strong>This Year</strong> </span>
       </div>
+      {
+         Data.length === 0 ? <Box sx={{ display: 'flex', justifyContent: "center", alignItems: "center" }}>
+         Loading... &nbsp;
+         <CircularProgress />
+     </Box> : 
       <div>
-        <Pie
-          data={data}
-          height={400}
-          options={options}
+      <Pie
+        data={data}
+        height={400}
+        options={options}
 
-        />
-      </div>
+      />
+    </div>
+      }
+     
     </div>
   )
 }

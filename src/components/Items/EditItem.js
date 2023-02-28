@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import FileBase64 from 'react-file-base64';
 import Cookie from 'universal-cookie';
 import { toast } from 'react-toastify';
@@ -35,6 +35,7 @@ const EditItem = (props) => {
     const { setRender, cItem, showModal, setShowModal } = props;
     const id = cItem._id;
     cookie.set('user', userId, { path: '/' });
+    const buttonRef = useRef(null);
 
     useEffect(() => {
         const loadItemDetails = async () => {
@@ -84,7 +85,8 @@ const EditItem = (props) => {
 
     function validateItemDetails(){
         setIsLoading(true);
-        console.log('loigng', isLoading)
+        buttonRef.current.disabled = true;
+        
         const errorFields = Object.keys(errors);
         let newErrorValues = { ...errors }
         let values = Object.values(item)
@@ -112,7 +114,6 @@ const EditItem = (props) => {
         console.log('loigfggggggggggng', isLoading)
         setIsLoading(false);
         console.log('lossssssssssssssigng', isLoading)
-        
     }
     const editItemDetails = async () => {
         await updateItem(id, item);
@@ -275,17 +276,15 @@ const EditItem = (props) => {
                                 }}>Reset</Button>
                             </td>
                             <td align='right'>
-                                <Button variant="contained" color="primary" onClick={() => validateItemDetails()} sx={{
+                                <Button variant="contained" color="primary" ref={buttonRef} onClick={() => validateItemDetails()} sx={{
                                     color: 'white', backgroundColor: '#7700FF', borderColor: 'white', ':hover': {
                                         bgcolor: '#7700FF',
                                         color: 'black',
                                     }
                                 }} disabled={buttonDisabled}> {isLoading ? (
                                     <FontAwesomeIcon icon="spinner" spin />
-                                  ) : (
-                                    <FontAwesomeIcon icon="spinner"  />
-                                  )}
-                                  {isLoading ? 'Loading...' : 'Click me'}</Button>
+                                  ) : <FontAwesomeIcon icon="edit"  />}
+                                  {isLoading ? 'Loading...' : 'Edit'}</Button>
                             </td>
                         </tr>
 

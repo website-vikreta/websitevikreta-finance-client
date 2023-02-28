@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import FileBase64 from 'react-file-base64';
 import { toast } from 'react-toastify';
 import Cookie from 'universal-cookie';
@@ -31,7 +31,7 @@ const ItemForm = (props) => {
 
     const { setRender, showModal, setShowModal } = props;
     const [isLoading, setIsLoading] = useState(false);
-
+    const buttonRef = useRef(null);
 
     var cookie = new Cookie();
     cookie.set('user', userId, { path: '/' })
@@ -70,6 +70,8 @@ const ItemForm = (props) => {
     
     function validateItemDetails(){
         setIsLoading(true);
+        buttonRef.current.disabled = true;
+        
         const errorFields = Object.keys(errors);
         let newErrorValues = { ...errors }
         let values = Object.values(itemData)
@@ -286,7 +288,7 @@ const ItemForm = (props) => {
                                 }}>Reset</Button>
                             </td>
                             <td align='right'>
-                                <Button variant="contained" color="primary" onClick={() => validateItemDetails()} sx={{
+                                <Button variant="contained" color="primary" ref={buttonRef} onClick={() => validateItemDetails()} sx={{
                                     color: 'white', backgroundColor: '#7700FF', borderColor: 'white', ':hover': {
                                         bgcolor: '#7700FF',
                                         color: 'black',

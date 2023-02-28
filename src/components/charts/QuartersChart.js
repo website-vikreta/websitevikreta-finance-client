@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, BarElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { getItems } from '../../api';
+import { Box, CircularProgress } from '@mui/material';
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -16,14 +17,14 @@ ChartJS.register(
 const QuartersChart = ({ items }) => {
 
     const [Data, setData] = useState([]);
-
+   
     useEffect(() => {
         const getAllItems = async () => {
             let res = localStorage.getItem('user-info');
             let response = await getItems(JSON.parse(res).id);
             let thisYear = new Date();
             let currData = [];
-            let quartr = getQuarter(thisYear.getMonth()+1);
+            let quartr = getQuarter(thisYear.getMonth() + 1);
             let incomeTotal = getTotal(response.data, 'Income', thisYear, quartr);
             let expenseTotal = getTotal(response.data, 'Expense', thisYear, quartr);
             let profitTotal = getProfit(incomeTotal, expenseTotal);
@@ -41,8 +42,8 @@ const QuartersChart = ({ items }) => {
     function getProfit(incomeTotal, expenseTotal) {
         var profitTotal = Array.from({ length: 4 }, () => { return 0 });
         for (var i = 0; i < incomeTotal.length; i++) {
-            let profit = incomeTotal[i] - expenseTotal[i]; 
-            profitTotal[i] =  profit > 0 ? profit: 0;
+            let profit = incomeTotal[i] - expenseTotal[i];
+            profitTotal[i] = profit > 0 ? profit : 0;
 
         }
         return profitTotal;
@@ -57,7 +58,7 @@ const QuartersChart = ({ items }) => {
             let currentDate = new Date(currentItem.dateOfInvoice);
             let currentMonth = currentDate.getMonth() + 1;
 
-            if(quartr === 4){
+            if (quartr === 4) {
                 if (currentDate.getFullYear() === (thisYear.getFullYear() - 1)) {
                     if (currentMonth >= 4 && currentMonth <= 6) {
 
@@ -67,12 +68,12 @@ const QuartersChart = ({ items }) => {
                     } else if (currentMonth >= 10 && currentMonth <= 12) {
                         total[2] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
                     }
-                }else if(currentDate.getFullYear() === thisYear.getFullYear()) {
+                } else if (currentDate.getFullYear() === thisYear.getFullYear()) {
                     if (currentMonth <= 3) {
                         total[3] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
                     }
                 }
-            }else{
+            } else {
                 if (currentDate.getFullYear() === thisYear.getFullYear()) {
                     if (currentMonth >= 4 && currentMonth <= 6) {
                         total[0] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
@@ -81,7 +82,7 @@ const QuartersChart = ({ items }) => {
                     } else if (currentMonth >= 10 && currentMonth <= 12) {
                         total[2] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
                     }
-                }else if(currentDate.getFullYear() === thisYear.getFullYear()+1) {
+                } else if (currentDate.getFullYear() === thisYear.getFullYear() + 1) {
                     if (currentMonth <= 3) {
                         total[3] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
                     }
@@ -110,7 +111,7 @@ const QuartersChart = ({ items }) => {
         else if (month >= 10 && month <= 12) return 3;
         else return 4;
     }
-   
+
 
 
     var data = {
@@ -157,14 +158,20 @@ const QuartersChart = ({ items }) => {
             <div>
                 <span> <strong>Overall Summary</strong> </span>
             </div>
-            <div>
-                <Bar
-                    data={data}
-                    height={400}
-                    options={options}
+            {Data.length === 0 ? <Box sx={{ display: 'flex', justifyContent: "center", alignItems: "center" }}>
+                Loading... &nbsp;
+                <CircularProgress />
+            </Box> :
+                <div>
+                    <Bar
+                        data={data}
+                        height={400}
+                        options={options}
 
-                />
-            </div>
+                    />
+                </div>
+
+            }
         </div>
     )
 }

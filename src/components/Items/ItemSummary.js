@@ -6,10 +6,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 library.add(fas);
 
-const ItemsTable = ({items}) => {
+const ItemsTable = ({ items }) => {
 
    //const [isArrowUp, setArrowUp] = useState({thisMonth: false, thisQuarter: false, thisYear: false, lastMonth: false, lastQuarter: false, lastYear: false });
-  
+
    function getIncome(item, type) {
       if (item.paymentType === type) return item.amount;
       else return null;
@@ -26,7 +26,7 @@ const ItemsTable = ({items}) => {
       if (getQuarter(quartr === 4)) {
          if (currentDate.getFullYear() === now.getFullYear() && (month <= 3)) {
             return item;
-         } else{
+         } else {
             return null;
          }
       } else if (currentDate.getFullYear() === now.getFullYear()) {
@@ -139,7 +139,7 @@ const ItemsTable = ({items}) => {
    const currQuartrMonths = qaurters[currQuartr - 1];
    var currQuartrYear1 = currentDate.getFullYear();
    var currQuartrYear2 = currentDate.getFullYear();
-  
+
 
    // Calculate Last Quarter Months Details
    var lastQuartrMonths = qaurters[currQuartr - 2];
@@ -161,7 +161,10 @@ const ItemsTable = ({items}) => {
    const currQuarterProfitArrow = currQaurtrTotalIncome >= currQaurtrTotalExpense;
    const lastQuarterProfitArrow = lastQaurtrTotalIncome >= lastQaurtrTotalExpense;
 
-  
+   const profitPercentage = (income, expense) => income === 0 && expense === 0 ? 0 : expense === 0 ? 100 : Math.round(((((income - expense) / expense) * 100) + Number.EPSILON) * 100) / 100;
+   const lossPercentage = (income, expense) => Math.round(((((expense - income) / expense) * 100) + Number.EPSILON) * 100) / 100;
+   
+   
    return (
 
       // Defining Structure
@@ -186,8 +189,13 @@ const ItemsTable = ({items}) => {
                         <span className='digits green'>₹ {currency(currMonthTotalProfit)}</span>
                         <span className='label'>Profit</span>
                      </div>
-                     {currMonthProfitArrow ? (<FontAwesomeIcon icon="arrow-up" style={{width: '25px', height: '70px', color: 'white'}}/>) : (<FontAwesomeIcon icon="arrow-down" style={{width: '25px', height: '50px', color: 'red'}}/> )}
-                    
+                     <div>
+                        <span>
+                        {currMonthProfitArrow ? (<FontAwesomeIcon icon="arrow-up" style={{ padding: 0, margin:0, width: '25px', height: '50px', color: 'white' }} />) : (<FontAwesomeIcon icon="arrow-down" style={{ width: '25px', height: '50px', color: 'white' }} />)}
+                        {(currMonthTotalIncome >= currMonthTotalExpense) ? <strong style={{  color: 'white ' }}>{profitPercentage(currMonthTotalIncome, currMonthTotalExpense)+'%'}</strong> :  <strong style={{  color: 'white ' }}>{lossPercentage(currMonthTotalIncome, currMonthTotalExpense)+'%'}</strong>}
+                  
+                        </span>
+                     </div>
                   </div>
                   <hr />
                   <div className='cardHeading'>This Month ({currentMonth + ' ' + currentDate.getFullYear()})</div>
@@ -207,11 +215,16 @@ const ItemsTable = ({items}) => {
                      <div className="item">
                         <span className='digits green'>₹ {currency(lastMonthTotalProfit)}</span>
                         <span className='label'>Profit </span>
-                        
+
                      </div>
-                     {lastMonthProfitArrow? (<FontAwesomeIcon icon="arrow-up" style={{width: '25px', height: '50px', color: 'green'}}/>) : (<FontAwesomeIcon icon="arrow-down" style={{width: '25px', height: '50px', color: 'red'}}/> )}
-                    
-                    
+                      <div>
+                        <span>
+                        {lastMonthProfitArrow ? (<FontAwesomeIcon icon="arrow-up" style={{ padding: 0, margin:0, width: '25px', height: '50px', color: 'green' }} />) : (<FontAwesomeIcon icon="arrow-down" style={{ width: '25px', height: '50px', color: 'red' }} />)}
+                        {(lastMonthTotalIncome >= lastMonthTotalExpense) ? <strong style={{  color: 'green ' }}>{profitPercentage(lastMonthTotalIncome, lastMonthTotalExpense)+'%'}</strong> :  <strong style={{  color: 'red ' }}>{lossPercentage(lastMonthTotalIncome, lastMonthTotalExpense)+'%'}</strong>}
+                  
+                        </span>
+                     </div>
+
                   </div>
                   <hr />
                   <div className='cardHeading'>Last Month ({lastMonth + ' ' + lastMonthYear})</div>
@@ -233,8 +246,13 @@ const ItemsTable = ({items}) => {
                         <span className='digits green'>₹ {currency(currQaurtrTotalProfit)}</span>
                         <span className='label'>Profit</span>
                      </div>
-                     {currQuarterProfitArrow? (<FontAwesomeIcon icon="arrow-up" style={{width: '25px', height: '50px', color: 'green'}}/>) : (<FontAwesomeIcon icon="arrow-down" style={{width: '25px', height: '50px', color: 'red'}}/> )}
-                    
+                     <div>
+                        <span>
+                        {currQuarterProfitArrow ? (<FontAwesomeIcon icon="arrow-up" style={{ padding: 0, margin:0, width: '25px', height: '50px', color: 'green' }} />) : (<FontAwesomeIcon icon="arrow-down" style={{ width: '25px', height: '50px', color: 'red' }} />)}
+                        {(currQaurtrTotalIncome >= currQaurtrTotalExpense) ? <strong style={{  color: 'green ' }}>{profitPercentage(currQaurtrTotalIncome, currQaurtrTotalExpense)+'%'}</strong> :  <strong style={{  color: 'red ' }}>{lossPercentage(currQaurtrTotalIncome, currQaurtrTotalExpense)+'%'}</strong>}
+                  
+                        </span>
+                     </div>
                   </div>
                   <hr />
                   <div className='cardHeading this'>This Quarter ({currQuartrMonths[0] + (currQuartrYear1 % 100) + ' - ' + currQuartrMonths[1] + (currQuartrYear2 % 100)})</div>
@@ -253,8 +271,12 @@ const ItemsTable = ({items}) => {
                         <span className='digits green'>₹ {currency(lastQaurtrTotalProfit)}</span>
                         <span className='label'>Profit</span>
                      </div>
-                     {lastQuarterProfitArrow? (<FontAwesomeIcon icon="arrow-up" style={{width: '25px', height: '50px', color: 'green'}}/>) : (<FontAwesomeIcon icon="arrow-down" style={{width: '25px', height: '50px', color: 'red'}}/> )}
-                    
+                     <div>
+                        <span>
+                        {lastQuarterProfitArrow ? (<FontAwesomeIcon icon="arrow-up" style={{ padding: 0, margin:0, width: '25px', height: '50px', color: 'green' }} />) : (<FontAwesomeIcon icon="arrow-down" style={{ width: '25px', height: '50px', color: 'red' }} />)}
+                        {(lastQaurtrTotalIncome >= lastQaurtrTotalExpense) ? <strong style={{  color: 'green ' }}>{profitPercentage(lastQaurtrTotalIncome, lastQaurtrTotalExpense)+'%'}</strong> :  <strong style={{  color: 'red ' }}>{lossPercentage(lastQaurtrTotalIncome, lastQaurtrTotalExpense)+'%'}</strong>}
+                        </span>
+                     </div>
                   </div>
                   <hr />
                   <div className='cardHeading'>Last Quarter ({lastQuartrMonths[0] + (lastQuartrYear1 % 100) + ' - ' + lastQuartrMonths[1] + (lastQuartrYear2 % 100)})</div>
@@ -276,8 +298,13 @@ const ItemsTable = ({items}) => {
                         <span className='digits green'>₹ {currency(currentYearTotalProfit)}</span>
                         <span className='label'>Profit</span>
                      </div>
-                     {thisYearProfitArrow? (<FontAwesomeIcon icon="arrow-up" style={{width: '25px', height: '50px', color: 'green'}}/>) : (<FontAwesomeIcon icon="arrow-down" style={{width: '25px', height: '50px', color: 'red'}}/> )}
-                    
+                     <div>
+                        <span>
+                        {thisYearProfitArrow ? (<FontAwesomeIcon icon="arrow-up" style={{ padding: 0, margin:0, width: '25px', height: '50px', color: 'green' }} />) : (<FontAwesomeIcon icon="arrow-down" style={{ width: '25px', height: '50px', color: 'red' }} />)}
+                        {(currentYearTotalIncome >= currentYearTotalExpense) ? <strong style={{  color: 'green ' }}>{profitPercentage(currentYearTotalIncome, currentYearTotalExpense)+'%'}</strong> :  <strong style={{  color: 'red ' }}>{lossPercentage(currentYearTotalIncome, currentYearTotalExpense)+'%'}</strong>}
+                  
+                        </span>
+                     </div>
                   </div>
                   <hr />
                   <div className='cardHeading this'>This Year ({new Date().getFullYear()})</div>
@@ -297,8 +324,11 @@ const ItemsTable = ({items}) => {
                         <span className='digits green'>₹ {currency(lastYearTotalProfit)}</span>
                         <span className='label'>Profit</span>
                      </div>
-                     {lastYearProfitArrow? (<FontAwesomeIcon icon="arrow-up" style={{width: '25px', height: '50px', color: 'green'}}/>) : (<FontAwesomeIcon icon="arrow-down" style={{width: '25px', height: '50px', color: 'red'}}/> )}
-                    
+                     <span>
+                     {lastYearProfitArrow ? (<FontAwesomeIcon icon="arrow-up" style={{ width: '25px', height: '50px', color: 'green' }} />) : (<FontAwesomeIcon icon="arrow-down" style={{ width: '25px', height: '50px', color: 'red' }} />)}
+                     {(lastYearTotalIncome >= lastYearTotalExpense) ? <strong style={{  color: 'green ' }}>{profitPercentage(lastYearTotalIncome, lastYearTotalExpense)+'%'}</strong> : <strong style={{  color: 'green ' }}>{lossPercentage(lastYearTotalIncome, lastYearTotalExpense)+'%'}</strong>}
+
+                     </span>
                   </div>
                   <hr />
                   <div className='cardHeading'>Last Year  ({lastYear})</div>
