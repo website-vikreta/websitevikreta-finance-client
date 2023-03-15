@@ -326,7 +326,7 @@ const ItemsTable = ({ items }) => {
                      </div>
                      <span>
                      {lastYearProfitArrow ? (<FontAwesomeIcon icon="arrow-up" style={{  width: '15px', height: '50px', color: 'green' }} />) : (<FontAwesomeIcon icon="arrow-down" style={{  width: '15px', height: '50px', color: 'red' }} />)}
-                     {(lastYearTotalIncome >= lastYearTotalExpense) ? <strong style={{  color: 'green ' }}>{profitPercentage(lastYearTotalIncome, lastYearTotalExpense)+'%'}</strong> : <strong style={{  color: 'green ' }}>{lossPercentage(lastYearTotalIncome, lastYearTotalExpense)+'%'}</strong>}
+                     {(lastYearTotalIncome >= lastYearTotalExpense) ? <strong style={{  color: 'green ' }}>{profitPercentage(lastYearTotalIncome, lastYearTotalExpense)+'%'}</strong> : <strong style={{  color: 'red ' }}>{lossPercentage(lastYearTotalIncome, lastYearTotalExpense)+'%'}</strong>}
 
                      </span>
                   </div>

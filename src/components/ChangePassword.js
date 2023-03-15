@@ -46,7 +46,7 @@ function ChangePassword() {
     } catch (error) {
       console.log('eorrr', error);
     }
-    if (!String(newPassword).match("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")) {
+    if (!String(newPassword).match("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")) {
       setError("Password must contains Minimum eight characters, at least one letter, one number!");
       return;
     } else { setError('') }
@@ -100,8 +100,8 @@ function ChangePassword() {
                 </InputAdornment>
               ),
             }}
-            error={(newPassword !== '' && !String(newPassword).match("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$"))}
-            helperText={(!String(newPassword).match("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$") && newPassword !== '' ? 'Password must contains Minimum eight characters, at least one letter, one number and one special character' : ' ')}
+            error={(newPassword !== '' && !String(newPassword).match("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"))}
+            helperText={(!String(newPassword).match("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$") && newPassword !== '' ? 'Password must contains Minimum eight characters, at least one letter, one number and one special character' : ' ')}
           />
           <FormLabel id="demo-controlled-radio-buttons-group">Confirm Password</FormLabel>
           <TextField
