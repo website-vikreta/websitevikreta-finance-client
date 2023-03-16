@@ -65,9 +65,9 @@ const Index = () => {
                      <span className='welcomeText'>Welcome back, <b>{JSON.parse(localStorage.getItem('user-info')).username}</b></span>
                   </div>
                   <div className="navLink">
-                     <Button onClick={()=> navigate('/ChangePassword')}>Change Password</Button>
+                     <Button onClick={() => navigate('/ChangePassword')}>Change Password</Button>
                   </div>
-                  
+
                   <div className="navLink">
                      <button className='linkBtn danger' onClick={handleLogout}>
                         <span>Logout</span> <Logout fontSize="small" sx={{ color: 'red' }} />

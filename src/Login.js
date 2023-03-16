@@ -95,9 +95,10 @@ const Login = () => {
                   ></TextField>
                </Grid>
                <Grid item xs={12}>
-               <NavLink to="/passwordReset">Forgot Password?
-                 </NavLink>
-                  
+                  <NavLink to="/passwordReset" className="forgot-password">
+                     Forgot Password?
+                  </NavLink>
+
                </Grid>
                <Grid item xs={12}>
                   <button className="btn btn-primary login-btn" onClick={() => handleSubmit()}>Login</button>

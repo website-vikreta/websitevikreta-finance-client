@@ -309,6 +309,12 @@ main {
    flex-direction: column !important;
    gap: 1rem;
 }
+.loginGrid div {
+   width: 100%;
+}
+.loginGrid .forgot-password {
+   font-size: 0.9rem;
+}
 
 @media screen and (max-width: 768px) {
    body {
