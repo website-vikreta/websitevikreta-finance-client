@@ -13,7 +13,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
-import { Box,  Button,  CircularProgress, Grid } from '@mui/material';
+import { Button,  Grid } from '@mui/material';
 import {utils, writeFileXLSX}  from 'xlsx';
 import { getItems, getMedia, deleteItem } from '../../api/index';
 import '../../styles/item.css';
@@ -328,8 +328,7 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
          <DeletePopup delModal={delModal} setDelModal={setDelModal} confirm={confirm}></DeletePopup>
          <PopupImage showImgModal={showImgModal} setShowImgModal={setShowImgModal}></PopupImage>
          <ToastContainer />
-         {filteredElements !== '' && filteredElements.length !== 0 && filteredElements !== null ? <div style={{ width: '100%' }}>
-           
+         
             <DataTable
 
                columns={columns}
@@ -354,7 +353,7 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
                   <div className='tableSubHeaderComponent'>
                      <div className='headingWrapper'>
                         <h5 className='heading heading-two'>All records</h5>
-                        <Button onClick={donwloadExcel}>Export Excel</Button>
+                        <Button onClick={donwloadExcel}>Export Data</Button>
                      </div>
                      <input
                         type='text'
@@ -367,13 +366,8 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
                }
                onChangePage={handlePageChange}
                highlightOnHover
-            /></div>
-            :
-            <Box sx={{ display: 'flex', justifyContent: "center", alignItems: "center" }}>
-               Loading... &nbsp;
-               <CircularProgress />
-            </Box>
-         }
+            />
+            
 
 
       </Grid>

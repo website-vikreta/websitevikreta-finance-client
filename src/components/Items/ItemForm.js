@@ -76,12 +76,12 @@ const ItemForm = (props) => {
       const errorFields = Object.keys(errors);
       let newErrorValues = { ...errors }
       let values = Object.values(itemData)
-      let cnt = 0;
+      let countErrors = 0;
       for (let index = 0; index < errorFields.length; index++) {
          const currentField = errorFields[index];
          const currentValue = values[index];
          if (currentValue === '') {
-            cnt = cnt + 1;
+            countErrors = countErrors + 1;
             newErrorValues = {
                ...newErrorValues,
                [currentField]: {
@@ -95,7 +95,8 @@ const ItemForm = (props) => {
       }
 
       setErrors(newErrorValues);
-      if (cnt === 0) addItemDetails();
+      if(countErrors !== 0) loadingRef.current = false;
+      if (countErrors === 0) addItemDetails();
       setTimeout(() => {
          loadingRef.current = false;
 

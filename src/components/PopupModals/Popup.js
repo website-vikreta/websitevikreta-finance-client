@@ -5,7 +5,7 @@ import ItemForm from "../Items/ItemForm";
 import EditItem from "../Items/EditItem";
 
 export default function Popup(props){
-    console.log('popup')
+    
     const {setRender, showModal,setShowModal, formType} = props;
     const {openDialog, currItem} = showModal;
     return(

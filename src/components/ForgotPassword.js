@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams, NavLink } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Button, FormLabel, TextField } from '@mui/material';
 import { forgotPassword, setNewPassword } from '../api';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const ForgotPassword = () => {
 
@@ -12,11 +13,10 @@ const ForgotPassword = () => {
 
    const navigate = useNavigate();
 
-   const [data2, setData] = useState(false);
-
+   const [itemData, setItemData] = useState(false);
    const [password, setPassword] = useState("");
-
    const [message, setMessage] = useState("");
+   const loadingRef = useRef(false); 
 
    const setval = (e) => {
       setPassword(e.target.value)
@@ -24,15 +24,17 @@ const ForgotPassword = () => {
 
    const sendPassword = async (e) => {
       e.preventDefault();
-
+      loadingRef.current = true;
       if (password === "") {
          toast.error("password is required!", {
             position: "top-center"
          });
+         loadingRef.current = false;
       } else if (password.length < 8) {
          toast.error("password must be 8 char!", {
             position: "top-center"
          });
+         loadingRef.current = false;
       } else {
 
          try {
@@ -42,10 +44,14 @@ const ForgotPassword = () => {
             if (res.status === 201) {
                setPassword("")
                setMessage(true)
+               setTimeout(() => {
+                  loadingRef.current = false;  
+              }, 2000);
             } else {
                toast.error("Token Expired! generate new Link", {
                   position: "top-center"
                })
+               loadingRef.current = false;
             }
 
          } catch (error) {
@@ -68,14 +74,14 @@ const ForgotPassword = () => {
       }
       userValid()
       setTimeout(() => {
-         setData(true)
+         setItemData(true)
       }, 3000)
    }, [id, token, navigate])
 
    return (
       <>
          {
-            data2 ? (
+            itemData ? (
                <>
                   <div style={{ width: '50%', margin: 'auto' }}>
                      <div>
@@ -91,7 +97,12 @@ const ForgotPassword = () => {
                               <TextField type="password" value={password} onChange={setval} name="password" id="password" />
                            </div>
 
-                           <Button onClick={sendPassword}>Send</Button>
+                           <Button onClick={sendPassword}
+                           disabled={loadingRef.current || message}> 
+                           {loadingRef.current ? 'Updating...' : 'Update Password'}
+                           {loadingRef.current && <FontAwesomeIcon icon="spinner" spin />}
+                           </Button>
+                           
                         </form>
                         <p><NavLink to="/">Home</NavLink></p>
                         <ToastContainer />

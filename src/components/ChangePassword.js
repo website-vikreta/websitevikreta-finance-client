@@ -1,5 +1,5 @@
 import { Button, FormLabel, TextField } from '@mui/material';
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -7,6 +7,8 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { FormHelperText } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { getPassword, updatePassword } from '../api';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 function ChangePassword() {
   let user = JSON.parse(localStorage.getItem('user-info'));
   const [currentPassword, setCurrentPassword] = useState('');
@@ -15,6 +17,7 @@ function ChangePassword() {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const loadingRef = useRef(false);
 
   const [error, setError] = useState('');
   const handleCurrentPasswordChange = (event) => {
@@ -37,10 +40,12 @@ function ChangePassword() {
   let navigate = useNavigate();
   const updatePasswrd = async (e) => {
     e.preventDefault();
+    loadingRef.current = true;
     try {
       let password = await getPassword(user.id,{ password:currentPassword});
       if (!password.data.success) {
         setError("Current Password is Wrong!");
+        loadingRef.current = false;
         return;
       } else { setError('') }
     } catch (error) {
@@ -48,10 +53,13 @@ function ChangePassword() {
     }
     if (!String(newPassword).match("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")) {
       setError("Password must contains Minimum eight characters, at least one letter, one number!");
+      loadingRef.current = false;
+
       return;
     } else { setError('') }
     if (newPassword !== confirmPassword) {
       setError('New Password and Confirm Password is not matched!');
+      loadingRef.current = false;
       return;
     } else {
       try {
@@ -60,6 +68,9 @@ function ChangePassword() {
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
+      setTimeout(() => {
+        loadingRef.current = false;  
+    }, 2000);
       navigate('/home');
       } catch (error) {
         console.log('error updating password', error)
@@ -126,8 +137,10 @@ function ChangePassword() {
           <Button
 
             variant="outlined"
-            type='submit'
-          >Update Password</Button>
+            type='submit' disabled={loadingRef.current}> 
+            {loadingRef.current ? 'Updating...' : 'Update Password'}
+            {loadingRef.current && <FontAwesomeIcon icon="spinner" spin />}
+            </Button>
         </div>
 
 

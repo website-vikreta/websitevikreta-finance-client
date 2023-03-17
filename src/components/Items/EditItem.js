@@ -90,12 +90,12 @@ const EditItem = (props) => {
         let newErrorValues = { ...errors }
         let values = Object.values(item)
 
-        let cnt = 0;
+        let countErrors = 0;
         for (let index = 0; index < errorFields.length-1; index++) {
             const currentField = errorFields[index];
             const currentValue = values[index+1];
             if (currentValue === '') {
-                cnt= cnt+1;
+                countErrors= countErrors+1;
                 newErrorValues = {
                     ...newErrorValues,
                     [currentField]: {
@@ -109,10 +109,12 @@ const EditItem = (props) => {
         }
 
         setErrors(newErrorValues);
-        if(cnt === 0)  editItemDetails();
+
+        if(countErrors !== 0) loadingRef.current = false;
+        if(countErrors === 0)  editItemDetails();
+
         setTimeout(() => {
-            loadingRef.current = false;
-            
+            loadingRef.current = false;  
         }, 2000);
     }
     const editItemDetails = async () => {

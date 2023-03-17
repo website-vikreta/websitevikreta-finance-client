@@ -6,8 +6,8 @@ import { sendPasswordLink } from '../api';
 const PasswordReset = () => {
 
     const [email, setEmail] = useState("");
-
     const [message, setMessage] = useState("");
+   
 
     const setVal = (e) => {
         setEmail(e.target.value)

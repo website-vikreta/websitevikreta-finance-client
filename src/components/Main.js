@@ -20,13 +20,16 @@ import PieChart from './charts/PieChart'
 import LineChart from './charts/LineChart'
 import { getItems } from '../api';
 import QuartersChart from './charts/QuartersChart';
-import { Button } from '@mui/material';
+import { Close, Menu } from '@mui/icons-material';
+import { Suspense } from 'react';
 const Popup = React.lazy(() => import('./PopupModals/Popup'));
+
 const Index = () => {
 
    const [showModal, setShowModal] = useState({ openDialog: false, itemId: 0 });
    const [items, setItems] = useState([]);
    const [render, setRender] = useState('unset');
+   const [showMediaIcon, setShowMediaIcon] = useState(false);
 
    const getAllItems = async () => {
       let res = localStorage.getItem('user-info');
@@ -59,21 +62,32 @@ const Index = () => {
                <div className='logoWrapper'>
                   <img src={SiteLogo} alt="Logo Icon" />
                </div>
-               {/* CTAs */}
-               <div className='ctaWrapper'>
-                  <div className="navLink">
-                     <span className='welcomeText'>Welcome back, <b>{JSON.parse(localStorage.getItem('user-info')).username}</b></span>
-                  </div>
-                  <div className="navLink">
-                     <Button onClick={() => navigate('/ChangePassword')}>Change Password</Button>
+              
+               {/* Hamburger menu for mobile screen */}
+               <div className='hamburgerMenu'>
+                     <span onClick={() => setShowMediaIcon(!showMediaIcon)}>
+                       {showMediaIcon ? <Close /> : <Menu/>}
+                     </span>
                   </div>
 
-                  <div className="navLink">
-                     <button className='linkBtn danger' onClick={handleLogout}>
-                        <span>Logout</span> <Logout fontSize="small" sx={{ color: 'red' }} />
-                     </button>
-                  </div>
+               {/* CTAs */}
+               <div className= {showMediaIcon ? 'mobile-menu-link' : 'ctaWrapper'}>
+                     
+               <div className='username-text'>
+                        <span className='welcomeText'>Welcome back, <b>{JSON.parse(localStorage.getItem('user-info')).username}</b></span>
                </div>
+                     <div >
+                     <button className='linkBtn ' onClick={() => navigate('/ChangePassword')}>Change Password</button>
+                     </div>
+
+                     <div >
+                        <button className='linkBtn ' onClick={handleLogout}>
+                           <span>Logout</span> <Logout fontSize="small"/>
+                        </button>
+                     </div>
+                 
+               </div>
+              
             </header>
 
             {/* Main Content */}
@@ -118,8 +132,10 @@ const Index = () => {
                title="Add new item">
                <Add fontSize='medium' />
             </button>
+            <Suspense>
             <Popup setRender={setRender} showModal={showModal} setShowModal={setShowModal} formType='Add'></Popup>
 
+            </Suspense>
          </div>
       </>
    );
