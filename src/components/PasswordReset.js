@@ -6,8 +6,8 @@ import { sendPasswordLink } from '../api';
 const PasswordReset = () => {
 
     const [email, setEmail] = useState("");
+
     const [message, setMessage] = useState("");
-   
 
     const setVal = (e) => {
         setEmail(e.target.value)
@@ -54,7 +54,7 @@ const PasswordReset = () => {
                         <FormLabel id="demo-controlled-radio-buttons-group">Email</FormLabel>
                             <TextField type="email" value={email} onChange={setVal} name="email" id="email" />
                         </div>
-                        <Button  onClick={sendLink}>Send</Button>
+                        <Button  onClick={sendLink}>Send Email</Button>
                     </form>
                     <ToastContainer />
                 </div>

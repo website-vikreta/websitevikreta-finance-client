@@ -52,7 +52,7 @@ function ChangePassword() {
       console.log('eorrr', error);
     }
     if (!String(newPassword).match("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")) {
-      setError("Password must contains Minimum eight characters, at least one letter, one number!");
+      setError("Password must contains Minimum eight characters, at least one uppercase letter, one lowercase letter, one number!");
       loadingRef.current = false;
 
       return;
@@ -69,9 +69,10 @@ function ChangePassword() {
       setNewPassword('');
       setConfirmPassword('');
       setTimeout(() => {
-        loadingRef.current = false;  
+        loadingRef.current = false; 
+        navigate('/home'); 
     }, 2000);
-      navigate('/home');
+      
       } catch (error) {
         console.log('error updating password', error)
       }
