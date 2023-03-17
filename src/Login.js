@@ -5,8 +5,7 @@ import React from 'react';
 import { loginUser } from './api';
 import Index from './components/Main';
 import { NavLink, useNavigate } from 'react-router-dom';
-// Image Imports
-import SiteLogo from "./assets/websitevikreta-finance.svg";
+import Navbar from './components/Navbar';
 
 
 const Login = () => {
@@ -21,11 +20,11 @@ const Login = () => {
    useEffect(() => {
 
       const loggedInUser = localStorage.getItem("user-info");
-
+      
       if (loggedInUser) {
-
          const foundUser = JSON.parse(loggedInUser);
          setUser(foundUser);
+         
          navigate('/home');
       }
    }, [navigate]);
@@ -47,6 +46,7 @@ const Login = () => {
          if (res.data) {
             localStorage.setItem('user-info', JSON.stringify(res.data));
             setUser(res.data);
+            console.log(res.data)
             setError("");
             navigate('/home');
          } else {
@@ -66,16 +66,7 @@ const Login = () => {
    return (
       <div className="App container">
          {/* Header */}
-         <header className="header">
-            {/* Logo */}
-            <div className='logoWrapper'>
-               <img src={SiteLogo} alt="Logo Icon" />
-            </div>
-            {/* CTAs */}
-            <div className='ctaWrapper'>
-
-            </div>
-         </header>
+         <Navbar user={user}/>
 
          {/* Main Content */}
          <main>

@@ -2,6 +2,7 @@ import { Button, FormLabel, TextField } from '@mui/material';
 import React, { useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import { sendPasswordLink } from '../api';
+import Navbar from './Navbar';
 
 const PasswordReset = () => {
 
@@ -40,7 +41,9 @@ const PasswordReset = () => {
     }
 
     return (
-        <>
+        <div className='App container'>
+            <Navbar/>
+            
             <div style={{width: '50%' ,margin:'auto'}}>
                 
                 <div>
@@ -59,7 +62,7 @@ const PasswordReset = () => {
                     <ToastContainer />
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 

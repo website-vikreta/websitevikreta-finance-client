@@ -16,7 +16,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Button,  Grid } from '@mui/material';
 import {utils, writeFileXLSX}  from 'xlsx';
 import { getItems, getMedia, deleteItem } from '../../api/index';
-import '../../styles/item.css';
+
 // Import Components
 const Popup = React.lazy(() => import('../PopupModals/Popup'));
 const DeletePopup = React.lazy(() => import('../PopupModals/DeletePopup'));

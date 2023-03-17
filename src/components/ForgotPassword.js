@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Button, FormLabel, TextField } from '@mui/material';
 import { forgotPassword, setNewPassword } from '../api';
+import Navbar from './Navbar';
 
 const ForgotPassword = () => {
 
@@ -12,7 +13,7 @@ const ForgotPassword = () => {
 
    const navigate = useNavigate();
 
-   const [data2, setData] = useState(false);
+   const [itemData, setData] = useState(false);
 
    const [password, setPassword] = useState("");
 
@@ -73,13 +74,14 @@ const ForgotPassword = () => {
    }, [id, token, navigate])
 
    return (
-      <>
+      <div className='App container'>
+         <Navbar/>
          {
-            data2 ? (
+            itemData ? (
                <>
                   <div style={{ width: '50%', margin: 'auto' }}>
                      <div>
-                        <div >
+                        <div>
                            <h2>Enter Your NEW Password</h2>
                         </div>
 
@@ -103,7 +105,7 @@ const ForgotPassword = () => {
                <CircularProgress />
             </Box>
          }
-      </>
+      </div>
    )
 }
 

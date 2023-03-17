@@ -1,13 +1,8 @@
 
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Cookie from 'universal-cookie';
-import React from 'react';
-// Image Imports
-import SiteLogo from "../assets/websitevikreta-finance.svg";
 
-// Icon Imports
-import Logout from '@mui/icons-material/Logout';
+import React from 'react';
+
 import Add from '@mui/icons-material/Add';
 
 // Import Components
@@ -20,75 +15,33 @@ import PieChart from './charts/PieChart'
 import LineChart from './charts/LineChart'
 import { getItems } from '../api';
 import QuartersChart from './charts/QuartersChart';
-import { Close, Menu } from '@mui/icons-material';
 import { Suspense } from 'react';
+import Navbar from './Navbar';
 const Popup = React.lazy(() => import('./PopupModals/Popup'));
 
 const Index = () => {
 
    const [showModal, setShowModal] = useState({ openDialog: false, itemId: 0 });
    const [items, setItems] = useState([]);
+   const [user, setUser] = useState([]);
    const [render, setRender] = useState('unset');
-   const [showMediaIcon, setShowMediaIcon] = useState(false);
-
+   
    const getAllItems = async () => {
       let res = localStorage.getItem('user-info');
       let response = await getItems(JSON.parse(res).id);
+      setUser(JSON.parse(res).username)
       setItems(response.data);
    }
    useEffect(() => {
       getAllItems();
    }, [render]);
-
-   let navigate = useNavigate();
-
-   const handleLogout = () => {
-      var cookie = new Cookie();
-      cookie.remove('user');
-      document.title = 'Login | WV Finance'
-      localStorage.removeItem('user-info');
-      navigate('/');
-   };
-
-
    return (
 
       // Defining Structure
       <>
          <div className="App container">
             {/* Header */}
-            <header className="header">
-               {/* Logo */}
-               <div className='logoWrapper'>
-                  <img src={SiteLogo} alt="Logo Icon" />
-               </div>
-              
-               {/* Hamburger menu for mobile screen */}
-               <div className='hamburgerMenu'>
-                     <span onClick={() => setShowMediaIcon(!showMediaIcon)}>
-                       {showMediaIcon ? <Close /> : <Menu/>}
-                     </span>
-                  </div>
-
-               {/* CTAs */}
-               <div className= {showMediaIcon ? 'mobile-menu-link' : 'ctaWrapper'}>
-                     
-               <div className='username-text'>
-                        <span className='welcomeText'>Welcome back, <b>{JSON.parse(localStorage.getItem('user-info')).username}</b></span>
-               </div>
-                     <div >
-                     <button className='linkBtn ' onClick={() => navigate('/ChangePassword')}>Change Password</button>
-                     </div>
-
-                     <div >
-                        <button className='linkBtn ' onClick={handleLogout}>
-                           <span>Logout</span> <Logout fontSize="small"/>
-                        </button>
-                     </div>
-                 
-               </div>
-              
-            </header>
+            <Navbar user={user}/>
 
             {/* Main Content */}
             <main>

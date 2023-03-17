@@ -8,6 +8,7 @@ import { FormHelperText } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { getPassword, updatePassword } from '../api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Navbar from './Navbar';
 
 function ChangePassword() {
   let user = JSON.parse(localStorage.getItem('user-info'));
@@ -42,7 +43,7 @@ function ChangePassword() {
     e.preventDefault();
     loadingRef.current = true;
     try {
-      let password = await getPassword(user.id,{ password:currentPassword});
+      let password = await getPassword(user.id, { password: currentPassword });
       if (!password.data.success) {
         setError("Current Password is Wrong!");
         loadingRef.current = false;
@@ -63,92 +64,94 @@ function ChangePassword() {
       return;
     } else {
       try {
-      await updatePassword(user.id, {password:newPassword});
-      setError('');
-      setCurrentPassword('');
-      setNewPassword('');
-      setConfirmPassword('');
-      setTimeout(() => {
-        loadingRef.current = false; 
-        navigate('/home'); 
-    }, 2000);
-      
+        await updatePassword(user.id, { password: newPassword });
+        setError('');
+        setCurrentPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+        setTimeout(() => {
+          loadingRef.current = false;
+          navigate('/home');
+        }, 2000);
+
       } catch (error) {
         console.log('error updating password', error)
       }
     }
   }
   return (
-    <div className='change_password' style={{ width: '50%', margin: 'auto', justifyContent: 'center' }}>
+    <div className="App container">
+      <Navbar/>
+      <div className='change_password' style={{ width: '50%', margin: 'auto', justifyContent: 'center' }}>
 
-      <form onSubmit={updatePasswrd}>
+        <form onSubmit={updatePasswrd}>
 
-        <div>
+          <div>
 
-          <FormLabel id="demo-controlled-radio-buttons-group">Current Password</FormLabel>
-          <TextField value={currentPassword}
-            onChange={handleCurrentPasswordChange}
-            type={showCurrentPassword ? 'text' : 'password'}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={toggleShowCurrentPassword}>
-                    {showCurrentPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-          <FormLabel id="demo-controlled-radio-buttons-group">New Password</FormLabel>
-          <TextField value={newPassword}
-            onChange={handleNewPasswordChange}
-            type={showNewPassword ? 'text' : 'password'}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={toggleShowNewPassword}>
-                    {showNewPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            error={(newPassword !== '' && !String(newPassword).match("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"))}
-            helperText={(!String(newPassword).match("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$") && newPassword !== '' ? 'Password must contains Minimum eight characters, at least one letter, one number and one special character' : ' ')}
-          />
-          <FormLabel id="demo-controlled-radio-buttons-group">Confirm Password</FormLabel>
-          <TextField
-            value={confirmPassword}
-            onChange={handleConfirmPasswordChange}
-            type={showConfirmPassword ? 'text' : 'password'}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={toggleShowConfirmPassword}>
-                    {showConfirmPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-        </div>
-        <div>
-          <FormHelperText error>{error}</FormHelperText>
-        </div>
-        <div>
-          <Button
+            <FormLabel id="demo-controlled-radio-buttons-group">Current Password</FormLabel>
+            <TextField value={currentPassword}
+              onChange={handleCurrentPasswordChange}
+              type={showCurrentPassword ? 'text' : 'password'}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={toggleShowCurrentPassword}>
+                      {showCurrentPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <FormLabel id="demo-controlled-radio-buttons-group">New Password</FormLabel>
+            <TextField value={newPassword}
+              onChange={handleNewPasswordChange}
+              type={showNewPassword ? 'text' : 'password'}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={toggleShowNewPassword}>
+                      {showNewPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              error={(newPassword !== '' && !String(newPassword).match("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"))}
+              helperText={(!String(newPassword).match("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$") && newPassword !== '' ? 'Password must contains Minimum eight characters, at least one letter, one number and one special character' : ' ')}
+            />
+            <FormLabel id="demo-controlled-radio-buttons-group">Confirm Password</FormLabel>
+            <TextField
+              value={confirmPassword}
+              onChange={handleConfirmPasswordChange}
+              type={showConfirmPassword ? 'text' : 'password'}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={toggleShowConfirmPassword}>
+                      {showConfirmPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </div>
+          <div>
+            <FormHelperText error>{error}</FormHelperText>
+          </div>
+          <div>
+            <Button
 
-            variant="outlined"
-            type='submit' disabled={loadingRef.current}> 
-            {loadingRef.current ? 'Updating...' : 'Update Password'}
-            {loadingRef.current && <FontAwesomeIcon icon="spinner" spin />}
+              variant="outlined"
+              type='submit' disabled={loadingRef.current}>
+              {loadingRef.current ? 'Updating...' : 'Update Password'}
+              {loadingRef.current && <FontAwesomeIcon icon="spinner" spin />}
             </Button>
-        </div>
+          </div>
 
 
-      </form>
+        </form>
+      </div>
+
     </div>
-
-
   )
 }
 export default ChangePassword;
