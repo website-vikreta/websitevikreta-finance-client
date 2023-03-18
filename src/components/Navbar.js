@@ -10,54 +10,53 @@ import { Close, Menu } from '@mui/icons-material';
 
 const Navbar = ({ user }) => {
 
-    const [showMediaIcon, setShowMediaIcon] = useState(false);
-    let navigate = useNavigate();
-    const handleLogout = () => {
-        var cookie = new Cookie();
-        cookie.remove('user');
-        document.title = 'Login | WV Finance'
-        localStorage.removeItem('user-info');
-        navigate('/');
-    };
+   const [showMediaIcon, setShowMediaIcon] = useState(false);
+   let navigate = useNavigate();
+   const handleLogout = () => {
+      var cookie = new Cookie();
+      cookie.remove('user');
+      document.title = 'Login | WV Finance'
+      localStorage.removeItem('user-info');
+      navigate('/');
+   };
 
-    return (
-        <header className="header">
-            {/* Logo */}
-            <div className='logoWrapper'>
-                <img src={SiteLogo} alt="Logo Icon" />
-            </div>
+   return (
+      <header className="header">
+         {/* Logo */}
+         <div className='logoWrapper'>
+            <img src={SiteLogo} alt="Logo Icon" />
+         </div>
 
-            {/* Hamburger menu for mobile screen */}
-           
-                {user && 
-                <>
-                <div className='hamburgerMenu'>
-                    <span onClick={() => setShowMediaIcon(!showMediaIcon)}>
-                        {showMediaIcon ? <Close /> : <Menu />}
-                    </span>
-                </div>
+         {/* Hamburger menu for mobile screen */}
 
-                {/* CTAs */}
-                <div className={showMediaIcon ? 'mobile-menu-link' : 'ctaWrapper'}>
+         {user &&
+            <>
+               {/* Toggle Button */}
+               <span onClick={() => setShowMediaIcon(!showMediaIcon)} className="hamburgerMenu m-0 p-0">
+                  {showMediaIcon ? <Close /> : <Menu />}
+               </span>
 
-                    <div className='username-text'>
-                        <span className='welcomeText'>Welcome back, <b>{user}</b></span>
-                    </div>
-                    <div >
-                        <button className='linkBtn ' onClick={() => navigate('/ChangePassword')}>Change Password</button>
-                    </div>
+               {/* CTAs */}
+               <div className={showMediaIcon ? 'mobile-menu-link' : 'ctaWrapper'}>
 
-                    <div >
-                        <button className='linkBtn ' onClick={handleLogout}>
-                            <span>Logout</span> <Logout fontSize="small" />
-                        </button>
-                    </div>
+                  <div className='username-text'>
+                     <span className='welcomeText'>Welcome back, <b>{user}</b></span>
+                  </div>
 
-                </div>
-                </>
-                }
-           
-        </header>
-    );
+                  <div >
+                     <button className='linkBtn' onClick={() => navigate('/ChangePassword')}>Change Password</button>
+                  </div>
+                  <div >
+                     <button className='linkBtn logout' onClick={handleLogout}>
+                        <span>Logout</span> <Logout fontSize="small" />
+                     </button>
+                  </div>
+
+               </div>
+            </>
+         }
+
+      </header>
+   );
 }
 export default Navbar;

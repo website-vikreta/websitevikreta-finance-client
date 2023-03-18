@@ -37,6 +37,7 @@ a {
    justify-content: space-between;
    align-items: center;
    margin-block: 1rem 3rem;
+   position: relative;
 }
 
 .header .ctaWrapper {
@@ -58,12 +59,15 @@ a {
    text-transform: capitalize;
    color: var(--primary-color);
    line-height: 100%;
-
 }
 
 .ctaWrapper a:hover,
 .linkBtn:hover {
    text-decoration: underline;
+}
+
+.ctaWrapper .logout {
+   color: red;
 }
 
 .heading {
@@ -341,10 +345,6 @@ main {
    gap: 1rem;
 }
 
-
-
-
-
 .hamburgerMenu {
    display: none;
 }
@@ -406,40 +406,45 @@ main {
    .FilterFormControl {
       width: 100%;
    }
-  
-
-
-
-
 
    .header .ctaWrapper {
       display: none;
    }
 
    .mobile-menu-link {
-      position: fixed;
+      position: absolute;
       background-color: white;
       display: block;
       width: 100%;
-      top: 90px;
+      top: 4rem;
       z-index: 99;
       align-items: center;
-      transition: all 2s linear;
-      transform-origin: bottom;
-      box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
-         rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+      box-shadow: 0px 30px 100px 20px rgba(50, 50, 93, 0.25);
    }
 
-   .mobile-menu-link .linkBtn {
-      padding: 10px;
+   .mobile-menu-link .linkBtn,
+   .mobile-menu-link .username-text {
+      margin-block: 1rem;
+      padding-inline: 1rem;
+   }
+
+   .mobile-menu-link .username-text {
+      border-bottom: 1px solid var(--primary-color-light);
+      font-style: italic;
+      margin-bottom: 4px;
+      padding-bottom: 1rem;
+   }
+
+   .mobile-menu-link .linkBtn.logout {
+      color: red;
    }
 
    .hamburgerMenu {
-      display: contents;
-   }
-
-   .username-text {
-      display: none;
+      display: grid;
+      place-content: center;
+      aspect-ratio: 1 / 1 !important;
+      width: 40px;
+      cursor: pointer;
    }
 }
 

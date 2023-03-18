@@ -20,7 +20,7 @@ const ForgotPassword = () => {
    const [btnStatus, setBtnStatus] = useState(false);
 
 
-   
+
 
    const setval = (e) => {
       setPassword(e.target.value)
@@ -28,7 +28,7 @@ const ForgotPassword = () => {
 
    const sendPassword = async (e) => {
       setBtnStatus(true);
-     
+
       if (password === "") {
          toast.error("password is required!", {
             position: "top-center"
@@ -106,7 +106,7 @@ const ForgotPassword = () => {
 
                            <TextField type="password" value={password} onChange={setval} name="password" id="password" />
                         </div>
-                        <div className="form_input" style={{padding: '20px 0px'}}>
+                        <div className="form_input" style={{ padding: '20px 0px' }}>
 
                            <Button onClick={sendPassword} disabled={btnStatus || (message && true)}>
                               {btnStatus ? 'Updating...' : 'Update Password'}
@@ -114,7 +114,7 @@ const ForgotPassword = () => {
                            </Button>
                         </div>
                         {message && <p><NavLink to="/">Back to Home</NavLink></p>}
-                        
+
                         <ToastContainer />
                      </div>
                   </div>

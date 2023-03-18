@@ -16,14 +16,14 @@ const Login = () => {
    const [user, setUser] = useState("");
    const [error, setError] = useState("");
    const [btnStatus, setBtnStatus] = useState(false);
-    
+
    var errorMsg = error;
    const navigate = useNavigate();
 
    useEffect(() => {
 
       const loggedInUser = localStorage.getItem("user-info");
-      
+
       if (loggedInUser) {
          const foundUser = JSON.parse(loggedInUser);
          setUser(foundUser);
@@ -70,7 +70,7 @@ const Login = () => {
    return (
       <div className="App container">
          {/* Header */}
-         <Navbar user={user}/>
+         <Navbar user={user} />
 
          {/* Main Content */}
          <main>
@@ -90,15 +90,15 @@ const Login = () => {
                   ></TextField>
                </Grid>
                <Grid item xs={12}>
-                  <NavLink to="/passwordReset" className="forgot-password">
+                  <NavLink to="/passwordReset" className="linkBtn">
                      Forgot Password?
                   </NavLink>
 
                </Grid>
                <Grid item xs={12}>
-                  <button className="btn btn-primary login-btn" onClick={handleSubmit} >  
-                  Login
-                  {btnStatus && <FontAwesomeIcon icon="spinner" spin />}</button>
+                  <button className="btn btn-primary login-btn" onClick={handleSubmit} >
+                     Login
+                     {btnStatus && <FontAwesomeIcon icon="spinner" spin />}</button>
                </Grid>
                <FormHelperText error>{error}</FormHelperText>
             </Grid>
