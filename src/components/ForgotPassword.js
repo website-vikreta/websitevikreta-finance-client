@@ -6,6 +6,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { Button, FormLabel, TextField } from '@mui/material';
 import { forgotPassword, setNewPassword } from '../api';
 import Navbar from './Navbar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const ForgotPassword = () => {
 
@@ -14,26 +15,32 @@ const ForgotPassword = () => {
    const navigate = useNavigate();
 
    const [itemData, setData] = useState(false);
-
    const [password, setPassword] = useState("");
+   const [message, setMessage] = useState(false);
+   const [btnStatus, setBtnStatus] = useState(false);
 
-   const [message, setMessage] = useState("");
+
+   
 
    const setval = (e) => {
       setPassword(e.target.value)
    }
 
    const sendPassword = async (e) => {
-      e.preventDefault();
-
+      setBtnStatus(true);
+     
       if (password === "") {
          toast.error("password is required!", {
             position: "top-center"
          });
+         setBtnStatus(false);
+         return;
       } else if (password.length < 8) {
          toast.error("password must be 8 char!", {
             position: "top-center"
          });
+         setBtnStatus(false);
+         return;
       } else {
 
          try {
@@ -42,11 +49,16 @@ const ForgotPassword = () => {
 
             if (res.status === 201) {
                setPassword("")
+               setTimeout(() => {
+                  setBtnStatus(false);
+               }, 2000);
                setMessage(true)
             } else {
                toast.error("Token Expired! generate new Link", {
                   position: "top-center"
                })
+               setBtnStatus(false);
+               return;
             }
 
          } catch (error) {
@@ -54,16 +66,19 @@ const ForgotPassword = () => {
             toast.error("Token Expired! generate new Link", {
                position: "top-center"
             })
+            setBtnStatus(false);
          }
       }
    }
 
    useEffect(() => {
       const userValid = async () => {
-
-         const res = await forgotPassword(id, token);
-
-         if (res.status !== 201) {
+         try {
+            const res = await forgotPassword(id, token);
+            if (res.status !== 201) {
+               navigate("*")
+            }
+         } catch (error) {
             navigate("*")
          }
       }
@@ -75,7 +90,7 @@ const ForgotPassword = () => {
 
    return (
       <div className='App container'>
-         <Navbar/>
+         <Navbar />
          {
             itemData ? (
                <>
@@ -85,17 +100,21 @@ const ForgotPassword = () => {
                            <h2>Enter Your NEW Password</h2>
                         </div>
 
-                        <form>
-                           {message ? <p style={{ color: "green", fontWeight: "bold" }}>Password Updated Successfully </p> : ""}
-                           <div className="form_input">
-                              <FormLabel id="demo-controlled-radio-buttons-group">Enter Your new password</FormLabel>
+                        {message ? <p style={{ color: "green", fontWeight: "bold" }}>Password Updated Successfully </p> : ""}
+                        <div className="form_input">
+                           <FormLabel id="demo-controlled-radio-buttons-group">Enter Your new password</FormLabel>
 
-                              <TextField type="password" value={password} onChange={setval} name="password" id="password" />
-                           </div>
+                           <TextField type="password" value={password} onChange={setval} name="password" id="password" />
+                        </div>
+                        <div className="form_input" style={{padding: '20px 0px'}}>
 
-                           <Button onClick={sendPassword} disabled= {message}>Update</Button>
-                        </form>
-                        <p><NavLink to="/">Home</NavLink></p>
+                           <Button onClick={sendPassword} disabled={btnStatus || (message && true)}>
+                              {btnStatus ? 'Updating...' : 'Update Password'}
+                              {btnStatus && <FontAwesomeIcon icon="spinner" spin />}
+                           </Button>
+                        </div>
+                        {message && <p><NavLink to="/">Back to Home</NavLink></p>}
+                        
                         <ToastContainer />
                      </div>
                   </div>

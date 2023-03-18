@@ -21,3 +21,6 @@ export const updatePassword = async (id, updatedPassword) => await axios.put(`${
 export const forgotPassword = async (id, token) => await axios.get(`${url}/forgotpassword${id}/${token}`);
 export const sendPasswordLink = async (email) =>  await axios.post(`${url}/sendpasswordlink`, email);
 export const setNewPassword = async (id, token, password) => await axios.post(`${url}/${id}/${token}`, password);
+export const setUserPasswordByAdmin = async (user) => await axios.post(`${url}/setuserpassword`, user);
+
+

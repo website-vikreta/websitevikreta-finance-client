@@ -38,6 +38,7 @@ function ChangePassword() {
   const toggleShowCurrentPassword = () => setShowCurrentPassword(!showCurrentPassword);
   const toggleShowNewPassword = () => setShowNewPassword(!showNewPassword);
   const toggleShowConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
+
   let navigate = useNavigate();
   const updatePasswrd = async (e) => {
     e.preventDefault();
@@ -55,7 +56,6 @@ function ChangePassword() {
     if (!String(newPassword).match("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")) {
       setError("Password must contains Minimum eight characters, at least one uppercase letter, one lowercase letter, one number!");
       loadingRef.current = false;
-
       return;
     } else { setError('') }
     if (newPassword !== confirmPassword) {
@@ -116,7 +116,7 @@ function ChangePassword() {
                 ),
               }}
               error={(newPassword !== '' && !String(newPassword).match("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"))}
-              helperText={(!String(newPassword).match("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$") && newPassword !== '' ? 'Password must contains Minimum eight characters, at least one letter, one number and one special character' : ' ')}
+              helperText={(!String(newPassword).match("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$") && newPassword !== '' ? 'Password must contains Minimum eight characters, at least one uppercase letter, one lowercase letter, one number!' : '')}
             />
             <FormLabel id="demo-controlled-radio-buttons-group">Confirm Password</FormLabel>
             <TextField

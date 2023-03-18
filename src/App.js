@@ -5,7 +5,7 @@ import Main from './components/Main'
 import EditItem from './components/Items/EditItem';
 import ChangePassword from './components/ChangePassword';
 import ProtectedRoutes from './components/ProtectedRoutes';
-
+import PasswordSet from './components/admin/PasswordSet';
 import './styles/index.css';
 import PasswordReset from './components/PasswordReset';
 import Error from './Error';
@@ -20,6 +20,7 @@ const App = () => {
         <Route element = {<ProtectedRoutes/>}>
           <Route path="/home" element={<Main />} />
          
+
           <Route path="/edit/:id" element={<EditItem />} />
           <Route path="/ChangePassword" element={<ChangePassword />} />
         </Route>
@@ -27,6 +28,8 @@ const App = () => {
         <Route path="/passwordReset" element={<PasswordReset/>}/>
         <Route path="/forgotpassword/:id/:token" element={<ForgotPassword/>}/>
         <Route path="*" element={<Error />} />
+        <Route path="/admin" element={<PasswordSet />} />
+
       </Routes>
     </BrowserRouter>
   );

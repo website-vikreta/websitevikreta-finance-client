@@ -6,6 +6,7 @@ import { loginUser } from './api';
 import Index from './components/Main';
 import { NavLink, useNavigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
 const Login = () => {
@@ -14,6 +15,8 @@ const Login = () => {
    const [password, setPassword] = useState("");
    const [user, setUser] = useState("");
    const [error, setError] = useState("");
+   const [btnStatus, setBtnStatus] = useState(false);
+    
    var errorMsg = error;
    const navigate = useNavigate();
 
@@ -24,7 +27,6 @@ const Login = () => {
       if (loggedInUser) {
          const foundUser = JSON.parse(loggedInUser);
          setUser(foundUser);
-         
          navigate('/home');
       }
    }, [navigate]);
@@ -34,10 +36,11 @@ const Login = () => {
    }
 
    const handleSubmit = async () => {
-
+      setBtnStatus(true);
       if (email === '' || password === '') {
          errorMsg = "Please Fill Email and Password Properly";
          setError(errorMsg);
+         setBtnStatus(false);
          return;
       }
       const userDetails = { email, password };
@@ -46,7 +49,7 @@ const Login = () => {
          if (res.data) {
             localStorage.setItem('user-info', JSON.stringify(res.data));
             setUser(res.data);
-            console.log(res.data)
+            setBtnStatus(false);
             setError("");
             navigate('/home');
          } else {
@@ -57,6 +60,7 @@ const Login = () => {
          errorMsg = "Invalid Email or Password";
          console.log(err.message, 'errrr');
          setError(errorMsg);
+         setBtnStatus(false);
       }
 
 
@@ -92,7 +96,9 @@ const Login = () => {
 
                </Grid>
                <Grid item xs={12}>
-                  <button className="btn btn-primary login-btn" onClick={() => handleSubmit()}>Login</button>
+                  <button className="btn btn-primary login-btn" onClick={handleSubmit} >  
+                  Login
+                  {btnStatus && <FontAwesomeIcon icon="spinner" spin />}</button>
                </Grid>
                <FormHelperText error>{error}</FormHelperText>
             </Grid>

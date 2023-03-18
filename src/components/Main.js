@@ -19,7 +19,7 @@ import { Suspense } from 'react';
 import Navbar from './Navbar';
 const Popup = React.lazy(() => import('./PopupModals/Popup'));
 
-const Index = () => {
+const Index = ({userr}) => {
 
    const [showModal, setShowModal] = useState({ openDialog: false, itemId: 0 });
    const [items, setItems] = useState([]);
