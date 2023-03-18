@@ -16,11 +16,7 @@ import '../../styles/ItemForm.css';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Date = styled(DatePicker)`
-    width: 250px
-`;
-const StyledTable = styled(Table)`
-    width: 200px;
-   
+    width: 300px
 `;
 
 const ItemForm = (props) => {
@@ -95,7 +91,7 @@ const ItemForm = (props) => {
       }
 
       setErrors(newErrorValues);
-      if(countErrors !== 0) loadingRef.current = false;
+      if (countErrors !== 0) loadingRef.current = false;
       if (countErrors === 0) addItemDetails();
       setTimeout(() => {
          loadingRef.current = false;
@@ -155,158 +151,118 @@ const ItemForm = (props) => {
 
    return (
 
-      <Container >
+      <Container>
+         <div className="item-form">
+            <div >
+               <FormLabel className="label" id="demo-controlled-radio-buttons-group">Item Title <span className="text-danger">*</span></FormLabel>
 
-         <StyledTable>
-            <table>
-               <tbody>
-                  <tr>
-                     <td colSpan='2'>
-                        <FormLabel id="demo-controlled-radio-buttons-group">Item Title</FormLabel>
+               <TextField variant='outlined' fullWidth
+                  type={'text'} onChange={(e) => onValueChange(e)}
+                  error={(errors.title.error)}
+                  helperText={(errors.title.error && errors.title.errorMessage)}
+                  name='title' value={title}
+                  size="small"
+               ></TextField>
+            </div>
+            <div >
+               <FormLabel className="label" id="demo-controlled-radio-buttons-group">Amount <span className="text-danger">*</span></FormLabel>
 
-                        <TextField variant='outlined' fullWidth
-                           type={'text'} onChange={(e) => onValueChange(e)}
-                           error={(errors.title.error)}
-                           helperText={(errors.title.error && errors.title.errorMessage)}
-                           name='title' value={title}
-                           size="small"
-                        ></TextField>
+               <TextField type={'text'} onChange={(e) => onValueChange(e)}
+                  name='amount' fullWidth
+                  error={(errors.amount.error) || (amount !== '' && !amount.match(/^\d+$/))}
+                  helperText={(errors.amount.error && errors.amount.errorMessage) || (!amount.match(/^\d+$/) && amount !== '' ? 'Only digits are allowed' : '')}
+                  value={amount}
+                  size="small"
+               ></TextField>
+            </div>
 
-                     </td>
-                  </tr>
-                  <tr >
-                     <td colSpan='2'>
-                        <FormLabel id="demo-controlled-radio-buttons-group">Amount</FormLabel>
+            <div>
+               <FormLabel className="label" id="demo-controlled-radio-buttons-group">Category <span className="text-danger">*</span></FormLabel>
 
-                        <TextField type={'text'} onChange={(e) => onValueChange(e)}
-                           name='amount' fullWidth
-                           error={(errors.amount.error) || (amount !== '' && !amount.match(/^\d+$/))}
-                           helperText={(errors.amount.error && errors.amount.errorMessage) || (!amount.match(/^\d+$/) && amount !== '' ? 'Only digits are allowed' : ' ')}
-                           value={amount}
-                           size="small"
-                        ></TextField>
+               <TextField fullWidth
+                  type={'text'} onChange={(e) => onValueChange(e)}
+                  name='category'
+                  error={(errors.category.error)}
+                  helperText={(errors.category.error && errors.category.errorMessage)}
+                  value={category}
+                  size="small"
+               ></TextField>
+            </div>
+            <div>
+               <FormLabel className="label" id="demo-controlled-radio-buttons-group">Payment Type <span className="text-danger">*</span></FormLabel>
 
-                     </td>
-                  </tr>
+               <RadioGroup row
+                  aria-labelledby="demo-controlled-radio-buttons-group"
+                  name="paymentType"
+                  value={paymentType}
+                  onChange={(e) => onValueChange(e)}
+               >
+                  <FormControlLabel value="Income" control={<Radio required={true} />} label="Income" />
+                  <FormControlLabel value="Expense" control={<Radio required={true} />} label="Expense" />
+               </RadioGroup>
+               <FormHelperText error>{errors.paymentType.errorMessage}</FormHelperText>
+            </div>
+            <div className="grid grid-2">
+               <div>
+                  <FormLabel className="label" id="demo-controlled-radio-buttons-group">Date of Invoice <span className="text-danger">*</span></FormLabel>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                     <Date
+                        name='dateOfInvoice'
+                        renderInput={(params) => <TextField {...params} size="small" />}
+                        value={dateOfInvoice}
+                        onChange={((date) => setItemData({ ...itemData, dateOfInvoice: date }))}
+                     />
+                  </LocalizationProvider>
+               </div>
+               <div>
+                  <FormLabel className="label" id="demo-controlled-radio-buttons-group">Date of Payment <span className="text-danger">*</span></FormLabel>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                     <Date
+                        name='dateOfPayment'
+                        renderInput={(params) => <TextField {...params} size="small" />}
+                        value={dateOfPayment}
+                        onChange={((date) => setItemData({ ...itemData, dateOfPayment: date }))}
+                     />
+                  </LocalizationProvider>
+               </div>
+            </div>
+            <div>
+               <FormLabel className="label" id="demo-controlled-radio-buttons-group">Description</FormLabel>
 
-                  <tr>
-                     <td colSpan='2' >
-                        <FormLabel id="demo-controlled-radio-buttons-group">Category</FormLabel>
+               <TextField
+                  multiline rows={5}
+                  fullWidth
+                  type={'text'} onChange={(e) => onValueChange(e)}
+                  name='description'
+                  value={description}
+                  size="small"
+               ></TextField>
 
-                        <TextField fullWidth
-                           type={'text'} onChange={(e) => onValueChange(e)}
-                           name='category'
-                           error={(errors.category.error)}
-                           helperText={(errors.category.error && errors.category.errorMessage)}
-                           value={category}
-                           size="small"
-                        ></TextField>
+            </div>
+            <div>
+               <FormLabel className="label" id="demo-controlled-radio-buttons-group">Payment Proof</FormLabel>
+               <br />
+               <span className="input-file" >
+                  <FileBase64
+                     type="file"
+                     sx={{ display: 'none' }}
+                     multiple={false}
+                     onDone={({ base64 }) => { handleImageData(base64) }}
+                  />
+               </span>
 
-                     </td>
+            </div>
 
-                  </tr>
-                  <tr>
-                     <td className='tr-row'>
-                        <FormLabel id="demo-controlled-radio-buttons-group">Payment Type</FormLabel>
-
-                        <RadioGroup row
-                           aria-labelledby="demo-controlled-radio-buttons-group"
-                           name="paymentType"
-                           value={paymentType}
-                           onChange={(e) => onValueChange(e)}
-                        >
-                           <FormControlLabel value="Income" control={<Radio required={true} />} label="Income" />
-                           <FormControlLabel value="Expense" control={<Radio required={true} />} label="Expense" />
-                        </RadioGroup>
-                        <FormHelperText error>{errors.paymentType.errorMessage}</FormHelperText>
-
-                     </td>
-                  </tr>
-                  <tr >
-                     <td className='tr-row'>
-                        <FormLabel id="demo-controlled-radio-buttons-group">Date of Invoice</FormLabel>
-
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                           <Date
-                              name='dateOfInvoice'
-                              renderInput={(params) => <TextField {...params} size="small" />}
-                              value={dateOfInvoice}
-                              onChange={((date) => setItemData({ ...itemData, dateOfInvoice: date }))}
-
-                           />
-                        </LocalizationProvider>
-                     </td>
-                     <td>
-                        <FormLabel id="demo-controlled-radio-buttons-group">Date of Payment</FormLabel>
-
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                           <Date
-                              name='dateOfPayment'
-                              renderInput={(params) => <TextField {...params} size="small" />}
-                              value={dateOfPayment}
-                              onChange={((date) => setItemData({ ...itemData, dateOfPayment: date }))}
-                           />
-                        </LocalizationProvider>
-
-                     </td>
-                  </tr>
-                  <tr >
-                     <td colSpan='2' className='tr-row'>
-                        <FormLabel id="demo-controlled-radio-buttons-group">Description</FormLabel>
-
-                        <TextField
-                           multiline rows={5}
-                           fullWidth
-                           type={'text'} onChange={(e) => onValueChange(e)}
-                           name='description'
-                           value={description}
-                           size="small"
-                        ></TextField>
-
-                     </td>
-                  </tr>
-
-                  <tr>
-                     <td colSpan='2' className='tr-row'>
-                        <FormLabel id="demo-controlled-radio-buttons-group">Payment Proof</FormLabel>
-                        <br />
-                        <span className="input-file" >
-                           <FileBase64
-                              type="file"
-                              sx={{ display: 'none' }}
-                              multiple={false}
-                              onDone={({ base64 }) => { handleImageData(base64) }}
-                           />
-                        </span>
-
-                     </td>
-                  </tr>
-
-                  <tr className='tr-row'>
-                     <td>
-                        <Button variant="contained" color="primary" onClick={() => clear()} sx={{
-                           color: 'red', backgroundColor: '#ffe6e6', borderColor: 'red', ':hover': {
-                              bgcolor: '#ffe6e6',
-                              color: 'red',
-                           }
-                        }}>Reset</Button>
-                     </td>
-                     <td align='right'>
-                        <Button variant="contained" color="primary" disabled={loadingRef.current} onClick={() => validateItemDetails()} sx={{
-                           color: 'white', backgroundColor: '#7700FF', borderColor: 'white', ':hover': {
-                              bgcolor: '#7700FF',
-                              color: 'black',
-                           }
-                        }}>{loadingRef.current ? 'Adding...' : 'Add Item'}
-                        {loadingRef.current && <FontAwesomeIcon icon="spinner" spin />}
-                        </Button>
-                     </td>
-                  </tr>
-
-               </tbody>
-
-            </table>
-         </StyledTable>
+            <div className="grid grid-2 mt-4">
+               <button className="btn btn-secondary btn-danger" onClick={() => clear()}>
+                  Reset
+               </button>
+               <button className="btn btn-primary" disabled={loadingRef.current} onClick={() => validateItemDetails()}>
+                  {loadingRef.current ? 'Adding...' : 'Add Item'}
+                  {loadingRef.current && <FontAwesomeIcon icon="spinner" spin />}
+               </button>
+            </div>
+         </div>
 
       </Container >
 

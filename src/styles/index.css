@@ -118,6 +118,14 @@ a {
    color: var(--primary-color);
    background: var(--primary-color-light);
 }
+.btn.btn-secondary.btn-danger {
+   color: red;
+   background: rgba(255, 0, 0, 0.1);
+}
+.btn.btn-secondary.btn-danger:hover {
+   color: red;
+   background: rgba(255, 0, 0, 0.2);
+}
 
 .btn.btn-secondary:hover {
    color: var(--white-color);
@@ -374,6 +382,34 @@ main {
    display: none;
 }
 
+.item-form {
+   display: grid;
+   gap: 0.7rem;
+}
+.item-form > div,
+.item-form .grid > div {
+   display: grid;
+   gap: 0.1rem;
+}
+.item-form .grid.grid-2 {
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+   gap: 0.7rem;
+}
+.item-form * {
+   padding: 0;
+}
+.item-form .mr-2 {
+   padding-right: 0.5rem;
+}
+.item-form .label {
+   font-weight: 500 !important;
+   font-size: 0.95rem;
+}
+.item-form .MuiFormHelperText-root {
+   margin: 0 !important;
+}
+
 @media screen and (max-width: 768px) {
    body {
       font-size: 14px;
@@ -478,5 +514,8 @@ main {
       gap: 0.5rem;
       flex-direction: column;
       align-items: flex-end;
+   }
+   .item-form .grid.grid-2 {
+      grid-template-columns: 1fr;
    }
 }
