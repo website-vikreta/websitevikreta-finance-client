@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import Cookie from 'universal-cookie';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { TextField, Button, Container, FormHelperText, FormControlLabel, FormLabel, Table, RadioGroup, Radio } from '@mui/material';
+import { TextField, Container, FormHelperText, FormControlLabel, FormLabel, RadioGroup, Radio } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -76,7 +76,8 @@ const ItemForm = (props) => {
       for (let index = 0; index < errorFields.length; index++) {
          const currentField = errorFields[index];
          const currentValue = values[index];
-         if (currentValue === '') {
+         
+         if (currentValue === '' || ((currentField === 'dateOfInvoice'|| currentField === 'dateOfPayment') && currentValue === null)) {
             countErrors = countErrors + 1;
             newErrorValues = {
                ...newErrorValues,
@@ -89,6 +90,7 @@ const ItemForm = (props) => {
          }
 
       }
+      
 
       setErrors(newErrorValues);
       if (countErrors !== 0) loadingRef.current = false;
@@ -129,6 +131,14 @@ const ItemForm = (props) => {
          }
       })
       setItemData({ ...itemData, [e.target.name]: e.target.value })
+   }
+   const setDateOfInvoice = (date) => {
+      setItemData({ ...itemData, dateOfInvoice: date })
+      setErrors({...errors, dateOfInvoice: {...errors[dateOfInvoice], error: false, errorMessage: ''}})
+   }
+   const setDateOfPayment = (date) => {
+      setItemData({ ...itemData, dateOfPayment: date })
+      setErrors({...errors, dateOfPayment: {...errors[dateOfPayment], error: false, errorMessage: ''}})
    }
 
    const handleImageData = (img) => {
@@ -203,16 +213,17 @@ const ItemForm = (props) => {
                <FormHelperText error>{errors.paymentType.errorMessage}</FormHelperText>
             </div>
             <div className="grid grid-2">
-               <div>
+               <div sx={{padding: '20px'}}>
                   <FormLabel className="label" id="demo-controlled-radio-buttons-group">Date of Invoice <span className="text-danger">*</span></FormLabel>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                      <Date
                         name='dateOfInvoice'
                         renderInput={(params) => <TextField {...params} size="small" />}
                         value={dateOfInvoice}
-                        onChange={((date) => setItemData({ ...itemData, dateOfInvoice: date }))}
+                        onChange={(date) => setDateOfInvoice(date)}
                      />
                   </LocalizationProvider>
+                 <FormHelperText error>{errors.dateOfInvoice.error && errors.dateOfInvoice.errorMessage}</FormHelperText>
                </div>
                <div>
                   <FormLabel className="label" id="demo-controlled-radio-buttons-group">Date of Payment <span className="text-danger">*</span></FormLabel>
@@ -221,9 +232,10 @@ const ItemForm = (props) => {
                         name='dateOfPayment'
                         renderInput={(params) => <TextField {...params} size="small" />}
                         value={dateOfPayment}
-                        onChange={((date) => setItemData({ ...itemData, dateOfPayment: date }))}
+                        onChange={(date) => setDateOfPayment(date)}
                      />
                   </LocalizationProvider>
+                  <FormHelperText error>{errors.dateOfPayment.error && errors.dateOfPayment.errorMessage}</FormHelperText>
                </div>
             </div>
             <div>

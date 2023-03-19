@@ -4,8 +4,8 @@ import Cookie from 'universal-cookie';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import {  FormLabel, FormControlLabel, Radio, RadioGroup, Table } from '@mui/material';
-import { TextField, Container, Button, styled ,FormHelperText } from '@mui/material';
+import { FormLabel, FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import { TextField, Container, styled, FormHelperText } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -20,18 +20,13 @@ const Date = styled(DatePicker)`
     width: 300px
 `;
 
-const StyledTable = styled(Table)`
-    width: 200px;
-   
-`;
 
 const EditItem = (props) => {
 
     let user = JSON.parse(localStorage.getItem('user-info'));
-    
-    const [item, setItem] = useState({ title: '', amount: '', category: '', paymentType: '', dateOfInvoice: '', dateOfPayment: '', description: '', paymentProof: '', userId: user.id  });
+
+    const [item, setItem] = useState({ title: '', amount: '', category: '', paymentType: '', dateOfInvoice: '', dateOfPayment: '', description: '', paymentProof: '', userId: user.id });
     const { title, amount, category, paymentType, dateOfInvoice, dateOfPayment, description, userId } = item;
-   
     const { setRender, cItem, showModal, setShowModal } = props;
     const id = cItem._id;
     cookie.set('user', userId, { path: '/' });
@@ -83,7 +78,7 @@ const EditItem = (props) => {
         setItem({ ...item, title: '', amount: '', category: '', paymentType: '', dateOfInvoice: null, dateOfPayment: null, description: '', paymentProof: '' });
     }
 
-    function validateItemDetails(){
+    function validateItemDetails() {
         loadingRef.current = true;
 
         const errorFields = Object.keys(errors);
@@ -91,11 +86,11 @@ const EditItem = (props) => {
         let values = Object.values(item)
 
         let countErrors = 0;
-        for (let index = 0; index < errorFields.length-1; index++) {
+        for (let index = 0; index < errorFields.length - 1; index++) {
             const currentField = errorFields[index];
-            const currentValue = values[index+1];
+            const currentValue = values[index + 1];
             if (currentValue === '') {
-                countErrors= countErrors+1;
+                countErrors = countErrors + 1;
                 newErrorValues = {
                     ...newErrorValues,
                     [currentField]: {
@@ -110,11 +105,11 @@ const EditItem = (props) => {
 
         setErrors(newErrorValues);
 
-        if(countErrors !== 0) loadingRef.current = false;
-        if(countErrors === 0)  editItemDetails();
+        if (countErrors !== 0) loadingRef.current = false;
+        if (countErrors === 0) editItemDetails();
 
         setTimeout(() => {
-            loadingRef.current = false;  
+            loadingRef.current = false;
         }, 2000);
     }
     const editItemDetails = async () => {
@@ -145,157 +140,127 @@ const EditItem = (props) => {
     const handleImageData = (img) => {
         setItem({ ...item, paymentProof: img });
     }
-   
+
     return (
 
-        <Container >
+        <Container>
+            <div className="item-form">
+                <div >
+                <FormLabel className="label" id="demo-controlled-radio-buttons-group">Item Title <span className="text-danger">*</span></FormLabel>
 
-            <StyledTable>
+                    <TextField variant='outlined' fullWidth
+                        type={'text'} onChange={(e) => onValueChange(e)}
+                        error={(errors.title.error)}
+                        helperText={(errors.title.error && errors.title.errorMessage)}
+                        name='title'
+                        size ='small' 
+                        value={title}></TextField>
 
-                <table>
-                    <thead></thead>
-                    <tbody>
-                        <tr>
-                            <td colSpan='2'>
-                                <FormLabel id="demo-controlled-radio-buttons-group">Item Title</FormLabel>
+                </div>
+                <div >
+                <FormLabel className="label" id="demo-controlled-radio-buttons-group">Amount <span className="text-danger">*</span></FormLabel>
 
-                                <TextField variant='outlined' fullWidth
-                                    type={'text'} onChange={(e) => onValueChange(e)}
-                                    error={(errors.title.error) }
-                                    helperText={(errors.title.error && errors.title.errorMessage)}
+                    <TextField type={'text'} onChange={(e) => onValueChange(e)}
+                        name='amount'
+                        fullWidth
+                        error={(errors.amount.error) || (amount !== '' && !String(amount).match(/^\d+$/))}
+                        helperText={(errors.amount.error && errors.amount.errorMessage) || (!String(amount).match(/^\d+$/) && amount !== '' ? 'Only digits are allowed' : ' ')}
+                        size='small'
+                        value={amount}></TextField>
 
-                                    name='title' value={title}></TextField>
+                </div>
 
-                            </td>
+                <div>
+                <FormLabel className="label" id="demo-controlled-radio-buttons-group">Category <span className="text-danger">*</span></FormLabel>
 
-                        </tr>
-                        <tr >
-                            <td colSpan='2'>
-                                <FormLabel id="demo-controlled-radio-buttons-group">Amount</FormLabel>
+                    <TextField fullWidth
+                        type={'text'} onChange={(e) => onValueChange(e)}
+                        name='category'
+                        error={(errors.category.error)}
+                        helperText={(errors.category.error && errors.category.errorMessage)}
+                        value={category}
+                        size='small'></TextField>
 
-                                <TextField type={'text'} onChange={(e) => onValueChange(e)}
-                                    name='amount'
-                                    fullWidth
-                                    error={(errors.amount.error) || (amount !== '' && !String(amount).match(/^\d+$/))}
-                                    helperText={(errors.amount.error && errors.amount.errorMessage) || (!String(amount).match(/^\d+$/) && amount !== '' ? 'Only digits are allowed' : ' ')} 
-                                    value={amount}></TextField>
+                </div>
+                <div>
+                <FormLabel className="label" id="demo-controlled-radio-buttons-group">Payment Type <span className="text-danger">*</span></FormLabel>
 
-                            </td>
-                        </tr>
+                    <RadioGroup row
+                        aria-labelledby="demo-controlled-radio-buttons-group"
+                        name="paymentType"
+                        value={paymentType}
+                        onChange={(e) => onValueChange(e)}>
+                        <FormControlLabel value="Income" control={<Radio />} label="Income" />
+                        <FormControlLabel value="Expense" control={<Radio />} label="Expense" />
+                    </RadioGroup>
+                    <FormHelperText error>{errors.paymentType.errorMessage}</FormHelperText>
 
-                        <tr>
-                            <td colSpan='2' >
-                                <FormLabel id="demo-controlled-radio-buttons-group">Category</FormLabel>
+                </div>
+                <div className="grid grid-2">
+                    <div>
+                    <FormLabel className="label" id="demo-controlled-radio-buttons-group">Date of Invoice <span className="text-danger">*</span></FormLabel>
+                  
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <Date
+                                name='dateOfInvoice'
+                                renderInput={(params) => <TextField {...params} />}
+                                value={dateOfInvoice}
+                                onChange={((date) => setItem({ ...item, dateOfInvoice: date }))}
 
-                                <TextField fullWidth
-                                    type={'text'} onChange={(e) => onValueChange(e)}
-                                    name='category'
-                                    error={(errors.category.error)}
-                                    helperText={(errors.category.error && errors.category.errorMessage)}
-                                    value={category}></TextField>
-
-                            </td>
-
-                        </tr>
-                        <tr>
-                            <td className='tr-row'>
-                                <FormLabel id="demo-controlled-radio-buttons-group">Payment Type</FormLabel>
-
-                                <RadioGroup row
-                                    aria-labelledby="demo-controlled-radio-buttons-group"
-                                    name="paymentType"
-                                    value={paymentType}
-                                    onChange={(e) => onValueChange(e)}>
-                                    <FormControlLabel value="Income" control={<Radio />} label="Income" />
-                                    <FormControlLabel value="Expense" control={<Radio />} label="Expense" />
-                                </RadioGroup>
-                                <FormHelperText error>{errors.paymentType.errorMessage}</FormHelperText>
-
-                            </td>
-                        </tr>
-                        <tr >
-                            <td className='tr-row'>
-                                <FormLabel id="demo-controlled-radio-buttons-group">Date of Invoice</FormLabel>
-
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <Date
-                                        name='dateOfInvoice'
-                                        renderInput={(params) => <TextField {...params} />}
-                                        value={dateOfInvoice}
-                                        onChange={((date) => setItem({ ...item, dateOfInvoice: date }))}
-
-                                    />
-                                </LocalizationProvider>
-                            </td>
-                            <td>
-                                <FormLabel id="demo-controlled-radio-buttons-group">Date of Payment</FormLabel>
-
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <Date
-                                        name='dateOfPayment'
-                                        renderInput={(params) => <TextField {...params} />}
-                                        value={dateOfPayment}
-                                        onChange={((date) => setItem({ ...item, dateOfPayment: date }))}
-                                    />
-                                </LocalizationProvider>
-
-                            </td>
-                        </tr>
-                        <tr >
-                            <td colSpan='2' className='tr-row'>
-                                <FormLabel id="demo-controlled-radio-buttons-group">Description</FormLabel>
-
-                                <TextField
-                                    multiline rows={5}
-                                    fullWidth
-                                    type={'text'} onChange={(e) => onValueChange(e)}
-                                    name='description'
-                                    value={description} ></TextField>
-
-                            </td>
-                        </tr>
-                        <tr>
-                        <td colSpan='2' className='tr-row' >
-                               
-                                    <span className="input-file" >
-                            <FileBase64
-                                type="file"
-                                multiple={false}
-                                onDone={({ base64 }) => { handleImageData(base64) }}
                             />
-                            </span>
-                            
-                            </td>
-                        </tr>
-                        <tr className='tr-row'>
-                            <td>
-                                <Button variant="contained" color="primary" onClick={() => clear()} sx={{
-                                    color: 'red', backgroundColor: '#ffe6e6', borderColor: 'red', ':hover': {
-                                        bgcolor: '#ffe6e6',
-                                        color: 'red',
-                                    }
-                                }}>Reset</Button>
-                            </td>
-                            <td align='right'>
-                                <Button variant="contained" color="primary" onClick={() => validateItemDetails()} sx={{
-                                    color: 'white', backgroundColor: '#7700FF', borderColor: 'white', ':hover': {
-                                        bgcolor: '#7700FF',
-                                        color: 'black',
-                                    }
-                                }} disabled={loadingRef.current}> {loadingRef.current ? 'Editting...' : 'Edit'}
-                                {loadingRef.current && <FontAwesomeIcon icon="spinner" spin />}
-                                </Button> 
-                                  
-                            </td>
-                        </tr>
+                        </LocalizationProvider>
+                    </div>
+                    <div>
+                    <FormLabel className="label" id="demo-controlled-radio-buttons-group">Date of Payment <span className="text-danger">*</span></FormLabel>
+                  
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <Date
+                                name='dateOfPayment'
+                                renderInput={(params) => <TextField {...params} />}
+                                value={dateOfPayment}
+                                onChange={((date) => setItem({ ...item, dateOfPayment: date }))}
+                            />
+                        </LocalizationProvider>
+                       
+                    </div>
+                </div>
+                <div>
+                <FormLabel className="label" id="demo-controlled-radio-buttons-group">Description</FormLabel>
 
-                    </tbody>
+                    <TextField
+                        multiline rows={5}
+                        fullWidth
+                        type={'text'} onChange={(e) => onValueChange(e)}
+                        name='description'
+                        value={description} 
+                        size='small'></TextField>
 
-                </table>
-            </StyledTable>
+                </div>
+                <div>
+                <FormLabel className="label" id="demo-controlled-radio-buttons-group">Payment Proof</FormLabel>
+               <br />
+                    <span className="input-file" >
+                        <FileBase64
+                            type="file"
+                            multiple={false}
+                            onDone={({ base64 }) => { handleImageData(base64) }}
+                        />
+                    </span>
+
+                </div>
+
+                <div className="grid grid-2 mt-4">
+                    <button className="btn btn-secondary btn-danger" onClick={() => clear()}>
+                        Reset
+                    </button>
+                    <button className="btn btn-primary" disabled={loadingRef.current} onClick={() => validateItemDetails()} >
+                        {loadingRef.current ? 'Editting...' : 'Edit'}
+                        {loadingRef.current && <FontAwesomeIcon icon="spinner" spin />}
+                    </button>
+                </div>
+            </div>
 
         </Container >
-
     )
 }
 

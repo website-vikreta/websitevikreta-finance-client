@@ -19,11 +19,11 @@ const DoughnutChart = ({items}) => {
             let currData = [];
             let thisMonthIncome = getThisMonth(response.data, 'Income', thisYear);
             let thisMonthExpense = getThisMonth(response.data, 'Expense', thisYear);
-            let profit = thisMonthIncome - thisMonthExpense;
-            let thisMonthProfit = profit > 0 ? profit: 0;
+           // let profit = thisMonthIncome - thisMonthExpense;
+            //let thisMonthProfit = profit > 0 ? profit: 0;
             currData.push(thisMonthIncome);
             currData.push(thisMonthExpense);
-            currData.push(thisMonthProfit);
+            //currData.push(thisMonthProfit);
             setData(currData);
            
         }
@@ -42,7 +42,7 @@ const DoughnutChart = ({items}) => {
     }
 
     var data = {
-        labels: ['Income', 'Expense', 'Profit'],
+        labels: ['Income', 'Expense'],
         datasets: [{
             data: Data,
             backgroundColor: [

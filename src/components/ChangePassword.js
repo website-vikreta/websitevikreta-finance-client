@@ -19,8 +19,10 @@ function ChangePassword() {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const loadingRef = useRef(false);
-
   const [error, setError] = useState('');
+
+  document.title = 'Change Password'
+
   const handleCurrentPasswordChange = (event) => {
     setCurrentPassword(event.target.value);
   };
@@ -40,6 +42,8 @@ function ChangePassword() {
   const toggleShowConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
 
   let navigate = useNavigate();
+
+  // Update Current Password
   const updatePasswrd = async (e) => {
     e.preventDefault();
     loadingRef.current = true;
@@ -79,77 +83,88 @@ function ChangePassword() {
       }
     }
   }
+
   return (
     <div className="App container">
-      <Navbar/>
-      <div className='change_password' style={{ width: '50%', margin: 'auto', justifyContent: 'center' }}>
+      {/* Header */}
+      <Navbar user={user} />
 
-        <form onSubmit={updatePasswrd}>
+      {/* Main Content */}
+      <main>
+        <div className='loginGrid'>
+          <form onSubmit={updatePasswrd}>
 
-          <div>
+            <div>
+              {/* Form */}
+              <div className="form_input">
+                <FormLabel id="demo-controlled-radio-buttons-group">Current Password</FormLabel>
+                <TextField value={currentPassword}
+                  onChange={handleCurrentPasswordChange}
+                  type={showCurrentPassword ? 'text' : 'password'}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={toggleShowCurrentPassword}>
+                          {showCurrentPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </div>
+              <div className="form_input">
+                <FormLabel id="demo-controlled-radio-buttons-group">New Password</FormLabel>
+                <TextField value={newPassword}
+                  onChange={handleNewPasswordChange}
+                  type={showNewPassword ? 'text' : 'password'}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={toggleShowNewPassword}>
+                          {showNewPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                  error={(newPassword !== '' && !String(newPassword).match("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"))}
+                  helperText={(!String(newPassword).match("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$") && newPassword !== '' ? 'Password must contains Minimum eight characters, at least one uppercase letter, one lowercase letter, one number!' : '')}
+                />
+              </div>
+              <div className="form_input">
+                <FormLabel id="demo-controlled-radio-buttons-group">Confirm Password</FormLabel>
+                <TextField
+                  value={confirmPassword}
+                  onChange={handleConfirmPasswordChange}
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={toggleShowConfirmPassword}>
+                          {showConfirmPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </div>
+            </div>
+            <div>
+              <FormHelperText error>{error}</FormHelperText>
+            </div>
+            <div className="form_input">
+              <Button
 
-            <FormLabel id="demo-controlled-radio-buttons-group">Current Password</FormLabel>
-            <TextField value={currentPassword}
-              onChange={handleCurrentPasswordChange}
-              type={showCurrentPassword ? 'text' : 'password'}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={toggleShowCurrentPassword}>
-                      {showCurrentPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <FormLabel id="demo-controlled-radio-buttons-group">New Password</FormLabel>
-            <TextField value={newPassword}
-              onChange={handleNewPasswordChange}
-              type={showNewPassword ? 'text' : 'password'}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={toggleShowNewPassword}>
-                      {showNewPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-              error={(newPassword !== '' && !String(newPassword).match("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"))}
-              helperText={(!String(newPassword).match("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$") && newPassword !== '' ? 'Password must contains Minimum eight characters, at least one uppercase letter, one lowercase letter, one number!' : '')}
-            />
-            <FormLabel id="demo-controlled-radio-buttons-group">Confirm Password</FormLabel>
-            <TextField
-              value={confirmPassword}
-              onChange={handleConfirmPasswordChange}
-              type={showConfirmPassword ? 'text' : 'password'}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={toggleShowConfirmPassword}>
-                      {showConfirmPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </div>
-          <div>
-            <FormHelperText error>{error}</FormHelperText>
-          </div>
-          <div>
-            <Button
-
-              variant="outlined"
-              type='submit' disabled={loadingRef.current}>
-              {loadingRef.current ? 'Updating...' : 'Update Password'}
-              {loadingRef.current && <FontAwesomeIcon icon="spinner" spin />}
-            </Button>
-          </div>
+                variant="outlined"
+                type='submit' disabled={loadingRef.current}>
+                {loadingRef.current ? 'Updating...' : 'Update Password'}
+                {loadingRef.current && <FontAwesomeIcon icon="spinner" spin />}
+              </Button>
+            </div>
 
 
-        </form>
-      </div>
+          </form>
+        </div>
+      </main>
 
     </div>
   )

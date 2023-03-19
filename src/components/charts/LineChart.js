@@ -82,7 +82,7 @@ const LineChart = ({ items }) => {
 
   function getData(monthlyIncome, monthlyExpense, yearTotal, labels){
    
-    let i  =0;
+    let i=0;
     while (monthlyIncome[i] === 0 && monthlyExpense[i] === 0) {
       i++;
     }

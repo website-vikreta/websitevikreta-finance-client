@@ -22,5 +22,7 @@ export const forgotPassword = async (id, token) => await axios.get(`${url}/forgo
 export const sendPasswordLink = async (email) =>  await axios.post(`${url}/sendpasswordlink`, email);
 export const setNewPassword = async (id, token, password) => await axios.post(`${url}/${id}/${token}`, password);
 export const setUserPasswordByAdmin = async (user) => await axios.post(`${url}/setuserpassword`, user);
+export const deleteAllData = async (id) => await axios.delete(`${url}/deletedata${id}`);
+export const deleteAccountPermanant = async (id, user) => axios.post(`${url}/deleteaccount${id}`, user);
 
 

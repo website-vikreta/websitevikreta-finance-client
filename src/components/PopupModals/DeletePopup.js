@@ -1,6 +1,6 @@
-import  React from 'react';
+import React from 'react';
 import Draggable from 'react-draggable';
-import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper} from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper } from '@mui/material';
 
 
 function PaperComponent(props) {
@@ -15,15 +15,17 @@ function PaperComponent(props) {
 }
 
 export default function DeletePopup(props) {
-  
-  const {delModal,setDelModal, confirm} = props;
- 
+
+  const { delModal, setDelModal, confirm } = props;
+
+  // Close Dialog Modal
   const handleClose = () => {
-    setDelModal({openDelDialog: false, deleteId: null});
+    setDelModal({ openDelDialog: false, deleteId: null });
   };
 
+  // Delete All Data
   const handleDelete = () => {
-    setDelModal({openDelDialog: false, deleteId: null});
+    setDelModal({ openDelDialog: false, deleteId: null });
     confirm();
   }
 
@@ -34,25 +36,29 @@ export default function DeletePopup(props) {
         onClose={handleClose}
         PaperComponent={PaperComponent}
         aria-labelledby="draggable-dialog-title">
+
         <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
           Delete
         </DialogTitle>
+
+        {/* Dialog Content for Deletion */}
         <DialogContent dividers>
           <DialogContentText>
-            <span style={{fontWeight: '900'}}>Are you Sure? </span>
+            <span style={{ fontWeight: '900' }}>Are you Sure? </span>
             Do you really want to delete this record? This process cannot be undone.
           </DialogContentText>
         </DialogContent>
+
         <DialogActions>
           <Button autoFocus onClick={handleClose}>
             Cancel
           </Button>
           <Button onClick={handleDelete} sx={{
-                    color: 'white', backgroundColor: '#e60000', borderColor: 'white', ':hover': {
-                        bgcolor: '#e60000',
-                        color: 'white',
-                    }
-                }}>Delete</Button>
+            color: 'white', backgroundColor: '#e60000', borderColor: 'white', ':hover': {
+              bgcolor: '#e60000',
+              color: 'white',
+            }
+          }}>Delete</Button>
         </DialogActions>
       </Dialog>
     </div>

@@ -19,13 +19,12 @@ const ForgotPassword = () => {
    const [message, setMessage] = useState(false);
    const [btnStatus, setBtnStatus] = useState(false);
 
-
-
-
+   document.title = 'Forgot Password'
    const setval = (e) => {
       setPassword(e.target.value)
    }
 
+   // Set New Password
    const sendPassword = async (e) => {
       setBtnStatus(true);
 
@@ -46,7 +45,6 @@ const ForgotPassword = () => {
          try {
 
             const res = await setNewPassword(id, token, { password: password });
-
             if (res.status === 201) {
                setPassword("")
                setTimeout(() => {
@@ -90,41 +88,49 @@ const ForgotPassword = () => {
 
    return (
       <div className='App container'>
+         {/* Header */}
          <Navbar />
-         {
-            itemData ? (
-               <>
-                  <div style={{ width: '50%', margin: 'auto' }}>
-                     <div>
-                        <div>
-                           <h2>Enter Your NEW Password</h2>
+         {/* Main Content */}
+         <main>
+            <div className='loginGrid'>
+               {
+                  itemData ? (
+                     <>
+                        <div style={{ width: '50%', margin: 'auto' }}>
+                           <div>
+                              <div>
+                                 <h2>Enter Your NEW Password</h2>
+                              </div>
+
+                              {message ? <p style={{ color: "green", fontWeight: "bold" }}>Password Updated Successfully </p> : ""}
+                              <div className="form_input">
+                                 <FormLabel id="demo-controlled-radio-buttons-group">Enter Your new password</FormLabel>
+
+                                 <TextField type="password" value={password} onChange={setval} name="password" id="password" />
+                              </div>
+                              <div className="form_input" style={{ padding: '20px 0px' }}>
+
+                                 <Button onClick={sendPassword} disabled={btnStatus || (message && true)}>
+                                    {btnStatus ? 'Updating...' : 'Update Password'}
+                                    {btnStatus && <FontAwesomeIcon icon="spinner" spin />}
+                                 </Button>
+                              </div>
+                              {message && <p><NavLink to="/">Back to Home</NavLink></p>}
+
+                              <ToastContainer />
+                           </div>
                         </div>
-
-                        {message ? <p style={{ color: "green", fontWeight: "bold" }}>Password Updated Successfully </p> : ""}
-                        <div className="form_input">
-                           <FormLabel id="demo-controlled-radio-buttons-group">Enter Your new password</FormLabel>
-
-                           <TextField type="password" value={password} onChange={setval} name="password" id="password" />
-                        </div>
-                        <div className="form_input" style={{ padding: '20px 0px' }}>
-
-                           <Button onClick={sendPassword} disabled={btnStatus || (message && true)}>
-                              {btnStatus ? 'Updating...' : 'Update Password'}
-                              {btnStatus && <FontAwesomeIcon icon="spinner" spin />}
-                           </Button>
-                        </div>
-                        {message && <p><NavLink to="/">Back to Home</NavLink></p>}
-
-                        <ToastContainer />
-                     </div>
-                  </div>
-               </>
-            ) : <Box sx={{ display: 'flex', justifyContent: "center", alignItems: "center", height: "100vh" }}>
-               Loading... &nbsp;
-               <CircularProgress />
-            </Box>
-         }
+                     </>
+                  ) : <Box sx={{ display: 'flex', justifyContent: "center", alignItems: "center", height: "100vh" }}>
+                     Loading... &nbsp;
+                     <CircularProgress />
+                  </Box>
+               }
+            </div>
+         </main>
       </div>
+
+
    )
 }
 

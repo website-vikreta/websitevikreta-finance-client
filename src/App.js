@@ -19,14 +19,12 @@ const App = () => {
       <Routes>
         <Route element = {<ProtectedRoutes/>}>
           <Route path="/home" element={<Main />} />
-         
-
           <Route path="/edit/:id" element={<EditItem />} />
-          <Route path="/ChangePassword" element={<ChangePassword />} />
+          <Route path="/change-password" element={<ChangePassword />} />
         </Route>
         <Route path="/" element={<Login />} />
-        <Route path="/passwordReset" element={<PasswordReset/>}/>
-        <Route path="/forgotpassword/:id/:token" element={<ForgotPassword/>}/>
+        <Route path="/password-reset" element={<PasswordReset/>}/>
+        <Route path="/forgot-password/:id/:token" element={<ForgotPassword/>}/>
         <Route path="*" element={<Error />} />
         <Route path="/admin" element={<PasswordSet />} />
 

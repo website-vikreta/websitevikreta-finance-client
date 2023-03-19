@@ -19,22 +19,25 @@ import { Suspense } from 'react';
 import Navbar from './Navbar';
 const Popup = React.lazy(() => import('./PopupModals/Popup'));
 
-const Index = ({userr}) => {
+const Index = () => {
 
    const [showModal, setShowModal] = useState({ openDialog: false, itemId: 0 });
    const [items, setItems] = useState([]);
    const [user, setUser] = useState([]);
    const [render, setRender] = useState('unset');
    
+   document.title = 'Home'
    const getAllItems = async () => {
       let res = localStorage.getItem('user-info');
       let response = await getItems(JSON.parse(res).id);
-      setUser(JSON.parse(res).username)
+      setUser(JSON.parse(res))
       setItems(response.data);
    }
    useEffect(() => {
       getAllItems();
    }, [render]);
+
+   
    return (
 
       // Defining Structure

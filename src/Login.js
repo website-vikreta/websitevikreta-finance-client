@@ -35,6 +35,7 @@ const Login = () => {
       return <Index />;
    }
 
+   // Login Submit
    const handleSubmit = async () => {
       setBtnStatus(true);
       if (email === '' || password === '') {
@@ -58,7 +59,6 @@ const Login = () => {
          }
       } catch (err) {
          errorMsg = "Invalid Email or Password";
-         console.log(err.message, 'errrr');
          setError(errorMsg);
          setBtnStatus(false);
       }
@@ -90,7 +90,7 @@ const Login = () => {
                   ></TextField>
                </Grid>
                <Grid item xs={12}>
-                  <NavLink to="/passwordReset" className="linkBtn">
+                  <NavLink to="/password-reset" className="linkBtn">
                      Forgot Password?
                   </NavLink>
 

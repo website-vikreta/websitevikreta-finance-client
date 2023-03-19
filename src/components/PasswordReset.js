@@ -1,9 +1,12 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { TextField } from '@mui/material';
 import React, { useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import { NavLink } from 'react-router-dom';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { TextField } from '@mui/material';
+
 import { sendPasswordLink } from '../api';
+
 import Navbar from './Navbar';
 
 const PasswordReset = () => {
@@ -12,48 +15,13 @@ const PasswordReset = () => {
    const [message, setMessage] = useState(false);
    const [btnStatus, setBtnStatus] = useState(false);
 
+   document.title = 'Password Reset';
    const setVal = (e) => {
       setEmail(e.target.value)
    }
 
-   // const sendLink = async (e) => {
-   //     e.preventDefault();
-   //     loadingRef.current = true;
-   //     console.log(loadingRef.current)
-   //     if (email === "") {
-   //         toast.error("Email is required!", {
-   //             position: "top-center"
-   //         });
-
-   //         loadingRef.current = false;
-   //         return;
-   //     } else if (!email.includes("@")) {
-   //         toast.warning("Please include @ in your email!", {
-   //             position: "top-center"
-   //         });
-   //         loadingRef.current = false;
-   //         return;
-   //     } else {
-
-   //         const res = await sendPasswordLink({ email });
-
-   //         if (res.data.status === 201) {
-   //             setEmail("");
-   //             setMessage(true)
-
-   //         } else {
-   //             toast.error("Invalid User", {
-   //                 position: "top-center"
-   //             })
-
-   //         }
-   //     }
-   //     setTimeout(() => {
-   //         loadingRef.current = false;
-   //     }, 2000);
-   // }
+   // Validate Feilds 
    function sendLink() {
-
       setBtnStatus(true);
       if (email === "") {
          toast.error("Email is required!", {
@@ -68,12 +36,11 @@ const PasswordReset = () => {
          setBtnStatus(false);
          return;
       } else {
-
          sendEmail(email);
-
       }
 
    }
+   // Send request to reset password
    const sendEmail = async (email) => {
       const res = await sendPasswordLink({ email });
 
@@ -105,7 +72,6 @@ const PasswordReset = () => {
                   <p className='mb-3 fw-normal'>Enter your email to proceed</p>
                </div>
 
-               {/* <form onSubmit={sendLink}> */}
                {message ? <p style={{ color: "green", fontWeight: "bold" }}>Please check your email to reset password</p> : ""}
 
                <div className="form_input">
