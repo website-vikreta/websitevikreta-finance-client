@@ -1,5 +1,5 @@
 
-import React  from 'react'
+import React from 'react'
 import { useState, useEffect } from 'react';
 // import { Link } from 'react-router-dom';
 import { subDays } from 'date-fns';
@@ -13,15 +13,14 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
-import { Button,  Grid } from '@mui/material';
-import {utils, writeFileXLSX}  from 'xlsx';
+import { Button, Grid } from '@mui/material';
+import { utils, writeFileXLSX } from 'xlsx';
 import { getItems, getMedia, deleteItem } from '../../api/index';
 
 // Import Components
 const Popup = React.lazy(() => import('../PopupModals/Popup'));
 const DeletePopup = React.lazy(() => import('../PopupModals/DeletePopup'));
 const PopupImage = React.lazy(() => import('../PopupModals/PopupImage'));
-
 
 
 const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate, endDate }) => {
@@ -35,6 +34,7 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
    const [page, setPage] = useState(1);
    const handlePageChange = (page) => setPage(page);
 
+   // get all items
    const getAllItems = async () => {
       let res = localStorage.getItem('user-info');
       let response = await getItems(JSON.parse(res).id);
@@ -62,6 +62,7 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
          else return 4;
       }
 
+      // Current quarter items
       function thisQuarter(currentDate, now, month, quartr, item) {
          if (getQuarter(quartr === 4)) {
             if (currentDate.getFullYear() === now.getFullYear() && (month <= 3)) {
@@ -162,6 +163,7 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
       setDelModal({ openDelDialog: false, deleteId: null });
    }
 
+   // Delete items
    const deleteConfirm = async (id) => {
       await deleteItem(id);
       toast(" Successfully Deleted", {
@@ -178,6 +180,7 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
       return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear()
    };
 
+   // Get payment proof
    const getProof = async (id) => {
       let response = await getMedia(id);
 
@@ -275,7 +278,7 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
    //Custom Sort on Data Table
    const customSort = (rows, selector, direction) => {
       return rows.sort((firstRow, secondRow) => {
-         
+
          const firstRowField = selector(firstRow)
          const secondRowField = selector(secondRow)
 
@@ -314,12 +317,12 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
       const wb = utils.book_new();
       utils.book_append_sheet(wb, ws, sheetName);
       writeFileXLSX(wb, `${fileName}.xlsx`);
-    };
-   
-    const donwloadExcel = () => {
+   };
+
+   const donwloadExcel = () => {
       handleDownloadExcel(filteredElements, "ITEMS_SHEET", "ALL_ITEMS");
-    }
-   
+   }
+
    return (
 
       <Grid className='tableWrapper' container alignContent={'center'}>
@@ -328,48 +331,45 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
          <DeletePopup delModal={delModal} setDelModal={setDelModal} confirm={confirm}></DeletePopup>
          <PopupImage showImgModal={showImgModal} setShowImgModal={setShowImgModal}></PopupImage>
          <ToastContainer />
-         
-            <DataTable
 
-               columns={columns}
-               data={filteredElements}
-               sortFunction={customSort}
-               customStyles={tableCustomStyles}
-               fixedHeader
-               pagination
-               
-               paginationResetDefaultPage={true}
-               paginationTotalRows={filteredElements.length}
-               paginationComponentOptions={{
-                  rowsPerPageText: "Rows per page:",
-                  rangeSeparatorText: "of",
-                  noRowsPerPage: false,
-                  selectAllRowsItem: false,
-                  selectAllRowsItemText: "All",
-               }}
+         <DataTable
 
-               subHeader
-               subHeaderComponent={
-                  <div className='tableSubHeaderComponent'>
-                     <div className='headingWrapper'>
-                        <h5 className='heading heading-two'>All records</h5>
-                        <Button onClick={donwloadExcel}>Export Data</Button>
-                     </div>
-                     <input
-                        type='text'
-                        placeholder='Search Here'
-                        className='form-control'
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                     />
+            columns={columns}
+            data={filteredElements}
+            sortFunction={customSort}
+            customStyles={tableCustomStyles}
+            fixedHeader
+            pagination
+
+            paginationResetDefaultPage={true}
+            paginationTotalRows={filteredElements.length}
+            paginationComponentOptions={{
+               rowsPerPageText: "Rows per page:",
+               rangeSeparatorText: "of",
+               noRowsPerPage: false,
+               selectAllRowsItem: false,
+               selectAllRowsItemText: "All",
+            }}
+
+            subHeader
+            subHeaderComponent={
+               <div className='tableSubHeaderComponent'>
+                  <div className='headingWrapper'>
+                     <h5 className='heading heading-two'>All records</h5>
+                     <Button onClick={donwloadExcel}>Export Data</Button>
                   </div>
-               }
-               onChangePage={handlePageChange}
-               highlightOnHover
-            />
-            
-
-
+                  <input
+                     type='text'
+                     placeholder='Search Here'
+                     className='form-control'
+                     value={search}
+                     onChange={(e) => setSearch(e.target.value)}
+                  />
+               </div>
+            }
+            onChangePage={handlePageChange}
+            highlightOnHover
+         />
       </Grid>
    );
 

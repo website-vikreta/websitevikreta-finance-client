@@ -64,7 +64,7 @@ export default function DeleteDataPopup({ userId, deleteDataModal, setDeleteData
                     <DialogContentText>
                         {deleteSucces ? <>Your Data has been Deleted Successfully. Please Refresh the page. <CheckCircleOutlinedIcon sx={{ color: 'green' }} /></> :
                             <>
-                                <center> <strong>Delete Your Sure ?</strong></center>
+                                <center> <strong>Are You Sure ?</strong></center>
                                 Do you really want to delete All Record? This process cannot be undone.
                             </>
                         }

@@ -49,6 +49,7 @@ export default function DeleteAccount({ user, deleteAccountModal, setDeleteAccou
             setTimeout(() => {
                 setBtnStatus(false);
             }, 2000);
+            setError("Password is Wrong");
             console.log(error);
         }
 
