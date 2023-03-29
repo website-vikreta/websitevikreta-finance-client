@@ -40,7 +40,10 @@ const tableCustomStyles = {
    pagination: {
       style: {
          fontSize: '0.9rem',
-         padding: '0',
+         padding: '10px',
+         position: 'absolute',
+         bottom: '0',
+         right: '0',
       }
    },
    subHeaderComponent: {
