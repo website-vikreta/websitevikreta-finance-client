@@ -98,8 +98,6 @@ const PasswordSet = () => {
             <Navbar />
             <div className='change_password' style={{ width: '50%', margin: 'auto', justifyContent: 'center' }}>
 
-                <div>
-
                     <FormLabel id="demo-controlled-radio-buttons-group">Email</FormLabel>
                     <TextField value={email}
                         type='text'
@@ -145,7 +143,7 @@ const PasswordSet = () => {
                         error={(password !== '' && !String(password).match("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"))}
                         helperText={(!String(password).match("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$") && password !== '' ? 'Password must contains Minimum eight characters, at least one uppercase letter, one lowercase letter, one number!' : '')}
                       />
-                </div>
+                
                 <div>
             <FormHelperText error>{error}</FormHelperText>
           </div>
