@@ -8,6 +8,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import './styles/itemform.css';
 
 const Login = () => {
 

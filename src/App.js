@@ -1,7 +1,6 @@
 
 import { BrowserRouter, Route,Routes } from 'react-router-dom';
 import './styles/index.css';
-import './styles/itemform.css';
 import Login from './Login';
 import Main from './components/Main'
 import EditItem from './components/Items/EditItem';
