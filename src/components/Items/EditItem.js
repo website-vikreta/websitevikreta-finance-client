@@ -13,7 +13,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { updateItem, getItem } from '../../api/index';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import '../../styles/ItemForm.css';
+import '../../styles/itemform.css';
 
 var cookie = new Cookie();
 const Date = styled(DatePicker)`

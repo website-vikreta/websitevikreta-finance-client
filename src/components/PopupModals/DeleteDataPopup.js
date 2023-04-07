@@ -82,7 +82,7 @@ export default function DeleteDataPopup({ userId, deleteDataModal, setDeleteData
                                 }
                             }}>
 
-                            {btnStatus ? 'Delete Account...' : 'Delete Account'}
+                            {btnStatus ? 'Delete Data...' : 'Delete Data'}
                             {btnStatus && <FontAwesomeIcon icon="spinner" spin />}
                         </button>
                     </div>

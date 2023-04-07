@@ -96,7 +96,7 @@ const PasswordSet = () => {
     return (
         <div className="App container">
             <Navbar />
-            <Navbar />
+            
             <div className='change_password' style={{ width: '50%', margin: 'auto', justifyContent: 'center' }}>
 
                     <FormLabel id="demo-controlled-radio-buttons-group">Email</FormLabel>

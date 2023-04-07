@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import FileBase64 from 'react-file-base64';
+
 import { toast } from 'react-toastify';
 import Cookie from 'universal-cookie';
 import 'react-toastify/dist/ReactToastify.css';
@@ -12,7 +13,7 @@ import styled from "@emotion/styled";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { createItem } from '../../api/index';
-import '../../styles/ItemForm.css';
+import '../../styles/itemform.css';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Date = styled(DatePicker)`

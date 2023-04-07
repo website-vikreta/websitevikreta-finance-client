@@ -1,12 +1,13 @@
 
 import { BrowserRouter, Route,Routes } from 'react-router-dom';
+import './styles/index.css';
 import Login from './Login';
 import Main from './components/Main'
 import EditItem from './components/Items/EditItem';
 import ChangePassword from './components/ChangePassword';
 import ProtectedRoutes from './components/ProtectedRoutes';
 import PasswordSet from './components/admin/PasswordSet';
-import './styles/index.css';
+
 import PasswordReset from './components/PasswordReset';
 import Error from './Error';
 import ForgotPassword from './components/ForgotPassword';

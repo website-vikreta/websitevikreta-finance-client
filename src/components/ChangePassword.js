@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { getPassword, updatePassword } from '../api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Navbar from './Navbar';
+import '../styles/index.css';
 
 function ChangePassword() {
   let user = JSON.parse(localStorage.getItem('user-info'));
