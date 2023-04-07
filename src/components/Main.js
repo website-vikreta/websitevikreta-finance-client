@@ -17,6 +17,7 @@ import { getItems } from '../api';
 import QuartersChart from './charts/QuartersChart';
 import { Suspense } from 'react';
 import Navbar from './Navbar';
+import ChangePassword from './ChangePassword';
 const Popup = React.lazy(() => import('./PopupModals/Popup'));
 
 const Index = () => {
@@ -72,7 +73,9 @@ const Index = () => {
                   <div className="card">
 
                      <AllItems items={items} setItems={setItems} render={render} setRender={setRender} />
+                     
                   </div>
+                  <ChangePassword/>
                </div>
 
             </main>
