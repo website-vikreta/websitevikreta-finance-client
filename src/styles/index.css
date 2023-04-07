@@ -372,7 +372,7 @@ main {
    max-width: 500px;
    width: 100%;
    margin: 50px auto;
-   background-color: #7700ff;
+   
    display: flex;
    flex-direction: column !important;
    gap: 1rem;
