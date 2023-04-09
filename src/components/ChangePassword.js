@@ -10,6 +10,7 @@ import { getPassword, updatePassword } from '../api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Navbar from './Navbar';
 import '../styles/index.css';
+import '../styles/itemform.css';
 
 function ChangePassword() {
   let user = JSON.parse(localStorage.getItem('user-info'));
@@ -98,7 +99,7 @@ function ChangePassword() {
             <div>
               {/* Form */}
               <div className="form_input">
-                <FormLabel id="demo-controlled-radio-buttons-group">Current Password</FormLabel>
+                <FormLabel id="demo-controlled-radio-buttons-group">Current Password</FormLabel><br/>
                 <TextField value={currentPassword}
                   onChange={handleCurrentPasswordChange}
                   type={showCurrentPassword ? 'text' : 'password'}
@@ -114,7 +115,7 @@ function ChangePassword() {
                 />
               </div>
               <div className="form_input">
-                <FormLabel id="demo-controlled-radio-buttons-group">New Password</FormLabel>
+                <FormLabel id="demo-controlled-radio-buttons-group">New Password</FormLabel><br/>
                 <TextField value={newPassword}
                   onChange={handleNewPasswordChange}
                   type={showNewPassword ? 'text' : 'password'}
@@ -132,7 +133,7 @@ function ChangePassword() {
                 />
               </div>
               <div className="form_input">
-                <FormLabel id="demo-controlled-radio-buttons-group">Confirm Password</FormLabel>
+                <FormLabel id="demo-controlled-radio-buttons-group">Confirm Password</FormLabel><br/>
                 <TextField
                   value={confirmPassword}
                   onChange={handleConfirmPasswordChange}
