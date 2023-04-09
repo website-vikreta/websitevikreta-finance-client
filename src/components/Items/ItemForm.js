@@ -254,7 +254,7 @@ const ItemForm = (props) => {
             </div>
             <div>
                <FormLabel className="label" id="demo-controlled-radio-buttons-group">Payment Proof</FormLabel>
-               <br />
+               
                <span className="input-file" >
                   <FileBase64
                      type="file"

@@ -153,6 +153,7 @@ function ChangePassword() {
             <div>
               <FormHelperText error>{error}</FormHelperText>
             </div>
+            <br/>
             <div className="form_input">
               <Button
 
