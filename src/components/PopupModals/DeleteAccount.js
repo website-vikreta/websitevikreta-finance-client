@@ -79,7 +79,7 @@ export default function DeleteAccount({ user, deleteAccountModal, setDeleteAccou
                         You are requesting to delete an account. This process cannot be undone also will delete your all records.
                     </div>
                     <div className="form_input" sx={{ padding: '20px 0px' }}>
-                        <FormLabel id="demo-controlled-radio-buttons-group">Enter your password to confirm delete your account.</FormLabel>
+                        <FormLabel id="demo-controlled-radio-buttons-group">Enter your password to confirm delete your account.</FormLabel><br/>
 
                         <TextField type="password" value={password} onChange={setValue} name="password" id="password" size="small" />
                     </div>
