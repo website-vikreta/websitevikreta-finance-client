@@ -21,7 +21,8 @@ const ItemsTable = ({ items }) => {
    }
 
    function thisQuarter(currentDate, now, month, quartr, item) {
-      if (getQuarter(quartr === 4)) {
+      
+      if (quartr === 4) {
          if (currentDate.getFullYear() === now.getFullYear() && (month <= 3)) {
             return item;
          } else {
@@ -46,11 +47,16 @@ const ItemsTable = ({ items }) => {
       const itemDate = new Date(item.dateOfInvoice);
       var currentMonth = currentDate.getMonth();
       if (timeFilter === 0) {
-
+         
+         if(itemDate.getMonth() < 3)
+         return (itemDate.getFullYear() === currentDate.getFullYear()+1) ? item : null;
+         else
          return (itemDate.getFullYear() === currentDate.getFullYear()) ? item : null;
 
       } else if (timeFilter === 1) {
-
+         if(itemDate.getMonth() < 3)
+         return (itemDate.getFullYear() === currentDate.getFullYear()) ? item : null;
+         else
          return (itemDate.getFullYear() === currentDate.getFullYear() - 1) ? item : null;
 
       } else if (timeFilter === 2) {
@@ -150,12 +156,11 @@ const ItemsTable = ({ items }) => {
       lastQuartrYear2 = currentDate.getFullYear() - 1;
    }
    
-   // const profitPercentage = (income, expense) => income === 0 && expense === 0 ? 0 : expense === 0 ? 100 : Math.trunc(((income - expense) / income) * 100) ; //+ Number.EPSILON) * 100) / 100;
-   // const lossPercentage = (income, expense) => Math.trunc(((expense - income) / expense) * 100);   
-
-   const currentMonthProfit = (currMonthTotalProfit === lastMonthTotalProfit ) ? 0 : (lastMonthTotalProfit === 0 || ((currMonthTotalProfit < lastMonthTotalProfit) && currMonthTotalProfit < 0))  ? 100: (currMonthTotalProfit > lastMonthTotalProfit && lastMonthTotalProfit < 0) ?  Math.abs(Math.trunc((currMonthTotalProfit/lastMonthTotalProfit)*100)) : Math.trunc((currMonthTotalProfit/lastMonthTotalProfit)*100)
-   const currentQuarterProfit = (currQaurtrTotalProfit === lastQaurtrTotalProfit) ? 0:(lastQaurtrTotalProfit === 0 || ((currQaurtrTotalProfit < lastQaurtrTotalProfit) && currQaurtrTotalProfit < 0)) ? 100: (currQaurtrTotalProfit > lastQaurtrTotalProfit && lastQaurtrTotalProfit < 0) ? Math.abs(Math.trunc((currQaurtrTotalProfit/lastQaurtrTotalProfit)*100)) : Math.trunc((currQaurtrTotalProfit/lastQaurtrTotalProfit)*100)
-   const currentYearProfit = (currentYearTotalProfit === lastYearTotalProfit) ? 0: (lastYearTotalProfit === 0 || (currentYearTotalProfit < lastYearTotalProfit && currentYearTotalProfit < 0)) ? 100: (currentYearTotalProfit > lastYearTotalProfit && lastYearTotalProfit < 0) ? Math.abs(Math.trunc((currentYearTotalProfit/lastYearTotalProfit)*100)) : Math.trunc((currentYearTotalProfit/lastYearTotalProfit)*100)
+   
+   
+   const currentMonthProfit = (currMonthTotalProfit === lastMonthTotalProfit ) ? 0 : (lastMonthTotalProfit === 0 || ((currMonthTotalProfit < lastMonthTotalProfit) && currMonthTotalProfit < 0))  ? 100: (currMonthTotalProfit > lastMonthTotalProfit && lastMonthTotalProfit < 0) ?  (((currMonthTotalProfit-lastMonthTotalProfit)/Math.abs(lastMonthTotalProfit))*100).toFixed(2) : (((currMonthTotalProfit-lastMonthTotalProfit)/Math.abs(lastMonthTotalProfit))*100).toFixed(2);
+   const currentQuarterProfit = (currQaurtrTotalProfit === lastQaurtrTotalProfit) ? 0:(lastQaurtrTotalProfit === 0 || ((currQaurtrTotalProfit < lastQaurtrTotalProfit) && currQaurtrTotalProfit < 0)) ? 100: (currQaurtrTotalProfit > lastQaurtrTotalProfit && lastQaurtrTotalProfit < 0) ? (((currQaurtrTotalProfit-lastQaurtrTotalProfit)/Math.abs(lastQaurtrTotalProfit))*100).toFixed(2) : (((currQaurtrTotalProfit-lastQaurtrTotalProfit)/Math.abs(lastQaurtrTotalProfit))*100).toFixed(2);
+   const currentYearProfit = (currentYearTotalProfit === lastYearTotalProfit) ? 0: (lastYearTotalProfit === 0 || (currentYearTotalProfit < lastYearTotalProfit && currentYearTotalProfit < 0)) ? 100: (currentYearTotalProfit > lastYearTotalProfit && lastYearTotalProfit < 0) ? (((currentYearTotalProfit-lastYearTotalProfit)/Math.abs(lastYearTotalProfit))*100).toFixed(2) : (((currentYearTotalProfit-lastYearTotalProfit)/Math.abs(lastYearTotalProfit))*100).toFixed(2);
    return (
 
       // Defining Structure

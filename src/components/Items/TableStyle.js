@@ -41,9 +41,6 @@ const tableCustomStyles = {
       style: {
          fontSize: '0.9rem',
          padding: '10px',
-         position: 'absolute',
-         bottom: '0',
-         right: '0',
       }
    },
    subHeaderComponent: {

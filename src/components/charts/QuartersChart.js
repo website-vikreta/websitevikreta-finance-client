@@ -120,23 +120,25 @@ const QuartersChart = ({ items }) => {
             {
                 label: "Income",
                 data: Data[1],
-                backgroundColor: ' #e4ccff',
-                borderColor: '#7700ff',
-
-                borderWidth: 1
-            },
-            {
-                label: "Expense",
-                data: Data[2],
+               
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 borderColor: 'rgba(54, 162, 235, 1)',
                 borderWidth: 1
             },
             {
-                label: "Profit",
-                data: Data[3],
+                label: "Expense",
+                data: Data[2],
                 backgroundColor: 'rgba(255, 206, 86, 0.2)',
                 borderColor: 'rgba(255, 206, 86, 1)',
+                borderWidth: 1
+            },
+            {
+                label: "Profit",
+                data: Data[3],
+                
+                backgroundColor: ' #e4ccff',
+                borderColor: '#7700ff',
+
                 borderWidth: 1
             }
         ]

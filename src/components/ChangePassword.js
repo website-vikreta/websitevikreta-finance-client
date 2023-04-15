@@ -1,4 +1,4 @@
-import { Button, FormLabel, TextField } from '@mui/material';
+import { TextField } from '@mui/material';
 import React, { useRef, useState } from 'react'
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
@@ -98,9 +98,18 @@ function ChangePassword() {
 
             <div>
               {/* Form */}
+
+              <div>
+                <h4 className='heading heading-one mb-1'>Change Password</h4>
+      
+              </div>
+
+
               <div className="form_input">
-                <FormLabel id="demo-controlled-radio-buttons-group">Current Password</FormLabel><br/>
-                <TextField value={currentPassword}
+
+                <TextField
+                  label="Current Password"
+                  value={currentPassword}
                   onChange={handleCurrentPasswordChange}
                   type={showCurrentPassword ? 'text' : 'password'}
                   InputProps={{
@@ -113,10 +122,14 @@ function ChangePassword() {
                     ),
                   }}
                 />
+
               </div>
+              <br />
               <div className="form_input">
-                <FormLabel id="demo-controlled-radio-buttons-group">New Password</FormLabel><br/>
-                <TextField value={newPassword}
+
+                <TextField
+                  label="New Password"
+                  value={newPassword}
                   onChange={handleNewPasswordChange}
                   type={showNewPassword ? 'text' : 'password'}
                   InputProps={{
@@ -132,9 +145,11 @@ function ChangePassword() {
                   helperText={(!String(newPassword).match("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$") && newPassword !== '' ? 'Password must contains Minimum eight characters, at least one uppercase letter, one lowercase letter, one number!' : '')}
                 />
               </div>
+              <br />
               <div className="form_input">
-                <FormLabel id="demo-controlled-radio-buttons-group">Confirm Password</FormLabel><br/>
+
                 <TextField
+                  label="Confirm Password"
                   value={confirmPassword}
                   onChange={handleConfirmPasswordChange}
                   type={showConfirmPassword ? 'text' : 'password'}
@@ -153,15 +168,15 @@ function ChangePassword() {
             <div>
               <FormHelperText error>{error}</FormHelperText>
             </div>
-            <br/>
+            <br />
             <div className="form_input">
-              <Button
-
+              <button
+                className="btn btn-primary login-btn"
                 variant="outlined"
                 type='submit' disabled={loadingRef.current}>
                 {loadingRef.current ? 'Updating...' : 'Update Password'}
                 {loadingRef.current && <FontAwesomeIcon icon="spinner" spin />}
-              </Button>
+              </button>
             </div>
 
 

@@ -8,29 +8,40 @@ import { Box, CircularProgress } from '@mui/material';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 
-const PieChart = ({items}) => {
+const PieChart = ({ items }) => {
 
   const [Data, setData] = useState([]);
- 
+
   useEffect(() => {
     const getAllItems = async () => {
       let res = localStorage.getItem('user-info');
       let response = await getItems(JSON.parse(res).id);
-      let thisYear = new Date().getFullYear();
+      let thisYear = new Date();
       let currData = [];
       currData.push(getThisYear(response.data, 'Income', thisYear));
       currData.push(getThisYear(response.data, 'Expense', thisYear));
       setData(currData);
-     
+
     }
     getAllItems();
 
-  },[items]);
+  }, [items]);
 
   function getThisYear(items, paymentType, thisYear) {
     var total = 0;
     for (var item of items) {
-      total += (thisYear === new Date(item.dateOfInvoice).getFullYear()) && item.paymentType === paymentType ? item.amount : 0;
+      let itemDate = new Date(item.dateOfInvoice);
+      if (thisYear.getMonth() < 3) {
+        if ((thisYear.getFullYear() === itemDate.getFullYear() && itemDate.getMonth() < 3) || (itemDate.getFullYear() === thisYear.getFullYear()-1 && itemDate.getMonth() >= 3))
+          total += item.paymentType === paymentType ? item.amount : 0;
+
+      }
+
+      if(thisYear.getMonth() >= 3){
+        if ((thisYear.getFullYear() === itemDate.getFullYear() && itemDate.getMonth() >= 3) || (itemDate.getFullYear() === thisYear.getFullYear()+1 && itemDate.getMonth() < 3))
+          total += item.paymentType === paymentType ? item.amount : 0;
+      }
+      
     }
     return total;
   }
@@ -40,14 +51,14 @@ const PieChart = ({items}) => {
     datasets: [{
       data: Data,
       backgroundColor: [
-        ' #e4ccff',
         'rgba(54, 162, 235, 0.2)',
         'rgba(255, 206, 86, 0.2)',
+        ' #e4ccff',
       ],
       borderColor: [
-        '#7700ff',
         'rgba(54, 162, 235, 1)',
         'rgba(255, 206, 86, 1)',
+        '#7700ff',
       ],
       borderWidth: 1
     }]
@@ -70,20 +81,20 @@ const PieChart = ({items}) => {
         <span> <strong>This Year</strong> </span>
       </div>
       {
-         Data.length === 0 ? <Box sx={{ display: 'flex', justifyContent: "center", alignItems: "center" }}>
-         Loading... &nbsp;
-         <CircularProgress />
-     </Box> : 
-      <div>
-      <Pie
-        data={data}
-        height={400}
-        options={options}
+        Data.length === 0 ? <Box sx={{ display: 'flex', justifyContent: "center", alignItems: "center" }}>
+          Loading... &nbsp;
+          <CircularProgress />
+        </Box> :
+          <div>
+            <Pie
+              data={data}
+              height={400}
+              options={options}
 
-      />
-    </div>
+            />
+          </div>
       }
-     
+
     </div>
   )
 }

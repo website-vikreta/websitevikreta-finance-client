@@ -32,7 +32,15 @@ const Index = () => {
       let res = localStorage.getItem('user-info');
       let response = await getItems(JSON.parse(res).id);
       setUser(JSON.parse(res))
-      setItems(response.data);
+      
+      // Sort and set data according to latest date of invoice 
+      setItems(response.data.sort((item1, item2) => {
+         let d1 = new Date(item1.dateOfInvoice);
+         let d2 = new Date(item2.dateOfInvoice);
+         if(d1 < d2) return 1
+         else if(d1 > d2) return -1;
+         else return 0;
+      }));
    }
    useEffect(() => {
       getAllItems();

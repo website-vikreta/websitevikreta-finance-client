@@ -43,7 +43,6 @@ const PasswordReset = () => {
    // Send request to reset password
    const sendEmail = async (email) => {
       const res = await sendPasswordLink({ email });
-
       if (res.data.status === 201) {
          setEmail("");
 
@@ -70,6 +69,7 @@ const PasswordReset = () => {
                <div>
                   <h4 className='heading heading-one mb-1'>Forgot Password?</h4>
                   <p className='mb-3 fw-normal'>Enter your email to proceed</p>
+              
                </div>
 
                {message ? <p style={{ color: "green", fontWeight: "bold" }}>Please check your email to reset password</p> : ""}
