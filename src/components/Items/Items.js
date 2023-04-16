@@ -14,9 +14,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
 import { Button, Grid } from '@mui/material';
-import { utils, writeFileXLSX } from 'xlsx';
-import { getItems, getMedia, deleteItem } from '../../api/index';
 
+import { getItems, getMedia, deleteItem, donwloadExcelSheet } from '../../api/index';
 
 // Import Components
 const Popup = React.lazy(() => import('../PopupModals/Popup'));
@@ -311,102 +310,26 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
       });
 
    };
-   function getIncome(item, type) {
-      if (item.paymentType === type) return item.amount;
-      else return null;
-   }
-   function getIncomeInDuration(item, currentDate, timeFilter) {
-      return item;
-   }
-   function getTotalRevenueDetails(items, type, currentDate, timeFilter) {
-      var currItems = items.filter((item) => getIncome(item, type));
-      var currYear = currItems.filter((item) => getIncomeInDuration(item, currentDate, timeFilter)).map(item => item.amount);
-      var total = 0;
-      currYear.forEach(amount => total += amount);
-      return total;
-   }
-   //Export Table Data -> Excel
-   //Export Table Data -> Excel
-   const handleDownloadExcel = (dataSource, sheetName, fileName) => {
-
-      //Calculate first and last date
-      var startFrom = new Date(dataSource[0].dateOfInvoice);
-
-      var tillDate = new Date(dataSource[0].dateOfInvoice);
-      var tmp;
-      for (var i = 1; i < dataSource.length; i++) {
-
-         tmp = new Date(dataSource[i].dateOfInvoice);
-
-         if (tmp < startFrom) startFrom = tmp;
-         if (tmp > tillDate) tillDate = tmp;
-      }
-    
-      //Calculate total income and expenditure
-      const totalIncome = getTotalRevenueDetails(dataSource, 'Income', new Date(), 0);
-      const totalExpense = getTotalRevenueDetails(dataSource, 'Expense', new Date(), 0);
-
-      //Calulate Profit
-      const profit = totalIncome - totalExpense;
-      var sheet = utils.aoa_to_sheet([
-         ['Financial Income and Expenditure Accounting Statement'],
-         ['','Started From', startFrom,'','Till Date', tillDate,''],
-         ['','Profit Booked', profit],
-         ['','Total Income', totalIncome,'','Total Expenditure', totalExpense,''],
-         ['','','','','','','',''],
-         ['Invoice Date', 'Payment Date', 'Title', 'Description', 'Payment Type','Amount', 'Category'],
-      ]);
-
-
-      // Set row heights
-      sheet['!rows'] = [
-         { hpt: 50 },
-         { hpt: 30 }, // regular row height
-         { hpt: 30 },
-         { hpt: 30 },
-         { hpt: 30 },
-         { hpt: 30 },
-      ];
-      // Column heights
-      sheet['!cols'] = [
-         { width: 25 , alignment: { horizontal: 'center' }},
-         { width: 25 , alignment: { horizontal: 'center' }},
-         { width: 25 , alignment: { horizontal: 'center' }},
-         { width: 25 , alignment: { horizontal: 'center' }},
-         { width: 25 , alignment: { horizontal: 'center' }},
-         { width: 25 , alignment: { horizontal: 'center' }},
-         { width: 25 , alignment: { horizontal: 'center' }},
-         { width: 25 , alignment: { horizontal: 'center' }},
-      ];
-
-
-      sheet['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 6 } }]; // merge cells in first row
-      sheet['A1'].s = Object.assign({}, {
-         patternType: 'solid',
-         fgColor: '#FFFFFF',
-         bgColor: '#7700ff'
-
-      }, { font: { color: { rgb: 'FFFFFF' }, bold: true } });
-      sheet['A1'].t = 's'; // set cell type to string (needed for text color)
-      
-
-      // Add data to sheet
-      const dataRows = dataSource.sort((item1, item2) => {
-         if (item1.dateOfInvoice < item2.dateOfInvoice) return -1;
-         else if (item1.dateOfInvoice > item2.dateOfInvoice) return 1;
-         else return 0;
-      }).map((item) => [item.dateOfInvoice, formatedate(new Date(item.dateOfPayment)), item.title, item.description, item.paymentType, item.amount, item.category]);
-      utils.sheet_add_aoa(sheet, dataRows, { origin: 'A7' });
-
-      // console.log("shet:-> ", sheet);
-      const wb = utils.book_new();
-      utils.book_append_sheet(wb, sheet, sheetName);
-      writeFileXLSX(wb, `${fileName}.xlsx`);
-
-   };
-
-   const donwloadExcel = () => {
-      handleDownloadExcel(filteredElements, "ITEMS_SHEET", "ALL_ITEMS");
+  
+  
+  // Export data to excel 
+   const donwloadExcel = async() => {
+      try {
+         var productIds = filteredElements.map((item) => item._id);
+         var response = await donwloadExcelSheet(productIds);
+         const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+         const url = window.URL.createObjectURL(blob);
+         const link = document.createElement('a');
+         link.href = url;
+         link.setAttribute('download', 'All_Items.xlsx');
+         document.body.appendChild(link);
+         link.click();
+         document.body.removeChild(link);
+   
+   
+        } catch (error) {
+            console.log(error);
+        }
    }
    return (
 

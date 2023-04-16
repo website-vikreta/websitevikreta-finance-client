@@ -5,6 +5,10 @@ const url = process.env.REACT_APP_BASE_URL;
 // CRUD APIs
 export const getItems = async (id) => await axios.get(`${url}/${id}`);
 export const getItem = async (id) =>  await axios.get(`${url}/getedit${id}`);
+export const donwloadExcelSheet = async (user) => axios.post(`${url}/downloadexcel`, user,{
+   responseType: 'arraybuffer'
+ });
+
 
 export const createItem = async (newItem) => await axios.post(`${url}/add`, newItem);
 export const updateItem = async (id, updatedItem) => await axios.put(`${url}/${id}`, updatedItem);
@@ -24,5 +28,6 @@ export const setNewPassword = async (id, token, password) => await axios.post(`$
 export const setUserPasswordByAdmin = async (user) => await axios.post(`${url}/setuserpassword`, user);
 export const deleteAllData = async (id) => await axios.delete(`${url}/deletedata${id}`);
 export const deleteAccountPermanant = async (id, user) => axios.post(`${url}/deleteaccount${id}`, user);
+
 
 
