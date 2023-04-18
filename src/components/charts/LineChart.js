@@ -111,7 +111,7 @@ const LineChart = ({ items }) => {
       borderWidth: 1
     },
     {
-      label: 'Epense',
+      label: 'Expense',
       data: Data[2],
       
       backgroundColor: 'rgba(255, 206, 86, 0.2)',

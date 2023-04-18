@@ -1,11 +1,11 @@
-import { Box, Button, Container, Dialog, DialogContent, DialogTitle, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Container, Dialog, DialogContent, DialogTitle, Typography } from "@mui/material";
 import DownloadIcon from '@mui/icons-material/Download';
 import CloseIcon from '@mui/icons-material/Close';
 
 export default function PopupImage(props){
    
     const {showImgModal,setShowImgModal} = props;
-    const {openImgDialog, id, paymentType, image} = showImgModal;
+    const {openImgDialog, id, paymentType, image, loading} = showImgModal;
   
     function downloadBase64File( base64Data) {
         //const linkSource = `data:${contentType};base64,${base64Data}`;
@@ -32,14 +32,19 @@ export default function PopupImage(props){
                 </div>
             </DialogTitle>
             <DialogContent dividers sx= {{paddingY:5}}>
-              {image ?
-              <Container >
-              <img src={`${image}`} alt='View after sometime or Download to view' style={{ width: '100%', height: 300 }}/>
-              <Box><Button onClick={() => downloadBase64File(image)}>Download<DownloadIcon/></Button></Box>
-              
-              </Container> :
-              <Typography>Please upload Payment Proof</Typography>
-              }
+             {
+                loading ? <><Container><Box>Loading...<CircularProgress/></Box></Container></> :
+                <>
+                {image ?
+                <Container >
+                <img src={`${image}`} alt='View after sometime or Download to view' style={{ width: '100%', height: 300 }}/>
+                <Box><Button onClick={() => downloadBase64File(image)}>Download<DownloadIcon/></Button></Box>
+                
+                </Container> :
+                <Typography>Please upload Payment Proof</Typography>
+                }
+                </>
+             }
             </DialogContent>
         </Dialog>
     );

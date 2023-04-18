@@ -48,7 +48,6 @@ const BarChart = ({ items }) => {
       }
     }
     yearTotal.sort()
-    
     return yearTotal;
   }
 
@@ -117,7 +116,7 @@ const BarChart = ({ items }) => {
   return (
     <div>
       <div>
-        <span> <strong>Overall Summary</strong> </span>
+        <span> <strong>Yearly Growth </strong> </span>
       </div>
       {Data.length === 0 ? <Box sx={{ display: 'flex', justifyContent: "center", alignItems: "center" }}>
                     Loading... &nbsp;

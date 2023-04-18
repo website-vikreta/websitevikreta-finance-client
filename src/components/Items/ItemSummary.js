@@ -125,17 +125,20 @@ const ItemsTable = ({ items }) => {
 
    // Calculate Current Months Details
    const currentDate = new Date();
+   const currentFinancialYear = currentDate.getMonth() < 3 ? currentDate.getFullYear(): currentDate.getFullYear()+1;
+   const previousFinancialYear = currentFinancialYear-1;
+
+  
    const currentMonth = month[currentDate.getMonth()];
 
    // Calculate Last Months Details
    var lastMonth = month[currentDate.getMonth() - 1];
-   var lastMonthYear = currentDate.getFullYear();
+   
    if (currentMonth === 0) {
       lastMonth = 11;
-      lastMonthYear = currentDate.getFullYear() - 1;
    }
-   const lastYear = currentDate.getFullYear() - 1;
-
+ 
+   
    // Calculate Current Quarter Months Details
    const qaurters = [["APR", "JUN"], ["JUL", "SEPT"], ["OCT", "DEC"], ["JAN", "MAR"]];
    var currQuartr = getQuarter(currentDate.getMonth() + 1);
@@ -156,6 +159,8 @@ const ItemsTable = ({ items }) => {
       lastQuartrYear2 = currentDate.getFullYear() - 1;
    }
    
+  
+     
    
    
    const currentMonthProfit = (currMonthTotalProfit === lastMonthTotalProfit ) ? 0 : (lastMonthTotalProfit === 0 || ((currMonthTotalProfit < lastMonthTotalProfit) && currMonthTotalProfit < 0))  ? 100: (currMonthTotalProfit > lastMonthTotalProfit && lastMonthTotalProfit < 0) ?  (((currMonthTotalProfit-lastMonthTotalProfit)/lastMonthTotalProfit)*100).toFixed(2) : (((currMonthTotalProfit-lastMonthTotalProfit)/lastMonthTotalProfit)*100).toFixed(2);
@@ -174,10 +179,10 @@ const ItemsTable = ({ items }) => {
                <div className="card-body">
                   {/* This */}
                   <div className="numberWrapper this">
-                     <div className='cardHeading fullRow'>This Month ({currentMonth + ' ' + currentDate.getFullYear()})</div>
+                     <div className='cardHeading fullRow'>This Month ({currentMonth + ' ' + currentFinancialYear})</div>
                      <div className="item">
                         <span className='digits'>₹ {currency(currMonthTotalIncome)}</span>
-                        <span className='label'>Sales</span>
+                        <span className='label'>Income</span>
                      </div>
                      <div className="item">
                         <span className='digits'>₹ {currency(currMonthTotalExpense)}</span>
@@ -190,10 +195,10 @@ const ItemsTable = ({ items }) => {
                   </div>
                   {/* Prev */}
                   <div className="numberWrapper">
-                     <div className='cardHeading fullRow'>Prev Month ({lastMonth + ' ' + lastMonthYear})</div>
+                     <div className='cardHeading fullRow'>Prev Month ({lastMonth + ' ' + previousFinancialYear})</div>
                      <div className="item">
                         <span className='digits'>₹ {currency(lastMonthTotalIncome)}</span>
-                        <span className='label'>Sales</span>
+                        <span className='label'>Income</span>
                      </div>
                      <div className="item">
                         <span className='digits'>₹ {currency(lastMonthTotalExpense)}</span>
@@ -225,7 +230,7 @@ const ItemsTable = ({ items }) => {
                      <div className='cardHeading fullRow'>This Quarter ({currQuartrMonths[0] + (currQuartrYear1 % 100) + ' - ' + currQuartrMonths[1] + (currQuartrYear2 % 100)})</div>
                      <div className="item">
                         <span className='digits'>₹ {currency(currQaurtrTotalIncome)}</span>
-                        <span className='label'>Sales</span>
+                        <span className='label'>Income</span>
                      </div>
                      <div className="item">
                         <span className='digits'>₹ {currency(currQaurtrTotalExpense)}</span>
@@ -241,7 +246,7 @@ const ItemsTable = ({ items }) => {
                      <div className='cardHeading fullRow'>Prev Quarter ({lastQuartrMonths[0] + (lastQuartrYear1 % 100) + ' - ' + lastQuartrMonths[1] + (lastQuartrYear2 % 100)})</div>
                      <div className="item">
                         <span className='digits'>₹ {currency(lastQaurtrTotalIncome)}</span>
-                        <span className='label'>Sales</span>
+                        <span className='label'>Income</span>
                      </div>
                      <div className="item">
                         <span className='digits'>₹ {currency(lastQaurtrTotalExpense)}</span>
@@ -270,10 +275,10 @@ const ItemsTable = ({ items }) => {
                <div className="card-body">
                   {/* This */}
                   <div className="numberWrapper this">
-                     <div className='cardHeading fullRow'>This Year ({new Date().getFullYear()})</div>
+                     <div className='cardHeading fullRow'>This Financial Year ({'FY'+currentFinancialYear%100})</div>
                      <div className="item">
                         <span className='digits'>₹ {currency(currentYearTotalIncome)}</span>
-                        <span className='label'>Sales</span>
+                        <span className='label'>Income</span>
                      </div>
                      <div className="item">
                         <span className='digits'>₹ {currency(currentYearTotalExpense)}</span>
@@ -286,10 +291,10 @@ const ItemsTable = ({ items }) => {
                   </div>
                   {/* Prev */}
                   <div className="numberWrapper">
-                     <div className='cardHeading fullRow'>Last Year  ({lastYear})</div>
+                     <div className='cardHeading fullRow'>Last Financial Year ({'FY'+previousFinancialYear%100})</div>
                      <div className="item">
                         <span className='digits'>₹ {currency(lastYearTotalIncome)}</span>
-                        <span className='label'>Sales</span>
+                        <span className='label'>Income</span>
                      </div>
                      <div className="item">
                         <span className='digits'>₹ {currency(lastYearTotalExpense)}</span>

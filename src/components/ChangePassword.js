@@ -8,6 +8,8 @@ import { FormHelperText } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { getPassword, updatePassword } from '../api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import { toast } from 'react-toastify';
 import Navbar from './Navbar';
 import '../styles/index.css';
 import '../styles/itemform.css';
@@ -70,15 +72,31 @@ function ChangePassword() {
       return;
     } else {
       try {
-        await updatePassword(user.id, { password: newPassword });
-        setError('');
+        let response = await updatePassword(user.id, { password: newPassword });
+        console.log(response.status)
+        if(response.status === 201){
+          setError('');
         setCurrentPassword('');
         setNewPassword('');
         setConfirmPassword('');
         setTimeout(() => {
           loadingRef.current = false;
-          navigate('/home');
-        }, 2000);
+
+        }, 1000);
+          if(toast.success("Password Changed Successfully!!", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            theme: "light",
+          })){
+            setTimeout(() => {
+              navigate('/home');
+            }, 1000);
+          }
+        }
+        
+       
 
       } catch (error) {
         console.log('error updating password', error)
@@ -101,7 +119,7 @@ function ChangePassword() {
 
               <div>
                 <h4 className='heading heading-one mb-1'>Change Password</h4>
-      
+
               </div>
 
 

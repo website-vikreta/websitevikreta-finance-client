@@ -7,10 +7,10 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import styled from "@emotion/styled";
 
-import Item from './Items';
-// const Item = React.lazy(() => import('./Items'));
+//import Item from './Items';
+ const Item = React.lazy(() => import('./Items'));
 
-const Date = styled(DatePicker)`
+const DateComponent = styled(DatePicker)`
     width: 250px
 `;
 export default function AllItems({ items, setItems, render, setRender }) {
@@ -23,8 +23,8 @@ export default function AllItems({ items, setItems, render, setRender }) {
 
    const [filtr, setFilter] = useState({ filter: '_id', allActive: true, incomeActive: false, expenseActive: false, });
    const { filter, allActive, incomeActive, expenseActive } = filtr;
-
-
+   const currentDate = new Date();
+  
    const handleOpen = () => {
       setOpen(true);
    };
@@ -72,22 +72,24 @@ export default function AllItems({ items, setItems, render, setRender }) {
                      label="Filter"
                      onChange={handleChange}>
 
-                     <MenuItem value={1}>Today</MenuItem>
-                     <MenuItem value={2}>Past 7 Days</MenuItem>
-                     <MenuItem value={3}>Past 30 Days</MenuItem>
+                     <MenuItem value={1}>All</MenuItem>
+                     <MenuItem value={2}>Today</MenuItem>
+                     <MenuItem value={3}>This Month</MenuItem>
                      <MenuItem value={4}>This Quarter</MenuItem>
-                     <MenuItem value={5}>Last Quarter</MenuItem>
-                     <MenuItem value={6}>This Year</MenuItem>
-                     <MenuItem value={7}>Last Year</MenuItem>
-                     <MenuItem value={8}>2021</MenuItem>
-                     <MenuItem value={9}>All</MenuItem>
-                     <MenuItem value={10}>Custom Range</MenuItem>
-
+                     <MenuItem value={5}>This Financial Year</MenuItem>
+                     <MenuItem value={6}>Prev Month</MenuItem>
+                     <MenuItem value={7}>Prev Quarter</MenuItem>
+                     <MenuItem value={8}>Prev Financial Year</MenuItem>
+                     <MenuItem value={9}>Other</MenuItem>
+                     <MenuItem value={10}>FY{(currentDate.getFullYear()-3)%100}</MenuItem>
+                     <MenuItem value={11}>FY{(currentDate.getFullYear()-2)%100}</MenuItem>
+                     <MenuItem value={12}>FY{(currentDate.getFullYear()-1)%100}</MenuItem>
+                    
                   </Select>
                </FormControl>
 
                {/* Visible on Date Range Selecting Custom Range Menu */}
-               {val === 10 &&
+               {val === 9 &&
 
                   <Box component="div" sx={{ display: 'inline' }}>
 
@@ -95,7 +97,7 @@ export default function AllItems({ items, setItems, render, setRender }) {
                         <span style={{ padding: '0px 5px' }}>
 
                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                              <Date
+                              <DateComponent
                                  label='Start Date'
                                  name='startDate'
                                  renderInput={(params) => <TextField {...params} size="small" />}
@@ -106,7 +108,7 @@ export default function AllItems({ items, setItems, render, setRender }) {
                         </span>
                         <span style={{ padding: '0px 5px' }}>
                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                              <Date
+                              <DateComponent
                                  toolbarTitle='End Date'
                                  label='End Date'
                                  name='endDate'
