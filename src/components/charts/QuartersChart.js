@@ -24,11 +24,12 @@ const QuartersChart = ({ items }) => {
             let response = await getItems(JSON.parse(res).id);
             let thisYear = new Date();
             let currData = [];
-            let quartr = getQuarter(thisYear.getMonth() + 1);
-            let incomeTotal = getTotal(response.data, 'Income', thisYear, quartr);
-            let expenseTotal = getTotal(response.data, 'Expense', thisYear, quartr);
+            let quarter = getQuarter(thisYear.getMonth() + 1);
+            console.log(quarter, thisYear)
+            let incomeTotal = getTotal(response.data, 'Income', thisYear, quarter);
+            let expenseTotal = getTotal(response.data, 'Expense', thisYear, quarter);
             let profitTotal = getProfit(incomeTotal, expenseTotal);
-            currData.push(getLabels(thisYear, quartr))
+            currData.push(getLabels(thisYear, quarter))
             currData.push(incomeTotal);
             currData.push(expenseTotal);
             currData.push(profitTotal);
@@ -50,15 +51,15 @@ const QuartersChart = ({ items }) => {
     }
 
 
-    function getTotal(items, paymentType, thisYear, quartr) {
+    function getTotal(items, paymentType, thisYear, quarter) {
         var total = Array.from({ length: 4 }, () => { return 0 });
-
+        
         for (var item = 0; item < items.length; item++) {
             let currentItem = items[item];
             let currentDate = new Date(currentItem.dateOfInvoice);
             let currentMonth = currentDate.getMonth() + 1;
 
-            if (quartr === 4) {
+            if (quarter === 4) {
                 if (currentDate.getFullYear() === (thisYear.getFullYear() - 1)) {
                     if (currentMonth >= 4 && currentMonth <= 6) {
 
@@ -93,10 +94,10 @@ const QuartersChart = ({ items }) => {
         return total;
     }
 
-    function getLabels(thisYear, quartr) {
+    function getLabels(thisYear, quarter) {
         let year = thisYear.getFullYear() % 200;
         let labels = [];
-        if (quartr === 4) {
+        if (quarter === 4) {
             labels.push('APR' + (year - 1) + '-JUN' + (year - 1), 'JUL' + (year - 1) + '-SEPT' + (year - 1), 'OCT' + (year - 1) + '-DEC' + (year - 1), 'JAN' + year + '-MAR' + year);
             return labels;
         }
@@ -158,7 +159,7 @@ const QuartersChart = ({ items }) => {
     return (
         <div>
             <div>
-                <span> <strong>Overall Summary</strong> </span>
+                <span> <strong>Quarterly Growth</strong> </span>
             </div>
             {Data.length === 0 ? <Box sx={{ display: 'flex', justifyContent: "center", alignItems: "center" }}>
                 Loading... &nbsp;

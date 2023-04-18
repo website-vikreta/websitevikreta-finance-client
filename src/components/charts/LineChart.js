@@ -18,8 +18,35 @@ ChartJS.register(
 const LineChart = ({ items }) => {
 
   const [Data, setData] = useState({ labels: null, monthlyIncome: null, monthlyExpense: null, monthlyProfit: null });
- 
+  var [yearSince, setYearSince] = useState({month: 'Mar',year: new Date().getFullYear()%100});
   useEffect(() => {
+
+    function getData(monthlyIncome, monthlyExpense, yearTotal, labels){
+   
+      let i=0;
+      while (monthlyIncome[i] === 0 && monthlyExpense[i] === 0) {
+        i++;
+      }
+      monthlyIncome.splice(0, i);
+      monthlyExpense.splice(0, i);
+      let monthlyProfit = Array.from({ length: yearTotal.length * 12 }, () => { return 0 });
+      for (var ii = 0; ii < monthlyIncome.length; ii++) {
+        let profit = monthlyIncome[ii] - monthlyExpense[ii];
+        monthlyProfit[ii] = profit > 0 ? profit : 0;
+      }
+      
+      labels.splice(0,i);
+
+      
+      var year = labels[0].match(/\d+/g);
+      var month =  labels[0].match(/[a-zA-Z]+/g);
+      // console.log(year[0])
+      // if(!months.includes(month[0])) setYearSince({month:month[0],year: ++year[0]});
+      setYearSince({month: month, year: year[0]});
+
+      return [labels, monthlyIncome, monthlyExpense, monthlyProfit];
+    }
+
     const getAllItems = async () => {
 
       let res = localStorage.getItem('user-info');
@@ -80,26 +107,7 @@ const LineChart = ({ items }) => {
     return monthTotal;
   }
 
-  function getData(monthlyIncome, monthlyExpense, yearTotal, labels){
-   
-    let i=0;
-    while (monthlyIncome[i] === 0 && monthlyExpense[i] === 0) {
-      i++;
-    }
-    monthlyIncome.splice(0, i);
-    monthlyExpense.splice(0, i);
-    let monthlyProfit = Array.from({ length: yearTotal.length * 12 }, () => { return 0 });
-    for (var ii = 0; ii < monthlyIncome.length; ii++) {
-      let profit = monthlyIncome[ii] - monthlyExpense[ii];
-      monthlyProfit[ii] = profit > 0 ? profit : 0;
-    }
-    
-    labels.splice(0,i);
-    
-    let data = [labels, monthlyIncome, monthlyExpense, monthlyProfit]
-   
-    return data;
-  }
+  
  
   var data = {
     labels: Data[0],
@@ -144,7 +152,7 @@ const LineChart = ({ items }) => {
   return (
     <div>
       <div>
-        <span> <strong>This Year Monthly Data</strong> </span>
+        <span> <strong>Month on Month Growth since {yearSince.month+''+yearSince.year}</strong> </span>
       </div>
       {Data.labels === null?  <Box sx={{ display: 'flex', justifyContent: "center", alignItems: "center" }}>
                     Loading... &nbsp;
