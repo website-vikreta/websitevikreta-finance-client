@@ -216,8 +216,8 @@ const ItemsTable = ({ items }) => {
 
                   {/* Arrow % */}
                   <div className="arrowValue">
-                     {((currentMonthProfit !== 0 && currMonthTotalProfit > lastMonthTotalProfit) ? (<FontAwesomeIcon icon="arrow-up" style={{ color: 'green' }} />) : currentMonthProfit !== 0 ? (<FontAwesomeIcon icon="arrow-down" style={{ color: 'red' }} />) : null)}
-                     {currentMonthProfit === 0 ? <span style={{ color: 'gray ' }}>{0 + '%'}</span> : (currMonthTotalProfit >= lastMonthTotalProfit) ? <span style={{ color: 'green ' }}>{currentMonthProfit + '%'}</span> : <span style={{ color: 'red ' }}>{currentMonthProfit + '%'}</span>}
+                     {((currentMonthProfit !== 0 && currentMonthProfit > 0 ) ? (<FontAwesomeIcon icon="arrow-up" style={{ color: 'green' }} />) : currentMonthProfit !== 0 ? (<FontAwesomeIcon icon="arrow-down" style={{ color: 'red' }} />) : null)}
+                     {currentMonthProfit === 0 ? <span style={{ color: 'gray ' }}>{0 + '%'}</span> : (currentMonthProfit > 0) ? <span style={{ color: 'green ' }}>{currentMonthProfit + '%'}</span> : <span style={{ color: 'red ' }}>{currentMonthProfit + '%'}</span>}
                      <span>than prev month</span>
                   </div>
                </div>
@@ -264,8 +264,8 @@ const ItemsTable = ({ items }) => {
 
                   {/* Arrow % */}
                   <div className="arrowValue">
-                     {(currentQuarterProfit !== 0 && currQaurtrTotalProfit > lastQaurtrTotalProfit) ? (<FontAwesomeIcon icon="arrow-up" style={{ color: 'green' }} />) : currentQuarterProfit !== 0 ? (<FontAwesomeIcon icon="arrow-down" style={{ color: 'red' }} />) : null}
-                     {currentQuarterProfit === 0 ? <span style={{ color: 'gray ' }}>{0 + '%'}</span> : (currQaurtrTotalProfit >= lastQaurtrTotalProfit) ? <span style={{ color: 'green ' }}>{currentQuarterProfit + '%'}</span> : <span style={{ color: 'red ' }}>{currentQuarterProfit + '%'}</span>}
+                     {(currentQuarterProfit !== 0 &&  currentQuarterProfit > 0 ) ? (<FontAwesomeIcon icon="arrow-up" style={{ color: 'green' }} />) : currentQuarterProfit !== 0 ? (<FontAwesomeIcon icon="arrow-down" style={{ color: 'red' }} />) : null}
+                     {currentQuarterProfit === 0 ? <span style={{ color: 'gray ' }}>{0 + '%'}</span> : (currentQuarterProfit > 0) ? <span style={{ color: 'green ' }}>{currentQuarterProfit + '%'}</span> : <span style={{ color: 'red ' }}>{currentQuarterProfit + '%'}</span>}
                      <span>than prev quarter</span>
                   </div>
                </div>
@@ -312,8 +312,8 @@ const ItemsTable = ({ items }) => {
 
                   {/* Arrow % */}
                   <div className="arrowValue">
-                     {(currentYearProfit !== 0 && currentYearTotalProfit > lastYearTotalProfit) ? (<FontAwesomeIcon icon="arrow-up" style={{ color: 'green' }} />) : currentYearProfit !== 0 ? (<FontAwesomeIcon icon="arrow-down" style={{ color: 'red' }} />) : null}
-                     {currentYearProfit === 0 ? <span style={{ color: 'gray ' }}>{0 + '%'}</span> : (currentYearTotalProfit >= lastYearTotalProfit) ? <span style={{ color: 'green ' }}>{currentYearProfit + '%'}</span> : <span style={{ color: 'red ' }}>{currentYearProfit + '%'}</span>}
+                     {(currentYearProfit !== 0 && currentYearProfit > 0) ? (<FontAwesomeIcon icon="arrow-up" style={{ color: 'green' }} />) : currentYearProfit !== 0 ? (<FontAwesomeIcon icon="arrow-down" style={{ color: 'red' }} />) : null}
+                     {currentYearProfit === 0 ? <span style={{ color: 'gray ' }}>{0 + '%'}</span> : (currentYearProfit > 0) ? <span style={{ color: 'green ' }}>{currentYearProfit + '%'}</span> : <span style={{ color: 'red ' }}>{currentYearProfit + '%'}</span>}
                      <span>than prev year</span>
                   </div>
                </div>
