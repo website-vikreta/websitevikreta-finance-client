@@ -162,10 +162,10 @@ const ItemsTable = ({ items }) => {
 
 
 
-
-   const currentMonthProfit = (currMonthTotalProfit === lastMonthTotalProfit) ? 0 : lastMonthTotalProfit === 0 ? 100 : (currMonthTotalProfit > lastMonthTotalProfit && lastMonthTotalProfit < 0) ? (((currMonthTotalProfit - lastMonthTotalProfit) / lastMonthTotalProfit) * 100).toFixed(2) : (((currMonthTotalProfit - lastMonthTotalProfit) / lastMonthTotalProfit) * 100).toFixed(2);
-   const currentQuarterProfit = (currQaurtrTotalProfit === lastQaurtrTotalProfit) ? 0 : lastQaurtrTotalProfit === 0 ? 100 : (currQaurtrTotalProfit > lastQaurtrTotalProfit && lastQaurtrTotalProfit < 0) ? (((currQaurtrTotalProfit - lastQaurtrTotalProfit) / lastQaurtrTotalProfit) * 100).toFixed(2) : (((currQaurtrTotalProfit - lastQaurtrTotalProfit) / lastQaurtrTotalProfit) * 100).toFixed(2);
-   const currentYearProfit = (currentYearTotalProfit === lastYearTotalProfit) ? 0 : lastYearTotalProfit === 0 ? 100 : (currentYearTotalProfit > lastYearTotalProfit && lastYearTotalProfit < 0) ? (((currentYearTotalProfit - lastYearTotalProfit) / lastYearTotalProfit) * 100).toFixed(2) : (((currentYearTotalProfit - lastYearTotalProfit) / lastYearTotalProfit) * 100).toFixed(2);
+   // Calculate current month, quarter and year profit
+   const currentMonthProfit = (currMonthTotalProfit === lastMonthTotalProfit) ? 0 : lastMonthTotalProfit === 0 ? currMonthTotalProfit > 0 ? 100 : -100 : (((currMonthTotalProfit - lastMonthTotalProfit) / lastMonthTotalProfit) * 100).toFixed(2);
+   const currentQuarterProfit = (currQaurtrTotalProfit === lastQaurtrTotalProfit) ? 0 : lastQaurtrTotalProfit === 0 ?  currQaurtrTotalProfit > 0 ? 100 : -100  : (((currQaurtrTotalProfit - lastQaurtrTotalProfit) / lastQaurtrTotalProfit) * 100).toFixed(2);
+   const currentYearProfit = (currentYearTotalProfit === lastYearTotalProfit) ? 0 : lastYearTotalProfit === 0 ?  currentYearTotalProfit > 0 ? 100 : -100  : (((currentYearTotalProfit - lastYearTotalProfit) / lastYearTotalProfit) * 100).toFixed(2);
 
    return (
 
