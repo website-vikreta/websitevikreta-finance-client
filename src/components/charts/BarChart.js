@@ -17,15 +17,15 @@ ChartJS.register(
 const BarChart = ({ items }) => {
 
   const [Data, setData] = useState([]);
-  
+
   useEffect(() => {
     const getAllItems = async () => {
       document.title = 'Home | WV Finance'
       let res = localStorage.getItem('user-info');
       let response = await getItems(JSON.parse(res).id);
       let currData = [];
-      const yearTotal = getTotalYears(response.data);
-      currData.push(yearTotal)
+      const { yearTotal, yearLabel } = getTotalYears(response.data);
+      currData.push(yearLabel);
       const incomeTotal = getTotal(response.data, 'Income', yearTotal);
       const expenseTotal = getTotal(response.data, 'Expense', yearTotal);
       const profitTotal = getProfit(incomeTotal, expenseTotal);
@@ -41,22 +41,32 @@ const BarChart = ({ items }) => {
 
   function getTotalYears(items) {
     var yearTotal = [];
+    var yearLabel = [];
     for (var i = 0; i < items.length; i++) {
-      let year = new Date(items[i].dateOfInvoice).getFullYear();
+      var currentDate = new Date(items[i].dateOfInvoice);
+      var year = currentDate.getFullYear();
+      if (currentDate.getMonth() >= 3) year = currentDate.getFullYear() + 1;
+
       if (!yearTotal.includes(year)) {
-        yearTotal.push(year)
+        yearTotal.push(year);
+        yearLabel.push('FY' + year % 100);
       }
     }
     yearTotal.sort()
-    return yearTotal;
+    yearLabel.sort();
+
+
+    return { yearTotal, yearLabel };
   }
 
   function getTotal(items, paymentType, totalYears) {
     var total = Array.from({ length: totalYears.length }, () => { return 0 });
 
     for (var item of items) {
-      let thisYear = new Date(item.dateOfInvoice).getFullYear();
-      total[totalYears.indexOf(thisYear)] += item.paymentType === paymentType ? item.amount : 0;
+      let thisYear = new Date(item.dateOfInvoice);
+      let year = thisYear.getFullYear();
+      if (thisYear.getMonth() >= 3) year = year + 1;
+      total[totalYears.indexOf(year)] += item.paymentType === paymentType ? item.amount : 0;
     }
     return total;
   }
@@ -85,7 +95,7 @@ const BarChart = ({ items }) => {
       {
         label: "Expense",
         data: Data[2],
- 
+
 
         backgroundColor: 'rgba(255, 206, 86, 0.2)',
         borderColor: 'rgba(255, 206, 86, 1)',
@@ -119,9 +129,9 @@ const BarChart = ({ items }) => {
         <span> <strong>Yearly Growth </strong> </span>
       </div>
       {Data.length === 0 ? <Box sx={{ display: 'flex', justifyContent: "center", alignItems: "center" }}>
-                    Loading... &nbsp;
-                    <CircularProgress />
-                </Box> :
+        Loading... &nbsp;
+        <CircularProgress />
+      </Box> :
         <div>
           <Bar
             data={data}

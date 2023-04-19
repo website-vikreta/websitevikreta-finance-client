@@ -11,7 +11,12 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 const PieChart = ({ items }) => {
 
   const [Data, setData] = useState([]);
-
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear()%100)
+  const year = new Date();
+  
+  if(year.getMonth() < 3){
+    setCurrentYear((year.getFullYear()-1)%100);
+  }
   useEffect(() => {
     const getAllItems = async () => {
       let res = localStorage.getItem('user-info');
@@ -78,7 +83,7 @@ const PieChart = ({ items }) => {
   return (
     <div>
       <div>
-        <span> <strong>This Year (APR23-MAR24)</strong> </span>
+        <span> <strong>This Year (APR{currentYear}-MAR{currentYear+1})</strong> </span>
       </div>
       {
         Data.length === 0 ? <Box sx={{ display: 'flex', justifyContent: "center", alignItems: "center" }}>

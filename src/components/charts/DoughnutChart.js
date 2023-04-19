@@ -8,9 +8,11 @@ import { Box, CircularProgress } from '@mui/material';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 
-const DoughnutChart = ({items}) => {
+const DoughnutChart = ({ items }) => {
     const [Data, setData] = useState([]);
-    
+    const currentYear = new Date();
+    const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUNE", "JULY", "AUG", "SEPT", "OCT", "NOV", "DEC"];
+
     useEffect(() => {
         const getAllItems = async () => {
             let res = localStorage.getItem('user-info');
@@ -19,18 +21,18 @@ const DoughnutChart = ({items}) => {
             let currData = [];
             let thisMonthIncome = getThisMonth(response.data, 'Income', thisYear);
             let thisMonthExpense = getThisMonth(response.data, 'Expense', thisYear);
-           // let profit = thisMonthIncome - thisMonthExpense;
+            // let profit = thisMonthIncome - thisMonthExpense;
             //let thisMonthProfit = profit > 0 ? profit: 0;
             currData.push(thisMonthIncome);
             currData.push(thisMonthExpense);
             //currData.push(thisMonthProfit);
             setData(currData);
-           
+
         }
         getAllItems();
 
-    },[items]);
-   
+    }, [items]);
+
 
     function getThisMonth(items, paymentType, thisYear) {
         var total = 0;
@@ -55,7 +57,7 @@ const DoughnutChart = ({items}) => {
             ],
             borderWidth: 1
         }]
-        
+
     };
 
     var options = {
@@ -69,24 +71,25 @@ const DoughnutChart = ({items}) => {
         },
     }
 
+
     return (
         <div>
-            <div> 
-                <span> <strong>This Month</strong> </span>
+            <div>
+                <span> <strong>This Month ({months[currentYear.getMonth()] + ' ' + currentYear.getFullYear()})</strong> </span>
             </div>
             {Data.length === 0 ? <Box sx={{ display: 'flex', justifyContent: "center", alignItems: "center" }}>
                 Loading... &nbsp;
                 <CircularProgress />
-            </Box>:
-            <div>
-            <Doughnut
-                data={data}
-                height={400}
-                options={options}
-            />
-        </div>
+            </Box> :
+                <div>
+                    <Doughnut
+                        data={data}
+                        height={400}
+                        options={options}
+                    />
+                </div>
             }
-            
+
         </div>
     )
 }

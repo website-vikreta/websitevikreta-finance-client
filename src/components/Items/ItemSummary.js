@@ -21,14 +21,14 @@ const ItemsTable = ({ items }) => {
    }
 
    function thisQuarter(currentDate, now, month, quartr, item) {
-      
+
       if (quartr === 4) {
          if (currentDate.getFullYear() === now.getFullYear() && (month <= 3)) {
             return item;
          } else {
             return null;
          }
-      } else if (currentDate.getFullYear() === now.getFullYear()){
+      } else if (currentDate.getFullYear() === now.getFullYear()) {
 
          if (quartr === 1)
             return currentDate.getFullYear() === now.getFullYear() && month >= 4 && month <= 6 ? item : null;
@@ -47,17 +47,17 @@ const ItemsTable = ({ items }) => {
       const itemDate = new Date(item.dateOfInvoice);
       var currentMonth = currentDate.getMonth();
       if (timeFilter === 0) {
-         
-         if(itemDate.getMonth() < 3)
-         return (itemDate.getFullYear() === currentDate.getFullYear()+1) ? item : null;
+
+         if (itemDate.getMonth() < 3)
+            return (itemDate.getFullYear() === currentDate.getFullYear() + 1) ? item : null;
          else
-         return (itemDate.getFullYear() === currentDate.getFullYear()) ? item : null;
+            return (itemDate.getFullYear() === currentDate.getFullYear()) ? item : null;
 
       } else if (timeFilter === 1) {
-         if(itemDate.getMonth() < 3)
-         return (itemDate.getFullYear() === currentDate.getFullYear()) ? item : null;
+         if (itemDate.getMonth() < 3)
+            return (itemDate.getFullYear() === currentDate.getFullYear()) ? item : null;
          else
-         return (itemDate.getFullYear() === currentDate.getFullYear() - 1) ? item : null;
+            return (itemDate.getFullYear() === currentDate.getFullYear() - 1) ? item : null;
 
       } else if (timeFilter === 2) {
 
@@ -125,20 +125,20 @@ const ItemsTable = ({ items }) => {
 
    // Calculate Current Months Details
    const currentDate = new Date();
-   const currentFinancialYear = currentDate.getMonth() < 3 ? currentDate.getFullYear(): currentDate.getFullYear()+1;
-   const previousFinancialYear = currentFinancialYear-1;
+   const currentFinancialYear = currentDate.getMonth() < 3 ? currentDate.getFullYear() : currentDate.getFullYear() + 1;
+   const previousFinancialYear = currentFinancialYear - 1;
 
-  
+
    const currentMonth = month[currentDate.getMonth()];
 
    // Calculate Last Months Details
    var lastMonth = month[currentDate.getMonth() - 1];
-   
+
    if (currentMonth === 0) {
       lastMonth = 11;
    }
- 
-   
+
+
    // Calculate Current Quarter Months Details
    const qaurters = [["APR", "JUN"], ["JUL", "SEPT"], ["OCT", "DEC"], ["JAN", "MAR"]];
    var currQuartr = getQuarter(currentDate.getMonth() + 1);
@@ -158,15 +158,15 @@ const ItemsTable = ({ items }) => {
       lastQuartrYear1 = currentDate.getFullYear() - 1;
       lastQuartrYear2 = currentDate.getFullYear() - 1;
    }
-   
-  
-     
-   
-   
-   const currentMonthProfit = (currMonthTotalProfit === lastMonthTotalProfit ) ? 0 : lastMonthTotalProfit === 0 ? 100: (currMonthTotalProfit > lastMonthTotalProfit && lastMonthTotalProfit < 0) ?  (((currMonthTotalProfit-lastMonthTotalProfit)/lastMonthTotalProfit)*100).toFixed(2) : (((currMonthTotalProfit-lastMonthTotalProfit)/lastMonthTotalProfit)*100).toFixed(2);
-   const currentQuarterProfit = (currQaurtrTotalProfit === lastQaurtrTotalProfit) ? 0:lastQaurtrTotalProfit === 0  ? 100: (currQaurtrTotalProfit > lastQaurtrTotalProfit && lastQaurtrTotalProfit < 0) ? (((currQaurtrTotalProfit-lastQaurtrTotalProfit)/lastQaurtrTotalProfit)*100).toFixed(2) : (((currQaurtrTotalProfit-lastQaurtrTotalProfit)/lastQaurtrTotalProfit)*100).toFixed(2);
-   const currentYearProfit = (currentYearTotalProfit === lastYearTotalProfit) ? 0: lastYearTotalProfit === 0 ? 100: (currentYearTotalProfit > lastYearTotalProfit && lastYearTotalProfit < 0) ? (((currentYearTotalProfit-lastYearTotalProfit)/lastYearTotalProfit)*100).toFixed(2) : (((currentYearTotalProfit-lastYearTotalProfit)/lastYearTotalProfit)*100).toFixed(2);
-  
+
+
+
+
+
+   const currentMonthProfit = (currMonthTotalProfit === lastMonthTotalProfit) ? 0 : lastMonthTotalProfit === 0 ? 100 : (currMonthTotalProfit > lastMonthTotalProfit && lastMonthTotalProfit < 0) ? (((currMonthTotalProfit - lastMonthTotalProfit) / lastMonthTotalProfit) * 100).toFixed(2) : (((currMonthTotalProfit - lastMonthTotalProfit) / lastMonthTotalProfit) * 100).toFixed(2);
+   const currentQuarterProfit = (currQaurtrTotalProfit === lastQaurtrTotalProfit) ? 0 : lastQaurtrTotalProfit === 0 ? 100 : (currQaurtrTotalProfit > lastQaurtrTotalProfit && lastQaurtrTotalProfit < 0) ? (((currQaurtrTotalProfit - lastQaurtrTotalProfit) / lastQaurtrTotalProfit) * 100).toFixed(2) : (((currQaurtrTotalProfit - lastQaurtrTotalProfit) / lastQaurtrTotalProfit) * 100).toFixed(2);
+   const currentYearProfit = (currentYearTotalProfit === lastYearTotalProfit) ? 0 : lastYearTotalProfit === 0 ? 100 : (currentYearTotalProfit > lastYearTotalProfit && lastYearTotalProfit < 0) ? (((currentYearTotalProfit - lastYearTotalProfit) / lastYearTotalProfit) * 100).toFixed(2) : (((currentYearTotalProfit - lastYearTotalProfit) / lastYearTotalProfit) * 100).toFixed(2);
+
    return (
 
       // Defining Structure
@@ -179,7 +179,7 @@ const ItemsTable = ({ items }) => {
                <div className="card-body">
                   {/* This */}
                   <div className="numberWrapper this">
-                     <div className='cardHeading fullRow'>This Month ({currentMonth + ' ' + currentFinancialYear})</div>
+                     <div className='cardHeading fullRow'>This Month ({currentMonth + ' ' + currentDate.getFullYear()})</div>
                      <div className="item">
                         <span className='digits'>₹ {currency(currMonthTotalIncome)}</span>
                         <span className='label'>Income</span>
@@ -195,7 +195,7 @@ const ItemsTable = ({ items }) => {
                   </div>
                   {/* Prev */}
                   <div className="numberWrapper">
-                     <div className='cardHeading fullRow'>Prev Month ({lastMonth + ' ' + previousFinancialYear})</div>
+                     <div className='cardHeading fullRow'>Prev Month ({lastMonth + ' ' + (lastMonth === 'DEC' ? currentDate.getFullYear() - 1 : currentDate.getFullYear())})</div>
                      <div className="item">
                         <span className='digits'>₹ {currency(lastMonthTotalIncome)}</span>
                         <span className='label'>Income</span>
@@ -216,7 +216,7 @@ const ItemsTable = ({ items }) => {
 
                   {/* Arrow % */}
                   <div className="arrowValue">
-                     {((currentMonthProfit !== 0 && currMonthTotalProfit > lastMonthTotalProfit) ? (<FontAwesomeIcon icon="arrow-up" style={{ color: 'green' }} />) : currentMonthProfit !== 0  ? (<FontAwesomeIcon icon="arrow-down" style={{ color: 'red' }} />): null)}
+                     {((currentMonthProfit !== 0 && currMonthTotalProfit > lastMonthTotalProfit) ? (<FontAwesomeIcon icon="arrow-up" style={{ color: 'green' }} />) : currentMonthProfit !== 0 ? (<FontAwesomeIcon icon="arrow-down" style={{ color: 'red' }} />) : null)}
                      {currentMonthProfit === 0 ? <span style={{ color: 'gray ' }}>{0 + '%'}</span> : (currMonthTotalProfit >= lastMonthTotalProfit) ? <span style={{ color: 'green ' }}>{currentMonthProfit + '%'}</span> : <span style={{ color: 'red ' }}>{currentMonthProfit + '%'}</span>}
                      <span>than prev month</span>
                   </div>
@@ -264,7 +264,7 @@ const ItemsTable = ({ items }) => {
 
                   {/* Arrow % */}
                   <div className="arrowValue">
-                  {(currentQuarterProfit !== 0 && currQaurtrTotalProfit > lastQaurtrTotalProfit) ? (<FontAwesomeIcon icon="arrow-up" style={{ color: 'green' }} />) : currentQuarterProfit !== 0 ? (<FontAwesomeIcon icon="arrow-down" style={{ color: 'red' }} />): null}
+                     {(currentQuarterProfit !== 0 && currQaurtrTotalProfit > lastQaurtrTotalProfit) ? (<FontAwesomeIcon icon="arrow-up" style={{ color: 'green' }} />) : currentQuarterProfit !== 0 ? (<FontAwesomeIcon icon="arrow-down" style={{ color: 'red' }} />) : null}
                      {currentQuarterProfit === 0 ? <span style={{ color: 'gray ' }}>{0 + '%'}</span> : (currQaurtrTotalProfit >= lastQaurtrTotalProfit) ? <span style={{ color: 'green ' }}>{currentQuarterProfit + '%'}</span> : <span style={{ color: 'red ' }}>{currentQuarterProfit + '%'}</span>}
                      <span>than prev quarter</span>
                   </div>
@@ -275,7 +275,7 @@ const ItemsTable = ({ items }) => {
                <div className="card-body">
                   {/* This */}
                   <div className="numberWrapper this">
-                     <div className='cardHeading fullRow'>This Financial Year ({'FY'+currentFinancialYear%100})</div>
+                     <div className='cardHeading fullRow'>This Financial Year ({'FY' + currentFinancialYear % 100})</div>
                      <div className="item">
                         <span className='digits'>₹ {currency(currentYearTotalIncome)}</span>
                         <span className='label'>Income</span>
@@ -291,7 +291,7 @@ const ItemsTable = ({ items }) => {
                   </div>
                   {/* Prev */}
                   <div className="numberWrapper">
-                     <div className='cardHeading fullRow'>Last Financial Year ({'FY'+previousFinancialYear%100})</div>
+                     <div className='cardHeading fullRow'>Prev Financial Year ({'FY' + previousFinancialYear % 100})</div>
                      <div className="item">
                         <span className='digits'>₹ {currency(lastYearTotalIncome)}</span>
                         <span className='label'>Income</span>
@@ -312,7 +312,7 @@ const ItemsTable = ({ items }) => {
 
                   {/* Arrow % */}
                   <div className="arrowValue">
-                     {(currentYearProfit !== 0  && currentYearTotalProfit > lastYearTotalProfit) ? (<FontAwesomeIcon icon="arrow-up" style={{ color: 'green' }} />) : currentYearProfit !== 0  ? (<FontAwesomeIcon icon="arrow-down" style={{ color: 'red' }} /> ): null}
+                     {(currentYearProfit !== 0 && currentYearTotalProfit > lastYearTotalProfit) ? (<FontAwesomeIcon icon="arrow-up" style={{ color: 'green' }} />) : currentYearProfit !== 0 ? (<FontAwesomeIcon icon="arrow-down" style={{ color: 'red' }} />) : null}
                      {currentYearProfit === 0 ? <span style={{ color: 'gray ' }}>{0 + '%'}</span> : (currentYearTotalProfit >= lastYearTotalProfit) ? <span style={{ color: 'green ' }}>{currentYearProfit + '%'}</span> : <span style={{ color: 'red ' }}>{currentYearProfit + '%'}</span>}
                      <span>than prev year</span>
                   </div>

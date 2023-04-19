@@ -1,33 +1,58 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
+import React from "react";
+import { useState, useEffect } from "react";
 // import { Link } from 'react-router-dom';
 // import { subDays } from 'date-fns';
-import DataTable from 'react-data-table-component';
-import { tableCustomStyles } from './TableStyle.js';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import DataTable from "react-data-table-component";
+import { tableCustomStyles } from "./TableStyle.js";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 // Import Icons
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
-import { Grid } from '@mui/material';
+import { Grid } from "@mui/material";
 
-import { getItems, getMedia, deleteItem, donwloadExcelSheet } from '../../api/index';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+	getItems,
+	getMedia,
+	deleteItem,
+	donwloadExcelSheet,
+} from "../../api/index";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // Import Components
-const Popup = React.lazy(() => import('../PopupModals/Popup'));
-const DeletePopup = React.lazy(() => import('../PopupModals/DeletePopup'));
-const PopupImage = React.lazy(() => import('../PopupModals/PopupImage'));
+const Popup = React.lazy(() => import("../PopupModals/Popup"));
+const DeletePopup = React.lazy(() => import("../PopupModals/DeletePopup"));
+const PopupImage = React.lazy(() => import("../PopupModals/PopupImage"));
 
-const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate, endDate }) => {
-	const [search, setSearch] = useState('');
-	const [filteredElements, setFilteredElements] = useState('');
-	const [showModal, setShowModal] = useState({ openDialog: false, currItem: '' });
-	const [showImgModal, setShowImgModal] = useState({ openImgDialog: false, id: '', paymentType: '', image: '' });
-	const [delModal, setDelModal] = useState({ openDelDialog: false, deleteId: null });
+const Item = ({
+	items,
+	setItems,
+	render,
+	setRender,
+	type,
+	dateFilter,
+	startDate,
+	endDate,
+}) => {
+	const [search, setSearch] = useState("");
+	const [filteredElements, setFilteredElements] = useState("");
+	const [showModal, setShowModal] = useState({
+		openDialog: false,
+		currItem: "",
+	});
+	const [showImgModal, setShowImgModal] = useState({
+		openImgDialog: false,
+		id: "",
+		paymentType: "",
+		image: "",
+	});
+	const [delModal, setDelModal] = useState({
+		openDelDialog: false,
+		deleteId: null,
+	});
 	const [btnStatus, setBtnStatus] = useState(false);
 
 	const [page, setPage] = useState(1);
@@ -35,22 +60,22 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
 
 	// get all items
 	const getAllItems = async () => {
-		let res = localStorage.getItem('user-info');
+		let res = localStorage.getItem("user-info");
 		let response = await getItems(JSON.parse(res).id);
 		setItems(response.data);
 	};
 	useEffect(() => {
 		const getAllItems = async () => {
-			let res = localStorage.getItem('user-info');
+			let res = localStorage.getItem("user-info");
 			let response = await getItems(JSON.parse(res).id);
 			setItems(response.data);
 		};
 		getAllItems();
-		setRender('unset');
+		setRender("unset");
 	}, [render, setItems, setRender]);
 	useEffect(() => {
 		function check(items, type) {
-			if (type === '_id' || type === undefined) return items;
+			if (type === "_id" || type === undefined) return items;
 			return items.paymentType === type ? items : null;
 		}
 		function getQuarter(month) {
@@ -70,23 +95,43 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
 				}
 			} else if (currentDate.getFullYear() === now.getFullYear()) {
 				if (quarter === 1)
-					return currentDate.getFullYear() === now.getFullYear() && month >= 4 && month <= 6 ? item : null;
+					return currentDate.getFullYear() === now.getFullYear() &&
+						month >= 4 &&
+						month <= 6
+						? item
+						: null;
 				if (quarter === 2)
-					return currentDate.getFullYear() === now.getFullYear() && month >= 7 && month <= 9 ? item : null;
+					return currentDate.getFullYear() === now.getFullYear() &&
+						month >= 7 &&
+						month <= 9
+						? item
+						: null;
 				if (quarter === 3)
-					return currentDate.getFullYear() === now.getFullYear() && month >= 10 && month <= 12 ? item : null;
+					return currentDate.getFullYear() === now.getFullYear() &&
+						month >= 10 &&
+						month <= 12
+						? item
+						: null;
 			} else return null;
 		}
 
 		function lastQuarter(currentDate, now, month, item) {
-			return currentDate.getFullYear() === now.getFullYear() - 1 && month >= 10 && month <= 12 ? item : null;
+			return currentDate.getFullYear() === now.getFullYear() - 1 &&
+				month >= 10 &&
+				month <= 12
+				? item
+				: null;
 		}
 
 		function getYearlyData(currentYear, itemDate, item) {
 			if (itemDate.getMonth() < 3) {
 				if (currentYear === itemDate.getFullYear()) return item;
 			} else {
-				if (currentYear - 1 === itemDate.getFullYear() && itemDate.getMonth() >= 3) return item;
+				if (
+					currentYear - 1 === itemDate.getFullYear() &&
+					itemDate.getMonth() >= 3
+				)
+					return item;
 			}
 			return null;
 		}
@@ -96,7 +141,11 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
 			const now = new Date();
 
 			const currDate = new Date(item.dateOfInvoice);
-			const currentDate = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate());
+			const currentDate = new Date(
+				currDate.getFullYear(),
+				currDate.getMonth(),
+				currDate.getDate()
+			);
 			const month = currentDate.getMonth() + 1;
 			if (dateFilter === 1) {
 				return item;
@@ -110,69 +159,97 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
 				// const lastDate = new Date(now.getFullYear(), now.getMonth(), (now.getDate() - 7));
 				// return currentDate <= now && currentDate >= lastDate ? item : null;
 			} else if (dateFilter === 3) {
-				return currentDate.getFullYear() === now.getFullYear() && currentDate.getMonth() === now.getMonth()
+				return currentDate.getFullYear() === now.getFullYear() &&
+					currentDate.getMonth() === now.getMonth()
 					? item
 					: null;
 
 				// Past 30 Days
 				// const lastDate = subDays(now, 30);
 				// return currentDate <= now && currentDate >= lastDate ? item : null;
-
 			} else if (dateFilter === 4) {
 				const quarter = getQuarter(now.getMonth() + 1);
-				
+
 				return thisQuarter(currentDate, now, month, quarter, item);
 			} else if (dateFilter === 5) {
-            
 				if (now.getMonth() < 3) {
-					if (now.getFullYear() === currentDate.getFullYear() && currentDate.getMonth() < 3) return item;
-					if (now.getFullYear() - 1 === currentDate.getFullYear() && currentDate.getMonth() >= 3) return item;
+					if (
+						now.getFullYear() === currentDate.getFullYear() &&
+						currentDate.getMonth() < 3
+					)
+						return item;
+					if (
+						now.getFullYear() - 1 === currentDate.getFullYear() &&
+						currentDate.getMonth() >= 3
+					)
+						return item;
 				} else {
-					if (now.getFullYear() === currentDate.getFullYear() && currentDate.getMonth() >= 3) return item;
-					if (now.getFullYear() + 1 === currentDate.getFullYear() && currentDate.getMonth() < 3) return item;
+					if (
+						now.getFullYear() === currentDate.getFullYear() &&
+						currentDate.getMonth() >= 3
+					)
+						return item;
+					if (
+						now.getFullYear() + 1 === currentDate.getFullYear() &&
+						currentDate.getMonth() < 3
+					)
+						return item;
 				}
 				return null;
 			} else if (dateFilter === 6) {
 				if (now.getMonth() === 0) {
-					return currentDate.getFullYear() === now.getFullYear() - 1 && currentDate.getMonth() === 11
+					return currentDate.getFullYear() === now.getFullYear() - 1 &&
+						currentDate.getMonth() === 11
 						? item
 						: null;
 				}
-				return currentDate.getFullYear() === now.getFullYear() && currentDate.getMonth() === now.getMonth() - 1
+				return currentDate.getFullYear() === now.getFullYear() &&
+					currentDate.getMonth() === now.getMonth() - 1
 					? item
 					: null;
 			} else if (dateFilter === 7) {
 				const quarter = getQuarter(now.getMonth() + 1);
-				console.log(quarter);
+
 				if (quarter === 1) return thisQuarter(currentDate, now, month, 4, item);
 				if (quarter === 4) return lastQuarter(currentDate, now, month, item);
 				return thisQuarter(currentDate, now, month, quarter - 1, item);
+
 			} else if (dateFilter === 8) {
 				if (now.getMonth() < 3) {
-					if (now.getFullYear() - 1 === currentDate.getFullYear() && currentDate.getMonth() < 3) return item;
-					if (now.getFullYear() - 2 === currentDate.getFullYear() && currentDate.getMonth() >= 3) return item;
+					if (
+						now.getFullYear() - 1 === currentDate.getFullYear() &&
+						currentDate.getMonth() < 3
+					)
+						return item;
+					if (
+						now.getFullYear() - 2 === currentDate.getFullYear() &&
+						currentDate.getMonth() >= 3
+					)
+						return item;
 				} else {
-					if (now.getFullYear() === currentDate.getFullYear() && currentDate.getMonth() < 3) return item;
-					if (now.getFullYear() - 1 === currentDate.getFullYear() && currentDate.getMonth() >= 3) return item;
+					if (
+						now.getFullYear() === currentDate.getFullYear() &&
+						currentDate.getMonth() < 3
+					)
+						return item;
+					if (
+						now.getFullYear() - 1 === currentDate.getFullYear() &&
+						currentDate.getMonth() >= 3
+					)
+						return item;
 				}
 			} else if (dateFilter === 9 && startDate && endDate) {
-				
 				const startDate_ = new Date(startDate);
 				const endDate_ = new Date(endDate);
-				return currentDate >= startDate_ && currentDate <= endDate_ ? item : null;
-
+				return currentDate >= startDate_ && currentDate <= endDate_
+					? item
+					: null;
 			} else if (dateFilter === 10) {
-				
-				 return getYearlyData(now.getFullYear()-3, currentDate, item);
-				
-			}else if (dateFilter === 11) {
-				
-				 return getYearlyData(now.getFullYear()-2, currentDate, item);
-				
-			}else if (dateFilter === 12) {
-			
-				 return getYearlyData(now.getFullYear()-1, currentDate, item);
-				
+				return getYearlyData(now.getFullYear() - 3, currentDate, item);
+			} else if (dateFilter === 11) {
+				return getYearlyData(now.getFullYear() - 2, currentDate, item);
+			} else if (dateFilter === 12) {
+				return getYearlyData(now.getFullYear() - 1, currentDate, item);
 			} else {
 				return item;
 			}
@@ -182,7 +259,9 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
 			.filter((item) => checkDuration(item, dateFilter))
 			.filter((item) => check(item, type))
 			.filter((item) => {
-				return String(Object.values(item)).toLowerCase().includes(search.toLowerCase());
+				return String(Object.values(item))
+					.toLowerCase()
+					.includes(search.toLowerCase());
 			});
 
 		setFilteredElements(result);
@@ -200,18 +279,20 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
 	// Delete items
 	const deleteConfirm = async (id) => {
 		await deleteItem(id);
-		toast(' Successfully Deleted', {
-			position: 'top-center',
+		toast(" Successfully Deleted", {
+			position: "top-center",
 			autoClose: 2000,
 			hideProgressBar: false,
 			closeOnClick: true,
-			theme: 'light',
+			theme: "light",
 		});
 		getAllItems();
 	};
 
 	const formatedate = (date) => {
-		return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+		return (
+			date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()
+		);
 	};
 
 	// Get payment proof
@@ -232,13 +313,13 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
 	const rowsPerPage = 10;
 	const columns = [
 		{
-			name: 'Sr.No.',
+			name: "Sr.No.",
 			cell: (row, index) => (page - 1) * rowsPerPage + index + 1,
 			sortable: true,
-			width: '90px',
+			width: "90px",
 		},
 		{
-			name: 'Title',
+			name: "Title",
 			selector: (row) => row.title,
 			cell: (row) => (
 				<>
@@ -250,7 +331,7 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
 			sortable: true,
 		},
 		{
-			name: 'Amount',
+			name: "Amount",
 			selector: (row) => row.amount,
 			cell: (row) => (
 				<>
@@ -262,7 +343,7 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
 			sortable: true,
 		},
 		{
-			name: 'Category',
+			name: "Category",
 			cell: (row) => (
 				<>
 					<div className="cell-with-tooltip" title={row.category}>
@@ -274,7 +355,7 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
 		},
 
 		{
-			name: 'Payment Type',
+			name: "Payment Type",
 			cell: (row) => (
 				<>
 					<div className="cell-with-tooltip" title={row.paymentType}>
@@ -284,33 +365,39 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
 			),
 		},
 		{
-			name: 'Date of Invoice',
+			name: "Date of Invoice",
 			selector: (row) => formatedate(new Date(row.dateOfInvoice)),
 			cell: (row) => (
 				<>
-					<div className="cell-with-tooltip" title={formatedate(new Date(row.dateOfInvoice))}>
+					<div
+						className="cell-with-tooltip"
+						title={formatedate(new Date(row.dateOfInvoice))}
+					>
 						{formatedate(new Date(row.dateOfInvoice))}
 					</div>
 				</>
 			),
 			sortable: true,
-			width: '135px',
+			width: "135px",
 		},
 		{
-			name: 'Date of Payment',
+			name: "Date of Payment",
 			selector: (row) => formatedate(new Date(row.dateOfPayment)),
 			cell: (row) => (
 				<>
-					<div className="cell-with-tooltip" title={formatedate(new Date(row.dateOfPayment))}>
+					<div
+						className="cell-with-tooltip"
+						title={formatedate(new Date(row.dateOfPayment))}
+					>
 						{formatedate(new Date(row.dateOfPayment))}
 					</div>
 				</>
 			),
 			sortable: true,
-			width: '145px',
+			width: "145px",
 		},
 		{
-			name: 'Description',
+			name: "Description",
 			cell: (row) => (
 				<>
 					<div className="cell-with-tooltip" title={row.description}>
@@ -320,12 +407,12 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
 			),
 		},
 		{
-			name: 'Payment Proof',
+			name: "Payment Proof",
 			cell: (row) => (
 				<>
 					<IconButton
 						title="View/Download Payment Proof"
-						sx={{ color: '#7700ff', padding: '0 2px' }}
+						sx={{ color: "#7700ff", padding: "0 2px" }}
 						variant="contained"
 						style={{ marginRight: 10 }}
 						onClick={() => getProof(row._id)}
@@ -334,16 +421,16 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
 					</IconButton>
 				</>
 			),
-			width: '120px',
+			width: "120px",
 		},
 
 		{
-			name: 'Action',
+			name: "Action",
 			cell: (row) => (
 				<>
 					<IconButton
 						title="Edit Item"
-						sx={{ color: '#7700ff', padding: '0 2px' }}
+						sx={{ color: "#7700ff", padding: "0 2px" }}
 						variant="contained"
 						style={{ marginRight: 10 }}
 						onClick={() => setShowModal({ openDialog: true, currItem: row })}
@@ -352,7 +439,7 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
 					</IconButton>
 					<IconButton
 						title="Delete Item"
-						sx={{ color: 'red', padding: '0 2px' }}
+						sx={{ color: "red", padding: "0 2px" }}
 						variant="contained"
 						onClick={() => deleteItemData(row._id)}
 					>
@@ -360,7 +447,7 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
 					</IconButton>
 				</>
 			),
-			width: '90px',
+			width: "90px",
 		},
 	];
 
@@ -371,18 +458,26 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
 			const secondRowField = selector(secondRow);
 
 			let comparison = 0;
-			if (typeof firstRowField === 'number') {
+			if (typeof firstRowField === "number") {
 				if (firstRowField > secondRowField) {
 					comparison = 1;
 				} else if (firstRowField < secondRowField) {
 					comparison = -1;
 				}
 			} else if (firstRowField.match(/\d{1,2}\/\d{1,2}\/\d{4}/)) {
-				var parts = firstRowField.split('/');
-				const firstRowDate = new Date(parts[parts.length - 1], parts[1] - 1, parts[0]);
+				var parts = firstRowField.split("/");
+				const firstRowDate = new Date(
+					parts[parts.length - 1],
+					parts[1] - 1,
+					parts[0]
+				);
 
-				parts = secondRowField.split('/');
-				const secondRowDate = new Date(parts[parts.length - 1], parts[1] - 1, parts[0]);
+				parts = secondRowField.split("/");
+				const secondRowDate = new Date(
+					parts[parts.length - 1],
+					parts[1] - 1,
+					parts[0]
+				);
 
 				if (firstRowDate < secondRowDate) comparison = 1;
 				else comparison = -1;
@@ -392,7 +487,7 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
 				comparison = -1;
 			}
 
-			return direction === 'desc' ? comparison * -1 : comparison;
+			return direction === "desc" ? comparison * -1 : comparison;
 		});
 	};
 
@@ -403,12 +498,12 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
 			var productIds = filteredElements.map((item) => item._id);
 			var response = await donwloadExcelSheet(productIds);
 			const blob = new Blob([response.data], {
-				type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+				type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
 			});
 			const url = window.URL.createObjectURL(blob);
-			const link = document.createElement('a');
+			const link = document.createElement("a");
 			link.href = url;
-			link.setAttribute('download', 'All_Items.xlsx');
+			link.setAttribute("download", "All_Items.xlsx");
 			document.body.appendChild(link);
 			link.click();
 			document.body.removeChild(link);
@@ -418,10 +513,22 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
 		}
 	};
 	return (
-		<Grid className="tableWrapper" container alignContent={'center'}>
-			<Popup setRender={setRender} showModal={showModal} setShowModal={setShowModal} formType="Edit"></Popup>
-			<DeletePopup delModal={delModal} setDelModal={setDelModal} confirm={confirm}></DeletePopup>
-			<PopupImage showImgModal={showImgModal} setShowImgModal={setShowImgModal}></PopupImage>
+		<Grid className="tableWrapper" container alignContent={"center"}>
+			<Popup
+				setRender={setRender}
+				showModal={showModal}
+				setShowModal={setShowModal}
+				formType="Edit"
+			></Popup>
+			<DeletePopup
+				delModal={delModal}
+				setDelModal={setDelModal}
+				confirm={confirm}
+			></DeletePopup>
+			<PopupImage
+				showImgModal={showImgModal}
+				setShowImgModal={setShowImgModal}
+			></PopupImage>
 			<ToastContainer />
 
 			<DataTable
@@ -434,19 +541,23 @@ const Item = ({ items, setItems, render, setRender, type, dateFilter, startDate,
 				paginationResetDefaultPage={true}
 				paginationTotalRows={filteredElements.length}
 				paginationComponentOptions={{
-					rowsPerPageText: 'Rows per page:',
-					rangeSeparatorText: 'of',
+					rowsPerPageText: "Rows per page:",
+					rangeSeparatorText: "of",
 					noRowsPerPage: false,
 					selectAllRowsItem: false,
-					selectAllRowsItemText: 'All',
+					selectAllRowsItemText: "All",
 				}}
 				subHeader
 				subHeaderComponent={
 					<div className="tableSubHeaderComponent">
 						<div className="headingWrapper">
 							<h5 className="heading heading-two">All records</h5>
-							<button className="btn btn-primary" disabled={btnStatus} onClick={donwloadExcel}>
-								{btnStatus ? 'Export Data...' : 'Export Data'}
+							<button
+								className="btn btn-primary"
+								disabled={btnStatus}
+								onClick={donwloadExcel}
+							>
+								{btnStatus ? "Export Data..." : "Export Data"}
 								{btnStatus && <FontAwesomeIcon icon="spinner" spin />}
 							</button>
 						</div>

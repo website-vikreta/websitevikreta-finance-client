@@ -25,7 +25,7 @@ const QuartersChart = ({ items }) => {
             let thisYear = new Date();
             let currData = [];
             let quarter = getQuarter(thisYear.getMonth() + 1);
-            console.log(quarter, thisYear)
+            
             let incomeTotal = getTotal(response.data, 'Income', thisYear, quarter);
             let expenseTotal = getTotal(response.data, 'Expense', thisYear, quarter);
             let profitTotal = getProfit(incomeTotal, expenseTotal);
@@ -59,7 +59,47 @@ const QuartersChart = ({ items }) => {
             let currentDate = new Date(currentItem.dateOfInvoice);
             let currentMonth = currentDate.getMonth() + 1;
 
-            if (quarter === 4) {
+            if(quarter === 1){
+                if (currentDate.getFullYear() === (thisYear.getFullYear() - 1)) {
+                    if (currentMonth >= 7 && currentMonth <= 9) {
+                        total[0] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
+                    } else if (currentMonth >= 10 && currentMonth <= 12) {
+                        total[1] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
+                    }
+                } else if (currentDate.getFullYear() === thisYear.getFullYear()) {
+                    if (currentMonth <= 3) {
+                        total[2] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
+                    }else if (currentMonth >= 4 && currentMonth <= 6) {
+                        total[3] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
+                    }
+                }
+            }else if(quarter === 2){
+                if (currentDate.getFullYear() === (thisYear.getFullYear() - 1)) {
+                     if (currentMonth >= 10 && currentMonth <= 12) {
+                        total[0] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
+                    }
+                } else if (currentDate.getFullYear() === thisYear.getFullYear()) {
+                    if (currentMonth <= 3) {
+                        total[1] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
+                    }else if (currentMonth >= 4 && currentMonth <= 6) {
+                        total[2] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
+                    }else if (currentMonth >= 7 && currentMonth <= 9) {
+                        total[3] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
+                    }
+                }
+            }else if(quarter === 3){
+                if (currentDate.getFullYear() === thisYear.getFullYear()) {
+                    if (currentMonth <= 3) {
+                        total[0] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
+                    }else if (currentMonth >= 4 && currentMonth <= 6) {
+                        total[1] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
+                    } else if (currentMonth >= 7 && currentMonth <= 9) {
+                        total[2] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
+                    }else if (currentMonth >= 10 && currentMonth <= 12) {
+                        total[3] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
+                    }
+                }
+            }else {
                 if (currentDate.getFullYear() === (thisYear.getFullYear() - 1)) {
                     if (currentMonth >= 4 && currentMonth <= 6) {
 
@@ -74,21 +114,7 @@ const QuartersChart = ({ items }) => {
                         total[3] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
                     }
                 }
-            } else {
-                if (currentDate.getFullYear() === thisYear.getFullYear()) {
-                    if (currentMonth >= 4 && currentMonth <= 6) {
-                        total[0] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
-                    } else if (currentMonth >= 7 && currentMonth <= 9) {
-                        total[1] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
-                    } else if (currentMonth >= 10 && currentMonth <= 12) {
-                        total[2] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
-                    }
-                } else if (currentDate.getFullYear() === thisYear.getFullYear() + 1) {
-                    if (currentMonth <= 3) {
-                        total[3] += currentItem.paymentType === paymentType ? currentItem.amount : 0;
-                    }
-                }
-            }
+            } 
         }
 
         return total;
@@ -97,12 +123,18 @@ const QuartersChart = ({ items }) => {
     function getLabels(thisYear, quarter) {
         let year = thisYear.getFullYear() % 200;
         let labels = [];
-        if (quarter === 4) {
-            labels.push('APR' + (year - 1) + '-JUN' + (year - 1), 'JUL' + (year - 1) + '-SEPT' + (year - 1), 'OCT' + (year - 1) + '-DEC' + (year - 1), 'JAN' + year + '-MAR' + year);
+        if(quarter === 1){
+            labels.push('JUL' + (year - 1) + '-SEPT' + (year - 1), 'OCT' + (year - 1) + '-DEC' + (year - 1), 'JAN' + (year) + '-MAR' + (year), 'APR' + (year) + '-JUN' + (year));
+            return labels;
+        }else if(quarter === 2){
+            labels.push( 'OCT' + (year - 1) + '-DEC' + (year - 1), 'JAN' + year + '-MAR' + year, 'APR' + (year) + '-JUN' + (year), 'JUL' + (year) + '-SEPT' + (year));
+            return labels;
+        }else if (quarter === 3) {
+            labels.push( 'JAN' + (year) + '-MAR' + (year), 'APR' + (year) + '-JUN' + (year), 'JUL' + (year) + '-SEPT' + (year), 'OCT' + (year) + '-DEC' + (year));
             return labels;
         }
 
-        labels.push('APR' + year + '-JUN' + year, 'JUL' + year + '-SEPT' + year, 'OCT' + year + '-DEC' + year, 'JAN' + (year + 1) + '-MAR' + (year + 1));
+        labels.push('APR' + (year-1) + '-JUN' + (year-1), 'JUL' + (year - 1) + '-SEPT' + (year - 1), 'OCT' + (year - 1) + '-DEC' + (year - 1), 'JAN' + (year) + '-MAR' + (year));
         return labels;
     }
 
