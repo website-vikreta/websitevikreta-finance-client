@@ -68,7 +68,7 @@ const PasswordReset = () => {
             <div className='loginGrid'>
                <div>
                   <h4 className='heading heading-one mb-1'>Forgot Password?</h4>
-                  <p className='mb-3 fw-normal'>Enter your email to proceed</p>
+                  <p className='mb-1 fw-normal'>Enter your email to proceed</p>
               
                </div>
 

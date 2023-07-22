@@ -47,6 +47,7 @@ const Login = () => {
       const userDetails = { email, password };
       try {
          const res = await loginUser(userDetails);
+      
          if (res.data) {
             localStorage.setItem('user-info', JSON.stringify(res.data));
             setUser(res.data);
@@ -62,10 +63,7 @@ const Login = () => {
          setError(errorMsg);
          setBtnStatus(false);
       }
-
-
    }
-
 
    return (
       <div className="App container">

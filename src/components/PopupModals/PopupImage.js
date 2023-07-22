@@ -15,14 +15,46 @@ export default function PopupImage(props){
         downloadLink.download = 'Payment_'+id+'_'+paymentType;
         downloadLink.click();
    }
+   const handleClose = () => {
+        setShowImgModal({...showImgModal, openImgDialog: false});
+    };
+
+    // Function to detect file type based on the base64 string
+
+	const detectFileType = (base64String) => {
+		if (base64String.startsWith("data:image/jpeg;base64,")) {
+			return "image";
+		} else if (base64String.startsWith("data:image/png;base64,")) {
+			return "image";
+		} else if (base64String.startsWith("data:image/gif;base64,")) {
+			return "image";
+		} else if (base64String.startsWith("data:application/pdf;base64,")) {
+			return "pdf";
+		} else {
+			return "unknown"; // Handle other file types if needed
+		}
+	};
+    // Function to display the payment proof in the modal
+    const displayPaymentProof = () => {
+        if (!showImgModal.image) return null;
+
+        const fileType = detectFileType(showImgModal.image);
+
+        if (fileType === "pdf") {
+          return <iframe width="500" height="500" src={showImgModal.image}></iframe>;
+        } else if (fileType === "image") {
+          return <img src={showImgModal.image} alt='View after sometime or Download to view' style={{ width: '100%', flex: 1 }}/>;
+        } else {
+          return <div>Unknown file type</div>;
+        }
+    };
     return(
-        <Dialog open= {openImgDialog} maxWidth='md' width='500'>
+        <Dialog open= {openImgDialog} onClose={handleClose} maxWidth='md'>
             <DialogTitle>
             <div style={{ display: 'flex' }}>
-                    <Typography variant="h6" component="div" style={{ flexGrow: 1 }}>
+                    <Typography variant="h6" component="div" style={{ flexGrow: 1, paddingLeft: 22}}>
                         Payment Proof
                     </Typography>
-
 
                     <Button
                         color="secondary"
@@ -37,9 +69,11 @@ export default function PopupImage(props){
                 <>
                 {image ?
                 <Container >
-                <img src={`${image}`} alt='View after sometime or Download to view' style={{ width: '100%', height: 300 }}/>
-                <Box><Button onClick={() => downloadBase64File(image)}>Download<DownloadIcon/></Button></Box>
+                    {displayPaymentProof()}
+
+                <Box><Button className="btn btn-primary mt-3" onClick={() => downloadBase64File(image)}>Download<DownloadIcon/></Button></Box>
                 
+
                 </Container> :
                 <Typography>Please upload Payment Proof</Typography>
                 }

@@ -19,6 +19,7 @@ const Navbar = ({ user }) => {
    let menuRef = useRef();
 
    useEffect(() => {
+
       let handler = (e) => {
          if (menuRef.current) {
             if (!menuRef.current.contains(e.target)) {
@@ -37,6 +38,20 @@ const Navbar = ({ user }) => {
 
    }, [openMenu]);
    let navigate = useNavigate();
+
+   useEffect(() => {
+      const handleResize = () => {
+         if (window.innerWidth >= 768) {
+            setShowMediaIcon(false);
+         }
+      };
+
+      window.addEventListener("resize", handleResize);
+
+      return () => {
+         window.removeEventListener("resize", handleResize);
+      };
+   }, []);
 
    // User Logout
    const handleLogout = () => {
@@ -80,7 +95,7 @@ const Navbar = ({ user }) => {
                   </span>
 
                   {/* CTAs */}
-                  <div className={showMediaIcon ? 'mobile-menu-link' : 'ctaWrapper'} ref={menuRef}>
+                  <div className={showMediaIcon ? 'mobile-menu-link active' : 'ctaWrapper'} ref={menuRef}>
 
                      <div className='username-text'>
                         <span className='welcomeText'>Welcome back, <b>{user.username}</b></span>
@@ -117,8 +132,12 @@ const Navbar = ({ user }) => {
 
                            {openMenu && <div className='drop-down-menu' ref={menuRef}>
                               <ul>
-                                 <li><button className='linkBtn' onClick={() => navigate('/change-password')}>Change Password</button></li>
-                                 <hr />
+                                 <div className='username-text'>
+                                    <span className='welcomeText'>Welcome back, <b>{user.username}</b></span>
+                                 </div>
+                                 <li>
+                                    <button className='linkBtn' onClick={() => navigate('/change-password')}>Change Password</button>
+                                 </li>                                 
                                  <li>
                                     <button className='linkBtn logout' onClick={handleDeleteData}>
                                        <span>Delete All Data</span>
@@ -134,13 +153,8 @@ const Navbar = ({ user }) => {
                                  </button></li>
                               </ul>
                            </div>}
-
                         </>}
-
-
-
                   </div>
-
                </>
             }
          </header>
@@ -152,7 +166,5 @@ const Navbar = ({ user }) => {
       </>
    );
 }
-
-
 
 export default Navbar;

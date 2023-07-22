@@ -1,4 +1,4 @@
-import { TextField } from '@mui/material';
+import { TextField, Grid } from '@mui/material';
 import React, { useRef, useState } from 'react'
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
@@ -39,8 +39,6 @@ function ChangePassword() {
     setConfirmPassword(event.target.value);
   };
 
-
-
   const toggleShowCurrentPassword = () => setShowCurrentPassword(!showCurrentPassword);
   const toggleShowNewPassword = () => setShowNewPassword(!showNewPassword);
   const toggleShowConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
@@ -74,30 +72,27 @@ function ChangePassword() {
       try {
         let response = await updatePassword(user.id, { password: newPassword });
         console.log(response.status)
-        if(response.status === 201){
+        if (response.status === 201) {
           setError('');
-        setCurrentPassword('');
-        setNewPassword('');
-        setConfirmPassword('');
-        setTimeout(() => {
-          loadingRef.current = false;
+          setCurrentPassword('');
+          setNewPassword('');
+          setConfirmPassword('');
+          setTimeout(() => {
+            loadingRef.current = false;
 
-        }, 1000);
-          if(toast.success("Password Changed Successfully!!", {
+          }, 1000);
+          if (toast.success("Password Changed Successfully!!", {
             position: "top-center",
             autoClose: 2000,
             hideProgressBar: false,
             closeOnClick: true,
             theme: "light",
-          })){
+          })) {
             setTimeout(() => {
               navigate('/home');
             }, 1000);
           }
         }
-        
-       
-
       } catch (error) {
         console.log('error updating password', error)
       }
@@ -108,85 +103,70 @@ function ChangePassword() {
     <div className="App container">
       {/* Header */}
       <Navbar user={user} />
-
       {/* Main Content */}
       <main>
-        <div className='loginGrid'>
+        <Grid className='loginGrid'>
           <form onSubmit={updatePasswrd}>
-
-            <div>
-              {/* Form */}
-
-              <div>
-                <h4 className='heading heading-one mb-1'>Change Password</h4>
-
-              </div>
-
-
-              <div className="form_input">
-
-                <TextField
-                  label="Current Password"
-                  value={currentPassword}
-                  onChange={handleCurrentPasswordChange}
-                  type={showCurrentPassword ? 'text' : 'password'}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton onClick={toggleShowCurrentPassword}>
-                          {showCurrentPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-
-              </div>
-              <br />
-              <div className="form_input">
-
-                <TextField
-                  label="New Password"
-                  value={newPassword}
-                  onChange={handleNewPasswordChange}
-                  type={showNewPassword ? 'text' : 'password'}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton onClick={toggleShowNewPassword}>
-                          {showNewPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                  error={(newPassword !== '' && !String(newPassword).match("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"))}
-                  helperText={(!String(newPassword).match("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$") && newPassword !== '' ? 'Password must contains Minimum eight characters, at least one uppercase letter, one lowercase letter, one number!' : '')}
-                />
-              </div>
-              <br />
-              <div className="form_input">
-
-                <TextField
-                  label="Confirm Password"
-                  value={confirmPassword}
-                  onChange={handleConfirmPasswordChange}
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton onClick={toggleShowConfirmPassword}>
-                          {showConfirmPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </div>
-            </div>
+            <h4 className='heading heading-one mb-4'>Change Password</h4>
+            <Grid item xs={12}>
+              <TextField
+                label="Current Password"
+                className='mb-3'
+                value={currentPassword}
+                onChange={handleCurrentPasswordChange}
+                type={showCurrentPassword ? 'text' : 'password'}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={toggleShowCurrentPassword}>
+                        {showCurrentPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label="New Password"
+                className='mb-3'
+                value={newPassword}
+                onChange={handleNewPasswordChange}
+                type={showNewPassword ? 'text' : 'password'}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={toggleShowNewPassword}>
+                        {showNewPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                error={(newPassword !== '' && !String(newPassword).match("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"))}
+                helperText={(!String(newPassword).match("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$") && newPassword !== '' ? 'Password must contains Minimum eight characters, at least one uppercase letter, one lowercase letter, one number!' : '')}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label="Confirm Password"
+                className='mb-3'
+                value={confirmPassword}
+                onChange={handleConfirmPasswordChange}
+                type={showConfirmPassword ? 'text' : 'password'}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={toggleShowConfirmPassword}>
+                        {showConfirmPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
             <div>
               <FormHelperText error>{error}</FormHelperText>
             </div>
-            <br />
             <div className="form_input">
               <button
                 className="btn btn-primary login-btn"
@@ -196,12 +176,9 @@ function ChangePassword() {
                 {loadingRef.current && <FontAwesomeIcon icon="spinner" spin />}
               </button>
             </div>
-
-
           </form>
-        </div>
+        </Grid>
       </main>
-
     </div>
   )
 }

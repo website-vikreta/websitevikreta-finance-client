@@ -26,19 +26,19 @@ const Index = () => {
    const [items, setItems] = useState([]);
    const [user, setUser] = useState([]);
    const [render, setRender] = useState('unset');
-   
+
    document.title = 'Home'
    const getAllItems = async () => {
       let res = localStorage.getItem('user-info');
       let response = await getItems(JSON.parse(res).id);
       setUser(JSON.parse(res))
-      
+
       // Sort and set data according to latest date of invoice 
       setItems(response.data.sort((item1, item2) => {
          let d1 = new Date(item1.dateOfInvoice);
          let d2 = new Date(item2.dateOfInvoice);
-         if(d1 < d2) return 1
-         else if(d1 > d2) return -1;
+         if (d1 < d2) return 1
+         else if (d1 > d2) return -1;
          else return 0;
       }));
    }
@@ -46,14 +46,14 @@ const Index = () => {
       getAllItems();
    }, [render]);
 
-   
+
    return (
 
       // Defining Structure
       <>
          <div className="App container">
             {/* Header */}
-            <Navbar user={user}/>
+            <Navbar user={user} />
 
             {/* Main Content */}
             <main>
@@ -81,9 +81,9 @@ const Index = () => {
                   <div className="card">
 
                      <AllItems items={items} setItems={setItems} render={render} setRender={setRender} />
-                     
+
                   </div>
-                  
+
                </div>
 
             </main>
@@ -100,8 +100,7 @@ const Index = () => {
                <Add fontSize='medium' />
             </button>
             <Suspense>
-            <Popup setRender={setRender} showModal={showModal} setShowModal={setShowModal} formType='Add'></Popup>
-
+               <Popup setRender={setRender} showModal={showModal} setShowModal={setShowModal} formType='Add'></Popup>
             </Suspense>
          </div>
       </>

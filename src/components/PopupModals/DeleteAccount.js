@@ -52,19 +52,21 @@ export default function DeleteAccount({ user, deleteAccountModal, setDeleteAccou
             setError("Password is Wrong");
             console.log(error);
         }
-
     }
+
+    const handleClose = () => {
+        setDeleteAccountModal(false);
+     };
     return (
-        <Dialog open={deleteAccountModal} maxWidth='md'>
+        <Dialog open={deleteAccountModal} onClose={handleClose} maxWidth='md'>
             <DialogTitle>
                 <div style={{ display: 'flex' }}>
                     <Typography variant="h6" component="div" style={{ flexGrow: 1 }}>
-                        Delete Account
+                        <Warning sx={{ color: 'red' }} /><strong>Delete Your Account?</strong>
                     </Typography>
 
                     {/* Close Button */}
                     <Button
-                        sx={{ padding: 0, minWidth: 0 }}
                         color="secondary"
                         onClick={() => { setDeleteAccountModal(false); setPassword('') }}>
                         <CloseIcon />
@@ -73,7 +75,7 @@ export default function DeleteAccount({ user, deleteAccountModal, setDeleteAccou
             </DialogTitle>
             {/* Dialog Content for Deletion */}
             <DialogContent dividers style={{ paddingY: 2, paddingX: 0 }}>
-                <center> <Warning sx={{ color: 'red' }} /><strong>Delete Your Account ?</strong></center>
+                
                 <div>
                     <div>
                         You are requesting to delete an account. This process cannot be undone also will delete your all records.
@@ -88,7 +90,7 @@ export default function DeleteAccount({ user, deleteAccountModal, setDeleteAccou
             </DialogContent>
             <DialogActions>
 
-                <div className="form_input" style={{ padding: '10px 0px', color: 'red' }}>
+                <div className="form_input" style={{ padding: '0px 0px', color: 'red' }}>
                     <button
                         variant="outlined" onClick={deleteAccount}
                         type='submit' disabled={btnStatus || message}

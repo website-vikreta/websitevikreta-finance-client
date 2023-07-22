@@ -295,6 +295,7 @@ const Item = ({
 		);
 	};
 
+
 	// Get payment proof
 	const getProof = async (id) => {
 		setShowImgModal({ ...showImgModal, openImgDialog: true, loading: true });
@@ -410,19 +411,24 @@ const Item = ({
 			name: "Payment Proof",
 			cell: (row) => (
 				<>
-					<IconButton
-						title="View/Download Payment Proof"
-						sx={{ color: "#7700ff", padding: "0 2px" }}
-						variant="contained"
-						style={{ marginRight: 10 }}
-						onClick={() => getProof(row._id)}
-					>
-						<VisibilityIcon fontSize="small" />
-					</IconButton>
+					{row.paymentProof ? ( // Check if paymentProof exists
+						<IconButton
+							title={"View/Download Payment Proof"}
+							sx={{ color: "#7700ff", padding: "0 2px" }}
+							variant="contained"
+							style={{ marginRight: 10 }}
+							onClick={() => getProof(row._id)}
+						>
+							<VisibilityIcon fontSize="small" />
+						</IconButton>
+					) : (
+						<div>No Proof</div> // Render "No Proof" if paymentProof does not exist
+					)}
 				</>
 			),
 			width: "120px",
 		},
+
 
 		{
 			name: "Action",

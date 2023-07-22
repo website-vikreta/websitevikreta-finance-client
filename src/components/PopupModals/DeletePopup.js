@@ -1,6 +1,7 @@
 import React from 'react';
 import Draggable from 'react-draggable';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper, Typography } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 
 function PaperComponent(props) {
@@ -38,7 +39,16 @@ export default function DeletePopup(props) {
         aria-labelledby="draggable-dialog-title">
 
         <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
-          Delete
+          <div style={{ display: 'flex' }}>
+            <Typography variant="h6" component="div" style={{ flexGrow: 1 }}>
+              Delete
+            </Typography>
+            <Button
+              color="secondary"
+              onClick={()=>setDelModal({...delModal, openDelDialog: false})}>
+              <CloseIcon />
+            </Button>
+          </div>
         </DialogTitle>
 
         {/* Dialog Content for Deletion */}

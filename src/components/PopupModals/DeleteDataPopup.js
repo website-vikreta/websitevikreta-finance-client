@@ -4,7 +4,7 @@ import { deleteAllData } from '../../api';
 
 // import Icons
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
-import { Close } from '@mui/icons-material';
+import CloseIcon from '@mui/icons-material/Close';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
@@ -39,10 +39,16 @@ export default function DeleteDataPopup({ userId, deleteDataModal, setDeleteData
             console.log(error);
         }
     }
+
+    const handleClose = () => {
+        setDeleteDataModal(false);
+     };
+
     return (
         <div>
             <Dialog
                 open={deleteDataModal}
+                onClose={handleClose}
                 aria-labelledby="draggable-dialog-title">
                 <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
                     <div style={{ display: 'flex' }}>
@@ -52,10 +58,9 @@ export default function DeleteDataPopup({ userId, deleteDataModal, setDeleteData
 
                         {/* Close Button */}
                         <Button
-                            sx={{ padding: 0, minWidth: 0 }}
                             color="secondary"
                             onClick={() => { setDeleteDataModal(false); }}>
-                            <Close />
+                            <CloseIcon />
                         </Button>
                     </div>
                 </DialogTitle>
@@ -64,7 +69,7 @@ export default function DeleteDataPopup({ userId, deleteDataModal, setDeleteData
                     <DialogContentText>
                         {deleteSucces ? <>Your Data has been Deleted Successfully. Please Refresh the page. <CheckCircleOutlinedIcon sx={{ color: 'green' }} /></> :
                             <>
-                                <center> <strong>Are You Sure ?</strong></center>
+                                <strong>Are You Sure?</strong> <br />
                                 Do you really want to delete All Record? This process cannot be undone.
                             </>
                         }

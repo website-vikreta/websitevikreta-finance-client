@@ -8,15 +8,19 @@ export default function Popup(props) {
 
    const { setRender, showModal, setShowModal, formType } = props;
    const { openDialog, currItem } = showModal;
+
+   const handleClose = () => {
+      setShowModal({ ...showModal, openDialog: false });
+   };
+
    return (
-      <Dialog open={openDialog} maxWidth='md'>
+      <Dialog open={openDialog} onClose={handleClose} maxWidth='md'>
          <DialogTitle>
             <div style={{ display: 'flex' }}>
                <Typography variant="h6" component="div" style={{ flexGrow: 1 }}>
                   {formType} Item Details
                </Typography>
                <Button
-                  sx={{ padding: 0, minWidth: 0 }}
                   color="secondary"
                   onClick={() => setShowModal({ ...showModal, openDialog: false })}>
                   <CloseIcon />

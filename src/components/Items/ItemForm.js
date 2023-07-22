@@ -263,7 +263,6 @@ const ItemForm = (props) => {
                      onDone={({ base64 }) => { handleImageData(base64) }}
                   />
                </span>
-
             </div>
 
             <div className="grid grid-2 mt-4">

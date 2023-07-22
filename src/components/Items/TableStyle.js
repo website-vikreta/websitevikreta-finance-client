@@ -17,7 +17,7 @@ const tableCustomStyles = {
    },
    headCells: {
       style: {
-         fontSize: '0.8rem ',
+         fontSize: '0.9rem ',
          margin: '0',
          backgroundColor: '#7700ff',
          color: '#FFFFFF',
@@ -31,7 +31,7 @@ const tableCustomStyles = {
         '&:hover': { content: 'attr(title)',
         position: 'static',
          whiteSpace: 'nowrap',
-         fontSize: '0.7rem',
+         // fontSize: '0.7rem',
          opacity: '1',
          transition: 'opacity 0.3s',
          zIndex:'1'},
