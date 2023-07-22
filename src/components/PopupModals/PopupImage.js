@@ -41,7 +41,7 @@ export default function PopupImage(props){
         const fileType = detectFileType(showImgModal.image);
 
         if (fileType === "pdf") {
-          return <iframe width="500" height="500" src={showImgModal.image}></iframe>;
+          return <iframe width="500" height="500" title={showImgModal.id} src={showImgModal.image}></iframe>;
         } else if (fileType === "image") {
           return <img src={showImgModal.image} alt='View after sometime or Download to view' style={{ width: '100%', flex: 1 }}/>;
         } else {
