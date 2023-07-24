@@ -411,7 +411,7 @@ const Item = ({
 			name: "Payment Proof",
 			cell: (row) => (
 				<>
-					{row.paymentProof ? ( // Check if paymentProof exists
+					{row.hasPaymentProof ? ( // Check if paymentProof exists
 						<IconButton
 							title={"View/Download Payment Proof"}
 							sx={{ color: "#7700ff", padding: "0 2px" }}
