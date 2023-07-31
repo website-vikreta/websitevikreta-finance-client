@@ -128,7 +128,7 @@ const Navbar = ({ user }) => {
                         :
                         <>
                            {/* Menu Options on Desktop View */}
-                           <AccountCircleIcon onClick={() => setOpenMenu(!openMenu)} />
+                           {!openMenu ? <AccountCircleIcon onClick={() => setOpenMenu(!openMenu)} /> : <span><AccountCircleIcon/></span>}
 
                            {openMenu && <div className='drop-down-menu' ref={menuRef}>
                               <ul>
