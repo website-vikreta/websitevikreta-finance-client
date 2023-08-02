@@ -21,22 +21,22 @@ const ItemsTable = ({ items }) => {
    }
 
    function thisQuarter(currentDate, now, month, quartr, item) {
+      if (currentDate.getFullYear() !== now.getFullYear()) {
+         return null;
+      }
 
-      if (quartr === 4) {
-         if (currentDate.getFullYear() === now.getFullYear() && (month <= 3)) {
-            return item;
-         } else {
+      switch (quartr) {
+         case 1:
+            return month >= 4 && month <= 6 ? item : null;
+         case 2:
+            return month >= 7 && month <= 9 ? item : null;
+         case 3:
+            return month >= 10 && month <= 12 ? item : null;
+         case 4:
+            return month <= 3 ? item : null;
+         default:
             return null;
-         }
-      } else if (currentDate.getFullYear() === now.getFullYear()) {
-
-         if (quartr === 1)
-            return currentDate.getFullYear() === now.getFullYear() && month >= 4 && month <= 6 ? item : null;
-         if (quartr === 2)
-            return currentDate.getFullYear() === now.getFullYear() && month >= 7 && month <= 9 ? item : null;
-         if (quartr === 3)
-            return currentDate.getFullYear() === now.getFullYear() && month >= 10 && month <= 12 ? item : null;
-      } else return null;
+      }
    }
 
    function lastQuarter(currentDate, now, month, item) {
@@ -45,53 +45,50 @@ const ItemsTable = ({ items }) => {
 
    function getIncomeInDuration(item, currentDate, timeFilter) {
       const itemDate = new Date(item.dateOfInvoice);
-      var currentMonth = currentDate.getMonth();
-      if (timeFilter === 0) {
-
-         if (itemDate.getMonth() < 3)
-            return (itemDate.getFullYear() === currentDate.getFullYear() + 1) ? item : null;
-         else
-            return (itemDate.getFullYear() === currentDate.getFullYear()) ? item : null;
-
-      } else if (timeFilter === 1) {
-         if (itemDate.getMonth() < 3)
-            return (itemDate.getFullYear() === currentDate.getFullYear()) ? item : null;
-         else
-            return (itemDate.getFullYear() === currentDate.getFullYear() - 1) ? item : null;
-
-      } else if (timeFilter === 2) {
-
-         return itemDate.getFullYear() === (currentDate.getFullYear()) && (itemDate.getMonth() === currentMonth) ? item : null;
-
-      } else if (timeFilter === 3) {
-
-         if (currentMonth === 0) return (itemDate.getFullYear() === (currentDate.getFullYear() - 1) && itemDate.getMonth() === 11) ? item : null;
-         else return (itemDate.getMonth() === currentMonth - 1) ? item : null;
-
-      } else if (timeFilter === 4) {
-
-         const quartr = getQuarter(currentDate.getMonth() + 1);
-         return thisQuarter(itemDate, currentDate, itemDate.getMonth() + 1, quartr, item);
-
-      } else if (timeFilter === 5) {
-
-         const quartr = getQuarter(currentDate.getMonth() + 1);
-         if (quartr === 1) return thisQuarter(itemDate, currentDate, itemDate.getMonth() + 1, 4, item);
-         if (quartr === 4) return lastQuarter(itemDate, currentDate, itemDate.getMonth() + 1, item);
-         return thisQuarter(itemDate, currentDate, itemDate.getMonth() + 1, quartr - 1, item);
-
-      } else {
-         return item;
+      const currentMonth = currentDate.getMonth();
+      const currentYear = currentDate.getFullYear();
+      var quarter = 0;
+      switch (timeFilter) {
+         case 0:
+            return itemDate.getMonth() < 3 ? (itemDate.getFullYear() === currentYear + 1 ? item : null) : (itemDate.getFullYear() === currentYear ? item : null);
+         case 1:
+            return itemDate.getMonth() < 3 ? (itemDate.getFullYear() === currentYear ? item : null) : (itemDate.getFullYear() === currentYear - 1 ? item : null);
+         case 2:
+            return itemDate.getFullYear() === currentYear && itemDate.getMonth() === currentMonth ? item : null;
+         case 3:
+            if (currentMonth === 0) {
+               return itemDate.getFullYear() === currentYear - 1 && itemDate.getMonth() === 11 ? item : null;
+            } else {
+               return itemDate.getFullYear() === currentYear && itemDate.getMonth() === currentMonth - 1 ? item : null;
+            }
+         case 4:
+            quarter = getQuarter(currentMonth + 1);
+            return thisQuarter(itemDate, currentDate, itemDate.getMonth() + 1, quarter, item);
+         case 5:
+            quarter = getQuarter(currentMonth + 1);
+            if (quarter === 1) {
+               return thisQuarter(itemDate, currentDate, itemDate.getMonth() + 1, 4, item);
+            } else if (quarter === 4) {
+               return lastQuarter(itemDate, currentDate, itemDate.getMonth() + 1, item);
+            } else {
+               return thisQuarter(itemDate, currentDate, itemDate.getMonth() + 1, quarter - 1, item);
+            }
+         default:
+            return item;
       }
    }
 
+
    function getTotalRevenueDetails(items, type, currentDate, timeFilter) {
-      var currItems = items.filter((item) => getIncome(item, type));
-      var currYear = currItems.filter((item) => getIncomeInDuration(item, currentDate, timeFilter)).map(item => item.amount);
-      var total = 0;
-      currYear.forEach(amount => total += amount);
-      return total;
+      return items.reduce((total, item) => {
+         const { amount } = item;
+         if (getIncome(item, type) && getIncomeInDuration(item, currentDate, timeFilter)) {
+            total += amount;
+         }
+         return total;
+      }, 0);
    }
+
 
    function currency(value) {
       return value.toLocaleString('en-IN');
@@ -163,9 +160,18 @@ const ItemsTable = ({ items }) => {
 
 
    // Calculate current month, quarter and year profit
-   const currentMonthProfit = (currMonthTotalProfit === lastMonthTotalProfit) ? 0 : lastMonthTotalProfit === 0 ? currMonthTotalProfit > 0 ? 100 : -100 : (((currMonthTotalProfit - lastMonthTotalProfit) / lastMonthTotalProfit) * 100).toFixed(2);
-   const currentQuarterProfit = (currQaurtrTotalProfit === lastQaurtrTotalProfit) ? 0 : lastQaurtrTotalProfit === 0 ?  currQaurtrTotalProfit > 0 ? 100 : -100  : (((currQaurtrTotalProfit - lastQaurtrTotalProfit) / lastQaurtrTotalProfit) * 100).toFixed(2);
-   const currentYearProfit = (currentYearTotalProfit === lastYearTotalProfit) ? 0 : lastYearTotalProfit === 0 ?  currentYearTotalProfit > 0 ? 100 : -100  : (((currentYearTotalProfit - lastYearTotalProfit) / lastYearTotalProfit) * 100).toFixed(2);
+   function calculateProfitPercentage(currentProfit, lastProfit) {
+      if (lastProfit === 0) {
+         return currentProfit > 0 ? 100 : -100;
+      } else {
+         return (((currentProfit - lastProfit) / lastProfit) * 100).toFixed(2);
+      }
+   }
+
+   const currentMonthProfit = calculateProfitPercentage(currMonthTotalProfit, lastMonthTotalProfit);
+   const currentQuarterProfit = calculateProfitPercentage(currQaurtrTotalProfit, lastQaurtrTotalProfit);
+   const currentYearProfit = calculateProfitPercentage(currentYearTotalProfit, lastYearTotalProfit);
+
 
    return (
 
@@ -216,7 +222,7 @@ const ItemsTable = ({ items }) => {
 
                   {/* Arrow % */}
                   <div className="arrowValue">
-                     {((currentMonthProfit !== 0 && currentMonthProfit > 0 ) ? (<FontAwesomeIcon icon="arrow-up" style={{ color: 'green' }} />) : currentMonthProfit !== 0 ? (<FontAwesomeIcon icon="arrow-down" style={{ color: 'red' }} />) : null)}
+                     {((currentMonthProfit !== 0 && currentMonthProfit > 0) ? (<FontAwesomeIcon icon="arrow-up" style={{ color: 'green' }} />) : currentMonthProfit !== 0 ? (<FontAwesomeIcon icon="arrow-down" style={{ color: 'red' }} />) : null)}
                      {currentMonthProfit === 0 ? <span style={{ color: 'gray ' }}>{0 + '%'}</span> : (currentMonthProfit > 0) ? <span style={{ color: 'green ' }}>{currentMonthProfit + '%'}</span> : <span style={{ color: 'red ' }}>{currentMonthProfit + '%'}</span>}
                      <span>than prev month</span>
                   </div>
@@ -264,7 +270,7 @@ const ItemsTable = ({ items }) => {
 
                   {/* Arrow % */}
                   <div className="arrowValue">
-                     {(currentQuarterProfit !== 0 &&  currentQuarterProfit > 0 ) ? (<FontAwesomeIcon icon="arrow-up" style={{ color: 'green' }} />) : currentQuarterProfit !== 0 ? (<FontAwesomeIcon icon="arrow-down" style={{ color: 'red' }} />) : null}
+                     {(currentQuarterProfit !== 0 && currentQuarterProfit > 0) ? (<FontAwesomeIcon icon="arrow-up" style={{ color: 'green' }} />) : currentQuarterProfit !== 0 ? (<FontAwesomeIcon icon="arrow-down" style={{ color: 'red' }} />) : null}
                      {currentQuarterProfit === 0 ? <span style={{ color: 'gray ' }}>{0 + '%'}</span> : (currentQuarterProfit > 0) ? <span style={{ color: 'green ' }}>{currentQuarterProfit + '%'}</span> : <span style={{ color: 'red ' }}>{currentQuarterProfit + '%'}</span>}
                      <span>than prev quarter</span>
                   </div>

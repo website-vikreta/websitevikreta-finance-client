@@ -37,8 +37,8 @@ const Index = () => {
       setItems(response.data.sort((item1, item2) => {
          let d1 = new Date(item1.dateOfPayment);
          let d2 = new Date(item2.dateOfPayment);
-         if (d1 > d2) return 1
-         else if (d1 < d2) return -1;
+         if (d1 < d2) return 1
+         else if (d1 > d2) return -1;
          else return 0;
       }));
    }

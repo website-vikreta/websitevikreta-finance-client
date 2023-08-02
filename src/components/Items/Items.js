@@ -137,123 +137,64 @@ const Item = ({
 		}
 
 		// Function to Select Items Date Range
-		function checkDuration(item, dateFilter) {
+		function checkDuration(item, dateFilter, startDate, endDate) {
 			const now = new Date();
-
 			const currDate = new Date(item.dateOfInvoice);
-			const currentDate = new Date(
-				currDate.getFullYear(),
-				currDate.getMonth(),
-				currDate.getDate()
-			);
+			const currentDate = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate());
 			const month = currentDate.getMonth() + 1;
-			if (dateFilter === 1) {
+			var quarter = 0;
+			switch (dateFilter) {
+			  case 1:
 				return item;
-			} else if (dateFilter === 2) {
-				return currentDate.getFullYear() === now.getFullYear() &&
-					currentDate.getMonth() === now.getMonth() &&
-					currentDate.getDate() === now.getDate()
-					? item
-					: null;
-				//Past 7 days
-				// const lastDate = new Date(now.getFullYear(), now.getMonth(), (now.getDate() - 7));
-				// return currentDate <= now && currentDate >= lastDate ? item : null;
-			} else if (dateFilter === 3) {
-				return currentDate.getFullYear() === now.getFullYear() &&
-					currentDate.getMonth() === now.getMonth()
-					? item
-					: null;
-
-				// Past 30 Days
-				// const lastDate = subDays(now, 30);
-				// return currentDate <= now && currentDate >= lastDate ? item : null;
-			} else if (dateFilter === 4) {
-				const quarter = getQuarter(now.getMonth() + 1);
-
+			  case 2:
+				return currentDate.getTime() === now.getTime() ? item : null;
+			  case 3:
+				return currentDate.getFullYear() === now.getFullYear() && currentDate.getMonth() === now.getMonth() ? item : null;
+			  case 4:
+				quarter = getQuarter(now.getMonth() + 1);
 				return thisQuarter(currentDate, now, month, quarter, item);
-			} else if (dateFilter === 5) {
-				if (now.getMonth() < 3) {
-					if (
-						now.getFullYear() === currentDate.getFullYear() &&
-						currentDate.getMonth() < 3
-					)
-						return item;
-					if (
-						now.getFullYear() - 1 === currentDate.getFullYear() &&
-						currentDate.getMonth() >= 3
-					)
-						return item;
-				} else {
-					if (
-						now.getFullYear() === currentDate.getFullYear() &&
-						currentDate.getMonth() >= 3
-					)
-						return item;
-					if (
-						now.getFullYear() + 1 === currentDate.getFullYear() &&
-						currentDate.getMonth() < 3
-					)
-						return item;
+			  case 5:
+				if ((now.getMonth() < 3 && currentDate.getMonth() < 3 && now.getFullYear() === currentDate.getFullYear()) ||
+					(now.getMonth() >= 3 && currentDate.getMonth() >= 3 && now.getFullYear() === currentDate.getFullYear()) ||
+					(now.getMonth() < 3 && currentDate.getMonth() >= 3 && now.getFullYear() - 1 === currentDate.getFullYear()) ||
+					(now.getMonth() >= 3 && currentDate.getMonth() < 3 && now.getFullYear() + 1 === currentDate.getFullYear())) {
+				  return item;
 				}
 				return null;
-			} else if (dateFilter === 6) {
-				if (now.getMonth() === 0) {
-					return currentDate.getFullYear() === now.getFullYear() - 1 &&
-						currentDate.getMonth() === 11
-						? item
-						: null;
-				}
-				return currentDate.getFullYear() === now.getFullYear() &&
-					currentDate.getMonth() === now.getMonth() - 1
-					? item
-					: null;
-			} else if (dateFilter === 7) {
-				const quarter = getQuarter(now.getMonth() + 1);
-
+			  case 6:
+				const prevMonth = now.getMonth() === 0 ? 11 : now.getMonth() - 1;
+				return currentDate.getFullYear() === now.getFullYear() && currentDate.getMonth() === prevMonth ? item : null;
+			  case 7:
+				quarter = getQuarter(now.getMonth() + 1);
 				if (quarter === 1) return thisQuarter(currentDate, now, month, 4, item);
 				if (quarter === 4) return lastQuarter(currentDate, now, month, item);
 				return thisQuarter(currentDate, now, month, quarter - 1, item);
-
-			} else if (dateFilter === 8) {
-				if (now.getMonth() < 3) {
-					if (
-						now.getFullYear() - 1 === currentDate.getFullYear() &&
-						currentDate.getMonth() < 3
-					)
-						return item;
-					if (
-						now.getFullYear() - 2 === currentDate.getFullYear() &&
-						currentDate.getMonth() >= 3
-					)
-						return item;
-				} else {
-					if (
-						now.getFullYear() === currentDate.getFullYear() &&
-						currentDate.getMonth() < 3
-					)
-						return item;
-					if (
-						now.getFullYear() - 1 === currentDate.getFullYear() &&
-						currentDate.getMonth() >= 3
-					)
-						return item;
+			  case 8:
+				if ((now.getMonth() < 3 && currentDate.getMonth() < 3 && now.getFullYear() - 1 === currentDate.getFullYear()) ||
+					(now.getMonth() >= 3 && currentDate.getMonth() >= 3 && now.getFullYear() - 1 === currentDate.getFullYear()) ||
+					(now.getMonth() < 3 && currentDate.getMonth() >= 3 && now.getFullYear() - 2 === currentDate.getFullYear()) ||
+					(now.getMonth() >= 3 && currentDate.getMonth() < 3 && now.getFullYear() - 1 === currentDate.getFullYear())) {
+				  return item;
 				}
-			} else if (dateFilter === 9 && startDate && endDate) {
-				const startDate_ = new Date(startDate);
-				const endDate_ = new Date(endDate);
-				return currentDate >= startDate_ && currentDate <= endDate_
-					? item
-					: null;
-			} else if (dateFilter === 10) {
+				return null;
+			  case 9:
+				if (startDate && endDate) {
+				  const startDate_ = new Date(startDate);
+				  const endDate_ = new Date(endDate);
+				  return currentDate >= startDate_ && currentDate <= endDate_ ? item : null;
+				}
+				return item;
+			  case 10:
 				return getYearlyData(now.getFullYear() - 3, currentDate, item);
-			} else if (dateFilter === 11) {
+			  case 11:
 				return getYearlyData(now.getFullYear() - 2, currentDate, item);
-			} else if (dateFilter === 12) {
+			  case 12:
 				return getYearlyData(now.getFullYear() - 1, currentDate, item);
-			} else {
+			  default:
 				return item;
 			}
-		}
+		  }
+		  
 
 		var result = items
 			.filter((item) => checkDuration(item, dateFilter))
