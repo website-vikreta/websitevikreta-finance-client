@@ -436,13 +436,7 @@ const Item = ({
 			return direction === "desc" ? comparison * -1 : comparison;
 		});
 	};
-
-	function generateFileName() {
-		const currentDate = new Date();
-		const formattedDate = format(currentDate, 'ddMMyyyy_HHmmss', { timeZone: 'Asia/Kolkata' });
-		return `FinanceReport_${formattedDate}.xlsx`;
-	}
-
+	
 	// Export data to excel
 	const donwloadExcel = async () => {
 		setBtnStatus(true);
@@ -455,7 +449,11 @@ const Item = ({
 			const url = window.URL.createObjectURL(blob);
 			const link = document.createElement("a");
 			link.href = url;
-			link.setAttribute("download", generateFileName());
+
+			const currentDate = new Date();
+			const formattedDate = format(currentDate, 'ddMMyyyy_HHmmss', { timeZone: 'Asia/Kolkata' });
+
+			link.setAttribute("download", `FinanceReport_${formattedDate}.xlsx`);
 			document.body.appendChild(link);
 			link.click();
 			document.body.removeChild(link);
