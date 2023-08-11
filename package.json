@@ -19,7 +19,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.2.3",
     "chart.js": "^4.2.0",
-    "date-fns": "^2.29.3",
+    "date-fns": "^2.30.0",
     "dayjs": "^1.11.7",
     "file-saver": "^2.0.5",
     "mui-image": "^1.0.7",

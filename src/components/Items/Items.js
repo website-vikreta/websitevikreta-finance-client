@@ -1,7 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-// import { Link } from 'react-router-dom';
-// import { subDays } from 'date-fns';
+import { format } from 'date-fns';
 import DataTable from "react-data-table-component";
 import { tableCustomStyles } from "./TableStyle.js";
 import { ToastContainer, toast } from "react-toastify";
@@ -144,57 +143,57 @@ const Item = ({
 			const month = currentDate.getMonth() + 1;
 			var quarter = 0;
 			switch (dateFilter) {
-			  case 1:
-				return item;
-			  case 2:
-				return currentDate.getTime() === now.getTime() ? item : null;
-			  case 3:
-				return currentDate.getFullYear() === now.getFullYear() && currentDate.getMonth() === now.getMonth() ? item : null;
-			  case 4:
-				quarter = getQuarter(now.getMonth() + 1);
-				return thisQuarter(currentDate, now, month, quarter, item);
-			  case 5:
-				if ((now.getMonth() < 3 && currentDate.getMonth() < 3 && now.getFullYear() === currentDate.getFullYear()) ||
-					(now.getMonth() >= 3 && currentDate.getMonth() >= 3 && now.getFullYear() === currentDate.getFullYear()) ||
-					(now.getMonth() < 3 && currentDate.getMonth() >= 3 && now.getFullYear() - 1 === currentDate.getFullYear()) ||
-					(now.getMonth() >= 3 && currentDate.getMonth() < 3 && now.getFullYear() + 1 === currentDate.getFullYear())) {
-				  return item;
-				}
-				return null;
-			  case 6:
-				const prevMonth = now.getMonth() === 0 ? 11 : now.getMonth() - 1;
-				return currentDate.getFullYear() === now.getFullYear() && currentDate.getMonth() === prevMonth ? item : null;
-			  case 7:
-				quarter = getQuarter(now.getMonth() + 1);
-				if (quarter === 1) return thisQuarter(currentDate, now, month, 4, item);
-				if (quarter === 4) return lastQuarter(currentDate, now, month, item);
-				return thisQuarter(currentDate, now, month, quarter - 1, item);
-			  case 8:
-				if ((now.getMonth() < 3 && currentDate.getMonth() < 3 && now.getFullYear() - 1 === currentDate.getFullYear()) ||
-					(now.getMonth() >= 3 && currentDate.getMonth() >= 3 && now.getFullYear() - 1 === currentDate.getFullYear()) ||
-					(now.getMonth() < 3 && currentDate.getMonth() >= 3 && now.getFullYear() - 2 === currentDate.getFullYear()) ||
-					(now.getMonth() >= 3 && currentDate.getMonth() < 3 && now.getFullYear() - 1 === currentDate.getFullYear())) {
-				  return item;
-				}
-				return null;
-			  case 9:
-				if (startDate && endDate) {
-				  const startDate_ = new Date(startDate);
-				  const endDate_ = new Date(endDate);
-				  return currentDate >= startDate_ && currentDate <= endDate_ ? item : null;
-				}
-				return item;
-			  case 10:
-				return getYearlyData(now.getFullYear() - 3, currentDate, item);
-			  case 11:
-				return getYearlyData(now.getFullYear() - 2, currentDate, item);
-			  case 12:
-				return getYearlyData(now.getFullYear() - 1, currentDate, item);
-			  default:
-				return item;
+				case 1:
+					return item;
+				case 2:
+					return currentDate.getTime() === now.getTime() ? item : null;
+				case 3:
+					return currentDate.getFullYear() === now.getFullYear() && currentDate.getMonth() === now.getMonth() ? item : null;
+				case 4:
+					quarter = getQuarter(now.getMonth() + 1);
+					return thisQuarter(currentDate, now, month, quarter, item);
+				case 5:
+					if ((now.getMonth() < 3 && currentDate.getMonth() < 3 && now.getFullYear() === currentDate.getFullYear()) ||
+						(now.getMonth() >= 3 && currentDate.getMonth() >= 3 && now.getFullYear() === currentDate.getFullYear()) ||
+						(now.getMonth() < 3 && currentDate.getMonth() >= 3 && now.getFullYear() - 1 === currentDate.getFullYear()) ||
+						(now.getMonth() >= 3 && currentDate.getMonth() < 3 && now.getFullYear() + 1 === currentDate.getFullYear())) {
+						return item;
+					}
+					return null;
+				case 6:
+					const prevMonth = now.getMonth() === 0 ? 11 : now.getMonth() - 1;
+					return currentDate.getFullYear() === now.getFullYear() && currentDate.getMonth() === prevMonth ? item : null;
+				case 7:
+					quarter = getQuarter(now.getMonth() + 1);
+					if (quarter === 1) return thisQuarter(currentDate, now, month, 4, item);
+					if (quarter === 4) return lastQuarter(currentDate, now, month, item);
+					return thisQuarter(currentDate, now, month, quarter - 1, item);
+				case 8:
+					if ((now.getMonth() < 3 && currentDate.getMonth() < 3 && now.getFullYear() - 1 === currentDate.getFullYear()) ||
+						(now.getMonth() >= 3 && currentDate.getMonth() >= 3 && now.getFullYear() - 1 === currentDate.getFullYear()) ||
+						(now.getMonth() < 3 && currentDate.getMonth() >= 3 && now.getFullYear() - 2 === currentDate.getFullYear()) ||
+						(now.getMonth() >= 3 && currentDate.getMonth() < 3 && now.getFullYear() - 1 === currentDate.getFullYear())) {
+						return item;
+					}
+					return null;
+				case 9:
+					if (startDate && endDate) {
+						const startDate_ = new Date(startDate);
+						const endDate_ = new Date(endDate);
+						return currentDate >= startDate_ && currentDate <= endDate_ ? item : null;
+					}
+					return item;
+				case 10:
+					return getYearlyData(now.getFullYear() - 3, currentDate, item);
+				case 11:
+					return getYearlyData(now.getFullYear() - 2, currentDate, item);
+				case 12:
+					return getYearlyData(now.getFullYear() - 1, currentDate, item);
+				default:
+					return item;
 			}
-		  }
-		  
+		}
+
 
 		var result = items
 			.filter((item) => checkDuration(item, dateFilter))
@@ -438,6 +437,12 @@ const Item = ({
 		});
 	};
 
+	function generateFileName() {
+		const currentDate = new Date();
+		const formattedDate = format(currentDate, 'ddMMyyyy_HHmmss', { timeZone: 'Asia/Kolkata' });
+		return `FinanceReport_${formattedDate}.xlsx`;
+	}
+
 	// Export data to excel
 	const donwloadExcel = async () => {
 		setBtnStatus(true);
@@ -450,11 +455,12 @@ const Item = ({
 			const url = window.URL.createObjectURL(blob);
 			const link = document.createElement("a");
 			link.href = url;
-			link.setAttribute("download", "All_Items.xlsx");
+			link.setAttribute("download", generateFileName());
 			document.body.appendChild(link);
 			link.click();
 			document.body.removeChild(link);
 			setBtnStatus(false);
+			console.log("exported");
 		} catch (error) {
 			console.log(error);
 		}
