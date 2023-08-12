@@ -5,7 +5,7 @@ const url = process.env.REACT_APP_BASE_URL;
 // CRUD APIs
 export const getItems = async (id) => await axios.get(`${url}/${id}`);
 export const getItem = async (id) =>  await axios.get(`${url}/getedit${id}`);
-export const donwloadExcelSheet = async (user) => axios.post(`${url}/downloadexcel`, user,{
+export const donwloadExcelSheet = async (user) => axios.post(`${url}/export`, user,{
    responseType: 'arraybuffer'
  });
 
