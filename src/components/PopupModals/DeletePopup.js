@@ -45,7 +45,7 @@ export default function DeletePopup(props) {
             </Typography>
             <Button
               color="secondary"
-              onClick={()=>setDelModal({...delModal, openDelDialog: false})}>
+              onClick={() => setDelModal({ ...delModal, openDelDialog: false })}>
               <CloseIcon />
             </Button>
           </div>

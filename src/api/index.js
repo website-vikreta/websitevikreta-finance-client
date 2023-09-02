@@ -29,5 +29,21 @@ export const setUserPasswordByAdmin = async (user) => await axios.post(`${url}/s
 export const deleteAllData = async (id) => await axios.delete(`${url}/deletedata${id}`);
 export const deleteAccountPermanant = async (id, user) => axios.post(`${url}/deleteaccount${id}`, user);
 
+// For Investment CRUD API's
 
+export const createInvestment = async (newInvestment) => await axios.post(`${url}/investmentroot/addinvestment`, newInvestment);
 
+export const getInvestments = async (id) => await axios.get(`${url}/investmentroot/${id}`);
+
+export const getInvestmentMedia = async (id) => {
+   id = id || '';
+   return await axios.get(`${url}/investmentroot/investmentdocs${id}`);
+};
+
+export const getInvestment = async (id) => await axios.get(`${url}/investmentroot/getedit${id}`);
+export const updateInvestment = async (id, updatedInvestment) => await axios.put(`${url}/investmentroot/${id}`, updatedInvestment);
+export const deleteInvestment = async (id) => await axios.delete(`${url}/investmentroot/${id}`);
+export const getCashReceipt = async (id) => {
+   id = id || '';
+   return await axios.get(`${url}/investmentroot/cashreceipt${id}`);
+};

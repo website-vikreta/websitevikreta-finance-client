@@ -4,6 +4,10 @@ import CloseIcon from '@mui/icons-material/Close';
 import ItemForm from "../Items/ItemForm";
 import EditItem from "../Items/EditItem";
 
+import InvestmentForm from "../investments/InvestmentForm";
+import EditInvestment from "../investments/EditInvestment";
+
+
 export default function Popup(props) {
 
    const { setRender, showModal, setShowModal, formType } = props;
@@ -18,7 +22,8 @@ export default function Popup(props) {
          <DialogTitle>
             <div style={{ display: 'flex' }}>
                <Typography variant="h6" component="div" style={{ flexGrow: 1 }}>
-                  {formType} Item Details
+                  
+                  {formType} Details
                </Typography>
                <Button
                   color="secondary"
@@ -28,7 +33,16 @@ export default function Popup(props) {
             </div>
          </DialogTitle>
          <DialogContent dividers sx={{ paddingY: 2, paddingX: 0 }}>
-            {formType === 'Add' ? <ItemForm setRender={setRender} showModal={showModal} setShowModal={setShowModal} /> : <EditItem setRender={setRender} cItem={currItem} showModal={showModal} setShowModal={setShowModal} />}
+            
+            { 
+               formType === 'Investment'? <InvestmentForm setRender={setRender} showModal={showModal} setShowModal={setShowModal} />  :
+               
+               formType === "Edit Investment" ? <EditInvestment setRender={setRender} showModal={showModal} setShowModal={setShowModal} />  :
+               
+               formType === 'Add' ? <ItemForm setRender={setRender} showModal={showModal} setShowModal={setShowModal} /> : 
+               
+               <EditItem setRender={setRender} cItem={currItem} showModal={showModal} setShowModal={setShowModal} /> 
+            }
          </DialogContent>
       </Dialog>
    );

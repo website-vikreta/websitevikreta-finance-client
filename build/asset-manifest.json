@@ -1,34 +1,42 @@
 {
   "files": {
     "main.css": "/static/css/main.54c6ba8a.css",
-    "main.js": "/static/js/main.510b16cf.js",
-    "static/js/496.5c1c6605.chunk.js": "/static/js/496.5c1c6605.chunk.js",
-    "static/js/979.16c91d67.chunk.js": "/static/js/979.16c91d67.chunk.js",
+    "main.js": "/static/js/main.d6b1cc37.js",
+    "static/js/968.16e1d6ec.chunk.js": "/static/js/968.16e1d6ec.chunk.js",
+    "static/js/979.668b24a9.chunk.js": "/static/js/979.668b24a9.chunk.js",
+    "static/js/848.d1a77a12.chunk.js": "/static/js/848.d1a77a12.chunk.js",
     "static/js/575.6babd799.chunk.js": "/static/js/575.6babd799.chunk.js",
     "static/js/76.6ea9e0ed.chunk.js": "/static/js/76.6ea9e0ed.chunk.js",
-    "static/js/798.43dc5405.chunk.js": "/static/js/798.43dc5405.chunk.js",
+    "static/js/623.67975b9f.chunk.js": "/static/js/623.67975b9f.chunk.js",
+    "static/js/787.01490c6c.chunk.js": "/static/js/787.01490c6c.chunk.js",
+    "static/js/977.763bd37b.chunk.js": "/static/js/977.763bd37b.chunk.js",
     "static/js/962.bd5f6d3a.chunk.js": "/static/js/962.bd5f6d3a.chunk.js",
+    "static/js/476.0bf25251.chunk.js": "/static/js/476.0bf25251.chunk.js",
     "static/media/fa-solid-900.ttf": "/static/media/fa-solid-900.4a2cd718d7031b732e76.ttf",
     "static/media/fa-brands-400.ttf": "/static/media/fa-brands-400.150de8eaa454d669c405.ttf",
     "static/media/fa-solid-900.woff2": "/static/media/fa-solid-900.bb975c966c37455a1bc3.woff2",
     "static/media/fa-brands-400.woff2": "/static/media/fa-brands-400.e033a13ee751afc1860c.woff2",
     "static/media/fa-regular-400.ttf": "/static/media/fa-regular-400.d87474231f4192884802.ttf",
     "static/media/fa-regular-400.woff2": "/static/media/fa-regular-400.3223dc79c1adee56370b.woff2",
-    "static/media/websitevikreta-finance.svg": "/static/media/websitevikreta-finance.da24ab79d5eb9fef22860edddff0f1a9.svg",
+    "static/media/websitevikreta-finance.svg": "/static/media/websitevikreta-finance.768480b182b1c1e8c16e14c6e4f522b8.svg",
     "static/media/fa-v4compatibility.ttf": "/static/media/fa-v4compatibility.0e3a648be390bd8cb094.ttf",
     "static/media/fa-v4compatibility.woff2": "/static/media/fa-v4compatibility.68577e40f3e70067b5da.woff2",
     "index.html": "/index.html",
     "main.54c6ba8a.css.map": "/static/css/main.54c6ba8a.css.map",
-    "main.510b16cf.js.map": "/static/js/main.510b16cf.js.map",
-    "496.5c1c6605.chunk.js.map": "/static/js/496.5c1c6605.chunk.js.map",
-    "979.16c91d67.chunk.js.map": "/static/js/979.16c91d67.chunk.js.map",
+    "main.d6b1cc37.js.map": "/static/js/main.d6b1cc37.js.map",
+    "968.16e1d6ec.chunk.js.map": "/static/js/968.16e1d6ec.chunk.js.map",
+    "979.668b24a9.chunk.js.map": "/static/js/979.668b24a9.chunk.js.map",
+    "848.d1a77a12.chunk.js.map": "/static/js/848.d1a77a12.chunk.js.map",
     "575.6babd799.chunk.js.map": "/static/js/575.6babd799.chunk.js.map",
     "76.6ea9e0ed.chunk.js.map": "/static/js/76.6ea9e0ed.chunk.js.map",
-    "798.43dc5405.chunk.js.map": "/static/js/798.43dc5405.chunk.js.map",
-    "962.bd5f6d3a.chunk.js.map": "/static/js/962.bd5f6d3a.chunk.js.map"
+    "623.67975b9f.chunk.js.map": "/static/js/623.67975b9f.chunk.js.map",
+    "787.01490c6c.chunk.js.map": "/static/js/787.01490c6c.chunk.js.map",
+    "977.763bd37b.chunk.js.map": "/static/js/977.763bd37b.chunk.js.map",
+    "962.bd5f6d3a.chunk.js.map": "/static/js/962.bd5f6d3a.chunk.js.map",
+    "476.0bf25251.chunk.js.map": "/static/js/476.0bf25251.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.54c6ba8a.css",
-    "static/js/main.510b16cf.js"
+    "static/js/main.d6b1cc37.js"
   ]
 }

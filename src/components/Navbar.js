@@ -89,6 +89,12 @@ const Navbar = ({ user }) => {
 
             {user &&
                <>
+                  <div onClick={() => { navigate('/investment') }}>
+                     <div className='username-text'>
+                        Investment
+                     </div>
+                  </div>
+
                   {/* Toggle Button */}
                   <span onClick={() => setShowMediaIcon(!showMediaIcon)} className="hamburgerMenu m-0 p-0">
                      {showMediaIcon ? <Close /> : <Menu />}
@@ -128,7 +134,7 @@ const Navbar = ({ user }) => {
                         :
                         <>
                            {/* Menu Options on Desktop View */}
-                           {!openMenu ? <AccountCircleIcon onClick={() => setOpenMenu(!openMenu)} /> : <span><AccountCircleIcon/></span>}
+                           {!openMenu ? <AccountCircleIcon onClick={() => setOpenMenu(!openMenu)} /> : <span><AccountCircleIcon /></span>}
 
                            {openMenu && <div className='drop-down-menu' ref={menuRef}>
                               <ul>
@@ -137,7 +143,7 @@ const Navbar = ({ user }) => {
                                  </div>
                                  <li>
                                     <button className='linkBtn' onClick={() => navigate('/change-password')}>Change Password</button>
-                                 </li>                                 
+                                 </li>
                                  <li>
                                     <button className='linkBtn logout' onClick={handleDeleteData}>
                                        <span>Delete All Data</span>
