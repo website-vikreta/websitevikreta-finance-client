@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.54c6ba8a.css",
-    "main.js": "/static/js/main.d6b1cc37.js",
+    "main.js": "/static/js/main.d1149ee1.js",
     "static/js/968.16e1d6ec.chunk.js": "/static/js/968.16e1d6ec.chunk.js",
     "static/js/979.668b24a9.chunk.js": "/static/js/979.668b24a9.chunk.js",
     "static/js/848.d1a77a12.chunk.js": "/static/js/848.d1a77a12.chunk.js",
@@ -18,12 +18,12 @@
     "static/media/fa-brands-400.woff2": "/static/media/fa-brands-400.e033a13ee751afc1860c.woff2",
     "static/media/fa-regular-400.ttf": "/static/media/fa-regular-400.d87474231f4192884802.ttf",
     "static/media/fa-regular-400.woff2": "/static/media/fa-regular-400.3223dc79c1adee56370b.woff2",
-    "static/media/websitevikreta-finance.svg": "/static/media/websitevikreta-finance.768480b182b1c1e8c16e14c6e4f522b8.svg",
+    "static/media/websitevikreta-finance.svg": "/static/media/websitevikreta-finance.da24ab79d5eb9fef22860edddff0f1a9.svg",
     "static/media/fa-v4compatibility.ttf": "/static/media/fa-v4compatibility.0e3a648be390bd8cb094.ttf",
     "static/media/fa-v4compatibility.woff2": "/static/media/fa-v4compatibility.68577e40f3e70067b5da.woff2",
     "index.html": "/index.html",
     "main.54c6ba8a.css.map": "/static/css/main.54c6ba8a.css.map",
-    "main.d6b1cc37.js.map": "/static/js/main.d6b1cc37.js.map",
+    "main.d1149ee1.js.map": "/static/js/main.d1149ee1.js.map",
     "968.16e1d6ec.chunk.js.map": "/static/js/968.16e1d6ec.chunk.js.map",
     "979.668b24a9.chunk.js.map": "/static/js/979.668b24a9.chunk.js.map",
     "848.d1a77a12.chunk.js.map": "/static/js/848.d1a77a12.chunk.js.map",
@@ -37,6 +37,6 @@
   },
   "entrypoints": [
     "static/css/main.54c6ba8a.css",
-    "static/js/main.d6b1cc37.js"
+    "static/js/main.d1149ee1.js"
   ]
 }
